@@ -245,13 +245,34 @@ const translations = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Safe Storage Utility (fixes crashes when localStorage is blocked/disabled) ---
+  const safeStorage = {
+    getItem(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        console.warn("localStorage.getItem blocked:", e);
+        return null;
+      }
+    },
+    setItem(key, value) {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (e) {
+        console.warn("localStorage.setItem blocked:", e);
+        return false;
+      }
+    }
+  };
+
   // --- Language Switcher Logic ---
-  let currentLang = localStorage.getItem('luxepaws_lang') || 'en';
+  let currentLang = safeStorage.getItem('luxepaws_lang') || 'en';
   const newsletterForm = document.getElementById('newsletterForm');
 
   function setLanguage(lang) {
     currentLang = lang;
-    localStorage.setItem('luxepaws_lang', lang);
+    safeStorage.setItem('luxepaws_lang', lang);
     document.documentElement.lang = lang;
     if (newsletterForm) newsletterForm.setAttribute('data-lang', lang);
 
@@ -567,9 +588,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkoutBtn = document.getElementById('checkoutBtn');
 
   // Load cart from localStorage if exists
-  if (localStorage.getItem('luxepaws_cart')) {
+  let localCartData = null;
+  try {
+    localCartData = localStorage.getItem('luxepaws_cart');
+  } catch (e) {
+    console.warn("localStorage.getItem for cart blocked:", e);
+  }
+
+  if (localCartData) {
     try {
-      cart = JSON.parse(localStorage.getItem('luxepaws_cart'));
+      cart = JSON.parse(localCartData);
     } catch (e) {
       cart = [];
     }
@@ -594,14 +622,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add Item to Cart
   function addToCart(id, titleKey, price, img, colorKey = 'Standard') {
-    const parsedPrice = parseFloat(price);
-    const existingItem = cart.find(item => item.id === id && item.colorKey === colorKey);
+    const stringId = String(id);
+    const parsedPrice = parseFloat(price) || 0;
+    const existingItem = cart.find(item => String(item.id) === stringId && item.colorKey === colorKey);
 
     if (existingItem) {
       existingItem.qty += 1;
     } else {
       cart.push({
-        id,
+        id: stringId,
         titleKey,
         price: parsedPrice,
         img,
@@ -610,7 +639,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    localStorage.setItem('luxepaws_cart', JSON.stringify(cart));
+    try {
+      localStorage.setItem('luxepaws_cart', JSON.stringify(cart));
+    } catch (e) {
+      console.warn("localStorage.setItem for cart blocked:", e);
+    }
     updateCartUI();
     openCart();
   }
