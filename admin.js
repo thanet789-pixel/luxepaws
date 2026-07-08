@@ -5,10 +5,34 @@
 const SUPABASE_URL = 'https://oylfiyelvquejtswpbxu.supabase.co'; 
 const SUPABASE_ANON_KEY = 'sb_publishable_XaV__6RxvquvwygZrW9HYw_l6Ct7Tfd'; 
 
+// Safe Memory Storage fallback for Supabase Auth in private browsing modes
+const MemoryStorage = {
+  store: {},
+  getItem(key) { return this.store[key] || null; },
+  setItem(key, value) { this.store[key] = value; },
+  removeItem(key) { delete this.store[key]; }
+};
+
+let safeAuthStorage = null;
+try {
+  localStorage.setItem('__storage_test__', '1');
+  localStorage.removeItem('__storage_test__');
+  safeAuthStorage = localStorage;
+} catch (e) {
+  console.warn("localStorage is blocked. Falling back to in-memory storage for Supabase Auth.");
+  safeAuthStorage = MemoryStorage;
+}
+
 let supabase = null;
 try {
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        storage: safeAuthStorage,
+        persistSession: true,
+        autoRefreshToken: true
+      }
+    });
     console.log("Supabase Admin client initialized successfully.");
   }
 } catch (e) {
