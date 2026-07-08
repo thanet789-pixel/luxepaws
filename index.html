@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LuxePaws - Premium designer furniture and accessories for dogs and cats. Timeless design, sustainable materials, and exceptional quality.">
+  <title>LuxePaws | Premium Design for Dogs & Cats</title>
+  
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Supabase client library SDK CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Backdrop for Cart Drawer -->
+  <div class="cart-backdrop" id="cartBackdrop"></div>
+
+  <!-- Header Navigation (Luxury Centered Layout) -->
+  <header id="header">
+    <div class="container nav-wrapper">
+      
+      <!-- Column 1: Navigation Links -->
+      <nav class="nav-links">
+        <a href="#" class="filter-link" data-target="all" data-i18n="nav_shop_all">Shop All</a>
+        <a href="#" class="filter-link" data-target="dog" data-i18n="nav_dogs">For Dogs</a>
+        <a href="#" class="filter-link" data-target="cat" data-i18n="nav_cats">For Cats</a>
+        <a href="#about" id="navAbout" data-i18n="nav_story">Our Story</a>
+      </nav>
+      
+      <!-- Column 2: Centered Logo -->
+      <a href="#" class="logo" id="logoLink">Luxe<span>Paws</span></a>
+      
+      <!-- Column 3: Navigation Actions -->
+      <div class="nav-actions">
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <span class="lang-divider">|</span>
+          <button class="lang-btn" data-lang="th">TH</button>
+        </div>
+        
+        <button class="nav-icon" id="searchBtn" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button class="nav-icon" id="cartToggleBtn" aria-label="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section with 5-Slide Carousel -->
+  <section class="hero" id="heroSection">
+    <div class="hero-slider" id="heroSlider">
+      
+      <!-- Slide 1 (Dog Bed Focus) -->
+      <div class="slide active">
+        <div class="hero-img-container">
+          <img src="assets/hero_banner.png" alt="Modern minimalist living room featuring LuxePaws designer pet furniture">
+          <div class="hero-overlay"></div>
+          
+          <!-- Interactive Hotspots for Slide 1 -->
+          <div class="hotspot hotspot-1" id="hotspot1">
+            <div class="hotspot-trigger"></div>
+            <div class="hotspot-popover">
+              <h4 data-i18n="hs1_title">Nido Felt Dog Bed</h4>
+              <p data-i18n="hs1_desc">Circular felt pet bed with plush cushion</p>
+              <div class="price">€189.00</div>
+              <button class="popover-action quick-add-btn" data-id="1" data-title="Nido Felt Dog Bed" data-price="189.00" data-img="assets/dog_bed.png" data-i18n="quick_add">Quick Add</button>
+            </div>
+          </div>
+          
+          <div class="hotspot hotspot-2" id="hotspot2">
+            <div class="hotspot-trigger"></div>
+            <div class="hotspot-popover">
+              <h4 data-i18n="hs2_title">Desco Oak Bowl Stand</h4>
+              <p data-i18n="hs2_desc">Minimalist wood & ceramic feeder stand</p>
+              <div class="price">€99.00</div>
+              <button class="popover-action quick-add-btn" data-id="2" data-title="Desco Oak Bowl Stand" data-price="99.00" data-img="assets/pet_bowl.png" data-i18n="quick_add">Quick Add</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hero-content">
+          <span class="section-subtitle" style="color: var(--color-accent);" data-i18n="hero_subtitle">New Collection</span>
+          <h1 class="serif-font" data-i18n="hero_title">Beautiful Living With Your Pet</h1>
+          <p data-i18n="hero_desc">Explore architectural design products and high-quality accessories that blend seamlessly into your home interior.</p>
+          <a href="#shop" class="btn btn-primary" data-i18n="hero_cta">Shop Now</a>
+        </div>
+      </div>
+      
+      <!-- Slide 2 (Cat Climbing Focus) -->
+      <div class="slide">
+        <div class="hero-img-container">
+          <img src="assets/hero_slide2.png" alt="Minimalist cat climbing walls and designer scratchers">
+          <div class="hero-overlay"></div>
+          
+          <!-- Interactive Hotspot for Slide 2 -->
+          <div class="hotspot" style="top: 52%; left: 55%;">
+            <div class="hotspot-trigger"></div>
+            <div class="hotspot-popover">
+              <h4 data-i18n="p3_title">Torre Cat Scratcher Tower</h4>
+              <p data-i18n="p3_cat">Scratchers & Climbing</p>
+              <div class="price">€249.00</div>
+              <button class="popover-action quick-add-btn" data-id="3" data-title="Torre Cat Scratcher Tower" data-price="249.00" data-img="assets/cat_scratch.png" data-i18n="quick_add">Quick Add</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hero-content">
+          <span class="section-subtitle" style="color: var(--color-accent);" data-i18n="slide2_sub">Architectural Play</span>
+          <h1 class="serif-font" data-i18n="slide2_title">Climbing Systems For Cats</h1>
+          <p data-i18n="slide2_desc">Crafted with high-quality ash wood and cream sisal rope to keep your cat active without compromising your home's aesthetics.</p>
+          <a href="#shop" class="btn btn-primary" data-i18n="hero_cta">Shop Now</a>
+        </div>
+      </div>
+      
+      <!-- Slide 3 (Dog Bed & Fireplace Focus) -->
+      <div class="slide">
+        <div class="hero-img-container">
+          <img src="assets/hero_slide3.png" alt="Premium luxury wooden dog bed next to modern fireplace">
+          <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+          <span class="section-subtitle" style="color: var(--color-accent);" data-i18n="slide3_sub">Cozy Retreat</span>
+          <h1 class="serif-font" data-i18n="slide3_title">Premium Fireplace Beds</h1>
+          <p data-i18n="slide3_desc">Handcrafted dog beds built next to cozy fireplaces for ultimate warmth and designer pet luxury.</p>
+          <a href="#shop" class="btn btn-primary" data-i18n="hero_cta">Shop Now</a>
+        </div>
+      </div>
+      
+      <!-- Slide 4 (Aesthetic Feeder Stand Focus) -->
+      <div class="slide">
+        <div class="hero-img-container">
+          <img src="assets/hero_slide4.png" alt="Luxury pet bowls next to modern kitchen counters">
+          <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+          <span class="section-subtitle" style="color: var(--color-accent);" data-i18n="slide4_sub">Aesthetic Utility</span>
+          <h1 class="serif-font" data-i18n="slide4_title">Sleek Oak Food Feeder</h1>
+          <p data-i18n="slide4_desc">Beautifully engineered double pet feeder stand that coordinates perfectly with modern kitchen interiors.</p>
+          <a href="#shop" class="btn btn-primary" data-i18n="hero_cta">Shop Now</a>
+        </div>
+      </div>
+      
+      <!-- Slide 5 (Designer Cat Cocoon Focus) -->
+      <div class="slide">
+        <div class="hero-img-container">
+          <img src="assets/hero_slide5.png" alt="Designer cat cocoon sleeping bed in Scandinavian loft">
+          <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+          <span class="section-subtitle" style="color: var(--color-accent);" data-i18n="slide5_sub">Editorial Sleeping</span>
+          <h1 class="serif-font" data-i18n="slide5_title">Luxury Cat Cocoon Bed</h1>
+          <p data-i18n="slide5_desc">Provide a cozy and private sanctuary for your cat with our architectural felt cat cave design.</p>
+          <a href="#shop" class="btn btn-primary" data-i18n="hero_cta">Shop Now</a>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Slider Navigation Arrows -->
+    <button class="slider-arrow prev" id="sliderPrevBtn" aria-label="Previous slide">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button class="slider-arrow next" id="sliderNextBtn" aria-label="Next slide">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    
+    <!-- Slide Indicator Dots -->
+    <div class="slider-dots" id="sliderDotsContainer">
+      <span class="dot active" data-slide="0"></span>
+      <span class="dot" data-slide="1"></span>
+      <span class="dot" data-slide="2"></span>
+      <span class="dot" data-slide="3"></span>
+      <span class="dot" data-slide="4"></span>
+    </div>
+  </section>
+
+  <!-- Collections Grid -->
+  <section class="section container" id="collectionsSection">
+    <div class="section-title-wrap text-center">
+      <span class="section-subtitle" data-i18n="col_subtitle">Curated Spaces</span>
+      <h2 class="section-title" data-i18n="col_title">Designed for Comfort and Aesthetics</h2>
+    </div>
+    
+    <div class="collections-grid">
+      <!-- Collection 1: Dogs -->
+      <div class="collection-card filter-link" data-target="dog" id="colCardDog">
+        <img src="assets/dog_bed.png" alt="Premium dog products" class="collection-img">
+        <div class="collection-info">
+          <span class="section-subtitle" data-i18n="col1_sub">Premium Comfort</span>
+          <h3 data-i18n="col1_title">Dog Beds & Cushions</h3>
+          <span class="btn-link" style="color: var(--color-white); border-color: var(--color-white);" data-i18n="explore">Explore</span>
+        </div>
+      </div>
+      
+      <!-- Collection 2: Cats -->
+      <div class="collection-card filter-link" data-target="cat" id="colCardCat">
+        <img src="assets/cat_scratch.png" alt="Architectural cat furniture" class="collection-img">
+        <div class="collection-info">
+          <span class="section-subtitle" data-i18n="col2_sub">Architectural Play</span>
+          <h3 data-i18n="col2_title">Scratchers & Climbing</h3>
+          <span class="btn-link" style="color: var(--color-white); border-color: var(--color-white);" data-i18n="explore">Explore</span>
+        </div>
+      </div>
+      
+      <!-- Collection 3: Accessories -->
+      <div class="collection-card filter-link" data-target="accessories" id="colCardAcc">
+        <img src="assets/pet_bowl.png" alt="Elegant feeding bowls" class="collection-img">
+        <div class="collection-info">
+          <span class="section-subtitle" data-i18n="col3_sub">Aesthetic Utility</span>
+          <h3 data-i18n="col3_title">Feeding & Bowls</h3>
+          <span class="btn-link" style="color: var(--color-white); border-color: var(--color-white);" data-i18n="explore">Explore</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Catalog -->
+  <section class="section container" id="shop">
+    <div class="section-title-wrap">
+      <span class="section-subtitle" data-i18n="shop_subtitle">Product Catalog</span>
+      <h2 class="section-title" data-i18n="shop_title">Shop the Collection</h2>
+    </div>
+    
+    <div class="catalog-controls">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all" id="filterAll" data-i18n="filter_all">All Products</button>
+        <button class="filter-btn" data-filter="dog" id="filterDog" data-i18n="filter_dog">For Dogs</button>
+        <button class="filter-btn" data-filter="cat" id="filterCat" data-i18n="filter_cat">For Cats</button>
+        <button class="filter-btn" data-filter="accessories" id="filterAcc" data-i18n="filter_acc">Accessories</button>
+      </div>
+      <div class="sort-group">
+        <span class="section-subtitle" style="display:inline; margin-right: 10px;" data-i18n="sort_label">Sort:</span>
+        <select id="sortSelect" style="border:none; background:transparent; font-family:var(--font-sans); font-size:0.85rem; font-weight:500; text-transform:uppercase; outline:none; cursor:pointer;">
+          <option value="featured" data-i18n="sort_featured">Featured</option>
+          <option value="price-low" data-i18n="sort_low">Price: Low to High</option>
+          <option value="price-high" data-i18n="sort_high">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Dynamic Product Grid (Rendered by JavaScript) -->
+    <div class="product-grid" id="productGrid">
+      <!-- Loading indicator while fetching from Supabase -->
+      <div style="grid-column: 1 / -1; text-align: center; color: var(--color-muted); font-family: var(--font-accent); font-size: 1rem; padding: 4rem 0;">
+        Loading collection...
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Story Section -->
+  <section class="section brand-story" id="about">
+    <div class="story-grid">
+      <div class="story-content">
+        <span class="section-subtitle" data-i18n="story_subtitle">Our Philosophy</span>
+        <h2 class="serif-font" data-i18n="story_title">Designed for pets. Fits your style.</h2>
+        <p data-i18n="story_p1">LuxePaws was born out of a desire to create products for dogs and cats that combine elegant, minimalist design with outstanding functionality.</p>
+        <p data-i18n="story_p2">We work with international designers and local manufacturers across Europe to select premium materials. From architectural cat climbing walls to felted nesting dog beds, every product is engineered for pet comfort while adding a timeless aesthetic to your modern home.</p>
+        <a href="#shop" class="btn btn-secondary" id="storyShopBtn" data-i18n="story_btn">Discover Collection</a>
+      </div>
+      <div class="story-img">
+        <img src="assets/hero_banner.png" alt="Elegant dog bed in beautifully designed apartment" id="storyImgElement">
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter">
+    <div class="container newsletter-wrap">
+      <h2 data-i18n="news_title">Join the LuxePaws Club</h2>
+      <p data-i18n="news_desc">Subscribe to receive news about new product launches, designer collaborations, and exclusive invitations to pre-order collections.</p>
+      <form class="newsletter-form" id="newsletterForm" onsubmit="event.preventDefault(); alert(this.getAttribute('data-lang') === 'th' ? 'ขอบคุณที่สมัครรับข่าวสาร!' : 'Thank you for subscribing!'); this.reset();">
+        <input type="email" placeholder="Your Email Address" class="newsletter-input" required id="newsletterEmailInput" data-i18n-placeholder="news_placeholder">
+        <button type="submit" class="btn btn-primary" id="newsletterSubmitBtn" data-i18n="news_submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Luxe<span>Paws</span></h3>
+          <p data-i18n="footer_desc">Premium designer furniture and lifestyle accessories for dogs and cats. Form following comfort.</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_col1_header">Products</h4>
+          <ul>
+            <li><a href="#" class="filter-link" data-target="dog" data-i18n="nav_dogs">Dog Beds</a></li>
+            <li><a href="#" class="filter-link" data-target="accessories" data-i18n="col3_title">Bowl Stands</a></li>
+            <li><a href="#" class="filter-link" data-target="cat" data-i18n="nav_cats">Cat Scratchers</a></li>
+            <li><a href="#" class="filter-link" data-target="all" data-i18n="nav_shop_all">New Arrivals</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_col2_header">Customer Care</h4>
+          <ul>
+            <li><a href="#" data-i18n="footer_ship">Shipping & Returns</a></li>
+            <li><a href="#" data-i18n="footer_care">Materials & Care</a></li>
+            <li><a href="#" data-i18n="footer_size">Size Guide</a></li>
+            <li><a href="#" data-i18n="footer_contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_col3_header">Follow Us</h4>
+          <ul>
+            <li><a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
+            <li><a href="#"><i class="fa-brands fa-pinterest"></i> Pinterest</a></li>
+            <li><a href="#"><i class="fa-brands fa-facebook"></i> Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="footer_copy">&copy; 2026 LuxePaws GmbH. All rights reserved.</p>
+        <p data-i18n="footer_loc">Designed with passion in Munich, Germany.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-out Cart Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3 data-i18n="cart_header">Your Shopping Bag</h3>
+      <button class="cart-close" id="cartCloseBtn" aria-label="Close cart">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    
+    <!-- Cart Items list -->
+    <div class="cart-items" id="cartItemsList">
+      <!-- Dynamic list items injected by JS -->
+      <div class="cart-empty-msg" id="cartEmptyMsg" data-i18n="cart_empty">Your bag is empty.</div>
+    </div>
+    
+    <div class="cart-footer">
+      <div class="subtotal-row">
+        <span data-i18n="cart_subtotal_label">Subtotal</span>
+        <span id="cartSubtotal">€0.00</span>
+      </div>
+      <button class="btn btn-primary" id="checkoutBtn" data-i18n="cart_checkout">Checkout</button>
+    </div>
+  </div>
+
+  <!-- Custom JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
