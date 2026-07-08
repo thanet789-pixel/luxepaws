@@ -1408,3 +1408,227 @@ html[lang="th"] .remove-item-btn {
   letter-spacing: normal !important; /* Disable letter-spacing for Thai characters to prevent vowel/tone mark shifting */
   text-transform: none !important; /* Avoid uppercase conversions */
 }
+
+/* --- Checkout Modal & Success Box Styling --- */
+.checkout-backdrop,
+.success-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1100;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.checkout-backdrop.open,
+.success-backdrop.open {
+  display: block;
+  opacity: 1;
+}
+
+.checkout-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  width: 90%;
+  max-width: 500px;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-premium);
+  border-radius: 4px;
+  padding: 2.5rem;
+  z-index: 1151;
+  display: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.checkout-modal.open {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.checkout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.checkout-header h3 {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.checkout-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--color-muted);
+  transition: color var(--transition-fast);
+}
+
+.checkout-close:hover {
+  color: var(--color-dark);
+}
+
+.checkout-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.checkout-form label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+  margin-bottom: 0.5rem;
+}
+
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  background-color: #faf9f6;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.checkout-form input:focus,
+.checkout-form textarea:focus {
+  border-color: var(--color-dark);
+}
+
+/* Payment Group Styling */
+.payment-group {
+  margin: 2rem 0;
+  padding: 1.2rem;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  background-color: #faf9f6;
+}
+
+.payment-group h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+  margin: 0 0 0.8rem 0;
+}
+
+.mock-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #2e7d32;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.mock-card-icon {
+  font-size: 1.2rem;
+}
+
+.checkout-summary {
+  margin-top: 1.8rem;
+  border-top: 1px solid #eee;
+  padding-top: 1.2rem;
+  margin-bottom: 1.8rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.btn-submit-order {
+  width: 100%;
+  padding: 1rem;
+}
+
+/* Success Modal Styling */
+.success-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  width: 95%;
+  max-width: 440px;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-premium);
+  border-radius: 4px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  z-index: 1201;
+  display: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.success-modal.open {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.success-icon-wrap {
+  font-size: 3.5rem;
+  color: #2e7d32;
+  margin-bottom: 1.5rem;
+}
+
+.success-modal h3 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0 0 0.8rem 0;
+}
+
+.success-modal p {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.order-id-box {
+  background-color: #faf9f6;
+  border: 1px solid #eae6df;
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.order-id-box strong {
+  color: var(--color-dark);
+  font-weight: 600;
+  margin-left: 0.4rem;
+}
+
+.btn-close-success {
+  width: 100%;
+  padding: 1rem;
+}
+

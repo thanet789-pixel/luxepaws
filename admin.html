@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuxePaws Admin Dashboard | Management Panel</title>
+  
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Supabase client library SDK CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- ========================================== -->
+  <!-- 1. LOGIN SCREEN CONTAINER -->
+  <!-- ========================================== -->
+  <div class="login-wrapper" id="loginWrapper">
+    <div class="login-card">
+      <div class="login-brand">
+        <h2>Luxe<span>Paws</span></h2>
+        <span class="admin-badge">Admin Panel</span>
+      </div>
+      <p class="login-subtitle">Access your store control center</p>
+      
+      <form id="loginForm" class="admin-form">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" required placeholder="admin@luxepaws.com">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+        <div id="loginError" class="error-msg" style="display: none;"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">Log In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 2. ADMIN DASHBOARD CONTAINER (Hidden by default) -->
+  <!-- ========================================== -->
+  <div class="dashboard-wrapper" id="dashboardWrapper" style="display: none;">
+    <!-- Dashboard Header -->
+    <header class="admin-header">
+      <div class="admin-nav-container">
+        <div class="admin-logo">
+          <h2>Luxe<span>Paws</span></h2>
+          <span class="admin-badge">Admin Dashboard</span>
+        </div>
+        <div class="admin-user-info">
+          <span id="adminUserEmail">admin@luxepaws.com</span>
+          <button class="btn btn-secondary btn-logout" id="logoutBtn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="admin-container">
+      
+      <!-- Metrics Row -->
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-euro-sign"></i></div>
+          <div class="metric-info">
+            <h3>Total Revenue</h3>
+            <p class="metric-value" id="revenueMetric">€0.00</p>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+          <div class="metric-info">
+            <h3>Total Orders</h3>
+            <p class="metric-value" id="ordersMetric">0</p>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+          <div class="metric-info">
+            <h3>Active Catalog</h3>
+            <p class="metric-value" id="productsMetric">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Section Tabs & Tables -->
+      <div class="admin-content-card">
+        <div class="admin-tabs">
+          <button class="tab-btn active" data-tab="orders">
+            <i class="fa-solid fa-list-check"></i> Customer Orders
+          </button>
+          <button class="tab-btn" data-tab="products">
+            <i class="fa-solid fa-box-open"></i> Manage Products
+          </button>
+        </div>
+
+        <!-- Orders Panel -->
+        <div class="tab-panel active" id="ordersPanel">
+          <div class="panel-header">
+            <h3>Orders Management</h3>
+            <button class="btn btn-secondary btn-refresh" id="refreshOrdersBtn">
+              <i class="fa-solid fa-arrows-rotate"></i> Refresh
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date & Time</th>
+                  <th>Customer Info</th>
+                  <th>Items Purchased</th>
+                  <th>Total Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr>
+                  <td colspan="7" class="text-center text-muted">Loading orders...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Products Panel -->
+        <div class="tab-panel" id="productsPanel">
+          <div class="panel-header">
+            <h3>Product Catalog Management</h3>
+            <button class="btn btn-primary" id="openAddProductBtn">
+              <i class="fa-solid fa-plus"></i> Add New Product
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Title (EN / TH)</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Swatches</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <tr>
+                  <td colspan="6" class="text-center text-muted">Loading products...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 3. PRODUCT FORM MODAL (Add & Edit) -->
+  <!-- ========================================== -->
+  <div class="product-modal-backdrop" id="productModalBackdrop"></div>
+  <div class="product-modal" id="productModal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add New Product</h3>
+      <button class="modal-close" id="closeProductModalBtn">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <form id="productForm">
+      <input type="hidden" id="productId">
+      
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label for="prodTitleEn">Product Title (English)</label>
+          <input type="text" id="prodTitleEn" required placeholder="e.g. Nido Felt Dog Bed">
+        </div>
+        <div class="form-group col-6">
+          <label for="prodTitleTh">Product Title (Thai)</label>
+          <input type="text" id="prodTitleTh" required placeholder="e.g. ที่นอนสุนัขใยสักหลาด Nido">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-4">
+          <label for="prodPrice">Price (€)</label>
+          <input type="number" step="0.01" id="prodPrice" required placeholder="189.00">
+        </div>
+        <div class="form-group col-4">
+          <label for="prodCategory">Category Slug</label>
+          <select id="prodCategory" required>
+            <option value="dog">dog</option>
+            <option value="cat">cat</option>
+            <option value="accessories">accessories</option>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="prodSwatches">Swatches (Comma separated)</label>
+          <input type="text" id="prodSwatches" placeholder="Grey, Cream, Charcoal">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label for="prodCatEn">Category Label (English)</label>
+          <input type="text" id="prodCatEn" required placeholder="e.g. Beds & Cushions">
+        </div>
+        <div class="form-group col-6">
+          <label for="prodCatTh">Category Label (Thai)</label>
+          <input type="text" id="prodCatTh" required placeholder="e.g. ที่นอนและเบาะหนุน">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label for="prodBadgeEn">Badge (English) - Optional</label>
+          <input type="text" id="prodBadgeEn" placeholder="e.g. Bestseller">
+        </div>
+        <div class="form-group col-6">
+          <label for="prodBadgeTh">Badge (Thai) - Optional</label>
+          <input type="text" id="prodBadgeTh" placeholder="e.g. ขายดีที่สุด">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="prodImageUrl">Product Image Link (URL or relative path)</label>
+        <input type="text" id="prodImageUrl" required placeholder="assets/dog_bed.png">
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancelProductBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="saveProductBtn">Save Product</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Custom JavaScript -->
+  <script src="admin.js"></script>
+</body>
+</html>

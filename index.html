@@ -257,7 +257,6 @@
     
     <!-- Dynamic Product Grid (Rendered by JavaScript) -->
     <div class="product-grid" id="productGrid">
-      <!-- Loading indicator while fetching from Supabase -->
       <div style="grid-column: 1 / -1; text-align: center; color: var(--color-muted); font-family: var(--font-accent); font-size: 1rem; padding: 4rem 0;">
         Loading collection...
       </div>
@@ -345,7 +344,6 @@
     
     <!-- Cart Items list -->
     <div class="cart-items" id="cartItemsList">
-      <!-- Dynamic list items injected by JS -->
       <div class="cart-empty-msg" id="cartEmptyMsg" data-i18n="cart_empty">Your bag is empty.</div>
     </div>
     
@@ -356,6 +354,64 @@
       </div>
       <button class="btn btn-primary" id="checkoutBtn" data-i18n="cart_checkout">Checkout</button>
     </div>
+  </div>
+
+  <!-- Checkout Form Modal -->
+  <div class="checkout-backdrop" id="checkoutBackdrop"></div>
+  <div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-header">
+      <h3 data-i18n="checkout_header">Complete Your Order</h3>
+      <button class="checkout-close" id="checkoutCloseBtn" aria-label="Close checkout">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <form class="checkout-form" id="checkoutForm">
+      <div class="form-group">
+        <label for="checkoutName" data-i18n="checkout_name_label">Full Name</label>
+        <input type="text" id="checkoutName" required placeholder="e.g. John Doe" data-i18n-placeholder="checkout_name_ph">
+      </div>
+      <div class="form-group">
+        <label for="checkoutEmail" data-i18n="checkout_email_label">Email Address</label>
+        <input type="email" id="checkoutEmail" required placeholder="e.g. john@example.com" data-i18n-placeholder="checkout_email_ph">
+      </div>
+      <div class="form-group">
+        <label for="checkoutAddress" data-i18n="checkout_address_label">Shipping Address</label>
+        <textarea id="checkoutAddress" required placeholder="e.g. 123 Luxury Way, Bangkok, Thailand" data-i18n-placeholder="checkout_address_ph" rows="3"></textarea>
+      </div>
+      
+      <!-- Mock Credit Card Payment -->
+      <div class="payment-group">
+        <h4 data-i18n="checkout_payment_header">Payment Method</h4>
+        <div class="mock-card">
+          <i class="fa-solid fa-credit-card mock-card-icon"></i>
+          <span data-i18n="checkout_mock_card">Mock Demo Payment (No real card required)</span>
+        </div>
+      </div>
+      
+      <div class="checkout-summary">
+        <div class="summary-row">
+          <span data-i18n="cart_subtotal_label">Subtotal</span>
+          <span id="checkoutSummaryTotal">€0.00</span>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-submit-order" id="submitOrderBtn" data-i18n="checkout_submit">Place Order</button>
+    </form>
+  </div>
+
+  <!-- Order Success Confirmation Modal -->
+  <div class="success-backdrop" id="successBackdrop"></div>
+  <div class="success-modal" id="successModal">
+    <div class="success-icon-wrap">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <h3 data-i18n="success_title">Order Placed Successfully!</h3>
+    <p data-i18n="success_desc">Thank you for your purchase. Your order has been registered in our database system.</p>
+    <div class="order-id-box">
+      <span data-i18n="success_order_id_label">Order ID:</span>
+      <strong id="successOrderId">#000000</strong>
+    </div>
+    <button class="btn btn-secondary btn-close-success" id="closeSuccessBtn" data-i18n="success_close">Continue Shopping</button>
   </div>
 
   <!-- Custom JavaScript -->

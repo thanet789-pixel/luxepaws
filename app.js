@@ -1,8 +1,6 @@
 // LuxePaws Premium E-commerce Logic with Supabase Backend & Multilingual Support (EN & TH)
 
 // --- Supabase Credentials Configuration ---
-// TO CONNECT TO YOUR DATABASE: Paste your Supabase project credentials below.
-// If left blank, the website will automatically fall back to local mock data.
 const SUPABASE_URL = 'https://oylfiyelvquejtswpbxu.supabase.co'; 
 const SUPABASE_ANON_KEY = 'sb_publishable_XaV__6RxvquvwygZrW9HYw_l6Ct7Tfd'; 
 
@@ -144,6 +142,23 @@ const translations = {
     cart_empty: "Your bag is empty.",
     cart_subtotal_label: "Subtotal",
     cart_checkout: "Checkout",
+    
+    // Checkout Translations
+    checkout_header: "Complete Your Order",
+    checkout_name_label: "Full Name",
+    checkout_name_ph: "e.g. John Doe",
+    checkout_email_label: "Email Address",
+    checkout_email_ph: "e.g. john@example.com",
+    checkout_address_label: "Shipping Address",
+    checkout_address_ph: "e.g. 123 Luxury Way, Bangkok, Thailand",
+    checkout_payment_header: "Payment Method",
+    checkout_mock_card: "Mock Demo Payment (No real card required)",
+    checkout_submit: "Place Order",
+    success_title: "Order Placed Successfully!",
+    success_desc: "Thank you for your purchase. Your order has been registered in our database system.",
+    success_order_id_label: "Order ID:",
+    success_close: "Continue Shopping",
+
     // Colors
     "Grey": "Grey",
     "Cream": "Cream",
@@ -232,6 +247,23 @@ const translations = {
     cart_empty: "ไม่มีสินค้าอยู่ในตะกร้าของคุณ",
     cart_subtotal_label: "ยอดรวมย่อย",
     cart_checkout: "ชำระเงิน",
+    
+    // Checkout Translations
+    checkout_header: "กรอกข้อมูลเพื่อสั่งซื้อสินค้า",
+    checkout_name_label: "ชื่อ-นามสกุล",
+    checkout_name_ph: "เช่น สมชาย รักเรียน",
+    checkout_email_label: "ที่อยู่อีเมล",
+    checkout_email_ph: "เช่น somchais@example.com",
+    checkout_address_label: "ที่อยู่สำหรับการจัดส่ง",
+    checkout_address_ph: "เช่น 123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ",
+    checkout_payment_header: "วิธีการชำระเงิน",
+    checkout_mock_card: "การจำลองจ่ายเงิน (ไม่มีการตัดบัตรจริง)",
+    checkout_submit: "ยืนยันการสั่งซื้อ",
+    success_title: "สั่งซื้อสินค้าสำเร็จแล้ว!",
+    success_desc: "ขอบคุณสำหรับการสั่งซื้อ ข้อมูลการสั่งซื้อของคุณได้รับการบันทึกในฐานข้อมูลระบบเรียบร้อยแล้ว",
+    success_order_id_label: "รหัสคำสั่งซื้อ:",
+    success_close: "เลือกช้อปสินค้าต่อ",
+
     // Colors
     "Grey": "สีเทา",
     "Cream": "สีครีม",
@@ -712,7 +744,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!id) return;
 
-      const itemIndex = cart.findIndex(item => item.id === id && item.colorKey === colorKey);
+      const stringId = String(id);
+      const itemIndex = cart.findIndex(item => String(item.id) === stringId && item.colorKey === colorKey);
       if (itemIndex === -1) return;
 
       if (target.classList.contains('inc-qty')) {
@@ -727,7 +760,11 @@ document.addEventListener('DOMContentLoaded', () => {
         cart.splice(itemIndex, 1);
       }
 
-      localStorage.setItem('luxepaws_cart', JSON.stringify(cart));
+      try {
+        localStorage.setItem('luxepaws_cart', JSON.stringify(cart));
+      } catch (e) {
+        console.warn("localStorage.setItem for cart blocked:", e);
+      }
       updateCartUI();
     });
   }
@@ -757,19 +794,139 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Checkouts message translation
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', () => {
-      const msg = currentLang === 'th' ? 'กำลังดำเนินการไปยังหน้าชำระเงิน (ตัวอย่างระบบจำลอง)' : 'Proceeding to checkout (mockup demo)';
-      alert(msg);
+  // --- Checkout Modal & Database Order Insertion Logic ---
+  const checkoutModal = document.getElementById('checkoutModal');
+  const checkoutBackdrop = document.getElementById('checkoutBackdrop');
+  const checkoutCloseBtn = document.getElementById('checkoutCloseBtn');
+  const checkoutForm = document.getElementById('checkoutForm');
+  const checkoutSummaryTotal = document.getElementById('checkoutSummaryTotal');
+
+  const successModal = document.getElementById('successModal');
+  const successBackdrop = document.getElementById('successBackdrop');
+  const successOrderId = document.getElementById('successOrderId');
+  const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+  function openCheckout() {
+    if (cart.length === 0) {
+      alert(currentLang === 'th' ? 'ไม่มีสินค้าอยู่ในตะกร้า!' : 'Your bag is empty!');
+      return;
+    }
+    const subtotal = cart.reduce((total, item) => total + (item.price * item.qty), 0);
+    if (checkoutSummaryTotal) checkoutSummaryTotal.textContent = `€${subtotal.toFixed(2)}`;
+    
+    closeCart();
+    checkoutModal.classList.add('open');
+    checkoutBackdrop.classList.add('open');
+  }
+
+  function closeCheckout() {
+    checkoutModal.classList.remove('open');
+    checkoutBackdrop.classList.remove('open');
+  }
+
+  if (checkoutBtn) checkoutBtn.addEventListener('click', openCheckout);
+  if (checkoutCloseBtn) checkoutCloseBtn.addEventListener('click', closeCheckout);
+  if (checkoutBackdrop) checkoutBackdrop.addEventListener('click', closeCheckout);
+
+  if (checkoutForm) {
+    checkoutForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitOrderBtn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = currentLang === 'th' ? 'กำลังส่งข้อมูลออเดอร์...' : 'Placing Order...';
+      }
+
+      const name = document.getElementById('checkoutName').value;
+      const email = document.getElementById('checkoutEmail').value;
+      const address = document.getElementById('checkoutAddress').value;
+      const subtotal = cart.reduce((total, item) => total + (item.price * item.qty), 0);
+
+      // Map cart items into DB schema structure
+      const itemsList = cart.map(item => {
+        const titleText = translations[currentLang][item.titleKey] || item.titleKey;
+        const colorText = translations[currentLang][item.colorKey] || item.colorKey;
+        return {
+          id: item.id,
+          title: titleText,
+          price: item.price,
+          qty: item.qty,
+          color: colorText
+        };
+      });
+
+      let orderId = 'LP-' + Math.floor(100000 + Math.random() * 900000);
+
+      if (supabase) {
+        try {
+          // Write the checkout order row to Supabase 'orders' database table
+          const { data, error } = await supabase.from('orders').insert([{
+            customer_name: name,
+            customer_email: email,
+            shipping_address: address,
+            items: itemsList,
+            total_price: subtotal,
+            status: 'pending'
+          }]).select();
+
+          if (error) throw error;
+          
+          if (data && data[0] && data[0].id) {
+            orderId = 'LP-' + data[0].id.toString().padStart(6, '0');
+          }
+          console.log("Order saved on Supabase database successfully:", data);
+        } catch (err) {
+          console.error("Database order insertion failed:", err);
+          // Fallback to random order ID if connection is lost so customer is not stuck
+        }
+      } else {
+        console.log("Supabase not connected. Local checkout simulation succeeded.");
+      }
+
+      // Display success details
+      if (successOrderId) successOrderId.textContent = orderId;
+      
+      closeCheckout();
+
+      // Clear Cart
+      cart = [];
+      try {
+        localStorage.setItem('luxepaws_cart', JSON.stringify(cart));
+      } catch (err) {
+        console.warn("Storage write error:", err);
+      }
+      updateCartUI();
+
+      // Open Success modal
+      if (successModal && successBackdrop) {
+        successModal.classList.add('open');
+        successBackdrop.classList.add('open');
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = currentLang === 'th' ? 'ยืนยันการสั่งซื้อ' : 'Place Order';
+      }
+
+      checkoutForm.reset();
     });
   }
+
+  function closeSuccess() {
+    if (successModal && successBackdrop) {
+      successModal.classList.remove('open');
+      successBackdrop.classList.remove('open');
+    }
+  }
+
+  if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', closeSuccess);
+  if (successBackdrop) successBackdrop.addEventListener('click', closeSuccess);
 
   // --- Filtering Logic (Working on Dynamic DOM Nodes) ---
   const filterBtns = document.querySelectorAll('.filter-btn');
 
   function filterProducts(category) {
-    // Dynamic cards must be selected when filtering occurs
     const dynamicCards = document.querySelectorAll('.product-grid .product-card');
     dynamicCards.forEach(card => {
       const cardCategory = card.getAttribute('data-category');
