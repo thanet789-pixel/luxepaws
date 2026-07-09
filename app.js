@@ -624,7 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.style.left = '0';
         navLinks.style.width = '100%';
         navLinks.style.height = 'calc(100vh - 48px)';
-        navLinks.style.backgroundColor = '#161617';
+        navLinks.style.backgroundColor = 'var(--color-light)';
         navLinks.style.padding = '3rem 2.5rem';
         navLinks.style.boxShadow = 'none';
         navLinks.style.zIndex = '999';
@@ -633,12 +633,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Style inner links to look like Apple's big links
         const innerLinks = navLinks.querySelectorAll('a');
         innerLinks.forEach(link => {
-          link.style.fontSize = '1.35rem';
+          link.style.fontFamily = 'var(--font-accent)';
+          link.style.fontSize = '1.25rem';
           link.style.fontWeight = '400';
           link.style.width = '100%';
-          link.style.borderBottom = '1px solid rgba(255, 255, 255, 0.08)';
+          link.style.borderBottom = '1px solid rgba(28, 27, 25, 0.06)';
           link.style.paddingBottom = '0.8rem';
-          link.style.color = '#f5f5f7';
+          link.style.color = 'var(--color-dark)';
           link.style.opacity = '0.9';
         });
 
