@@ -19,7 +19,7 @@
   --font-accent: 'Tenor Sans', 'IBM Plex Sans Thai', sans-serif;
 
   /* Layout and Spacing */
-  --header-height: 90px;
+  --header-height: 48px;
   --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Elegant decelerating cubic transition */
   --transition-fast: all 0.25s ease;
   --shadow-premium: 0 15px 35px -20px rgba(28, 27, 25, 0.08);
