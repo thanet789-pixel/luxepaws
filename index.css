@@ -198,41 +198,19 @@ header.scrolled {
 }
 
 .nav-links a {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 0.2rem 0;
-  gap: 2px;
+  font-family: var(--font-accent); /* Premium Tenor Sans */
+  font-size: 0.75rem; /* Highly visible */
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  padding: 0.6rem 0;
+  color: var(--color-dark);
   position: relative;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
   text-decoration: none;
 }
 
-.nav-links a .nav-th {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 550;
-  color: var(--color-dark);
-  transition: color 0.3s ease;
-  line-height: 1.2;
-}
-
-.nav-links a .nav-en {
-  font-family: var(--font-accent);
-  font-size: 0.52rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  color: var(--color-muted);
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-  line-height: 1.2;
-}
-
-.nav-links a:hover .nav-th {
-  color: var(--color-accent);
-}
-
-.nav-links a:hover .nav-en {
+.nav-links a:hover {
   color: var(--color-accent);
 }
 
@@ -409,19 +387,6 @@ header.scrolled .cart-count {
   }
   .nav-links {
     display: none; /* Hide standard links on mobile */
-  }
-  .nav-links a {
-    align-items: flex-start;
-    text-align: left;
-    gap: 1px;
-  }
-  .nav-links a .nav-th {
-    font-size: 1.15rem;
-    font-weight: 500;
-  }
-  .nav-links a .nav-en {
-    font-size: 0.72rem;
-    align-self: flex-start;
   }
   .menu-toggle {
     display: flex; /* Show mobile hamburger toggle */
