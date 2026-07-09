@@ -166,17 +166,18 @@ header {
   width: 100%;
   height: var(--header-height);
   z-index: 100;
-  background-color: rgba(250, 248, 245, 0.75);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  transition: background-color 0.3s ease;
+  background-color: transparent;
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(28, 27, 25, 0.05);
+  border-bottom: 1px solid transparent;
 }
 
 header.scrolled {
   background-color: rgba(250, 248, 245, 0.88);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(28, 27, 25, 0.05);
   box-shadow: 0 4px 30px rgba(28, 27, 25, 0.04);
 }
 
@@ -198,19 +199,18 @@ header.scrolled {
 
 .nav-links a {
   font-family: var(--font-accent); /* Premium Tenor Sans */
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem; /* Slightly larger for clarity */
+  font-weight: 500; /* Medium weight for high visibility */
+  letter-spacing: 0.12em;
   padding: 0.6rem 0;
   color: var(--color-dark);
-  opacity: 0.8;
+  opacity: 1; /* 100% opacity for sharp readability */
   position: relative;
-  transition: opacity 0.3s ease, color 0.3s ease;
+  transition: color 0.3s ease;
   text-transform: uppercase;
 }
 
 .nav-links a:hover {
-  opacity: 1;
   color: var(--color-accent);
 }
 
