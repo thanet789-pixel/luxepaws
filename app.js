@@ -74,6 +74,15 @@ let isLoaded = false;
 
 const translations = {
   en: {
+    nav_home: "Home",
+    nav_products: "Products",
+    nav_collections: "Collections",
+    nav_gallery: "Gallery",
+    nav_custom: "Custom Design",
+    nav_blog: "Blog",
+    nav_reviews: "Reviews",
+    nav_faq: "FAQ",
+    nav_contact: "Contact",
     nav_shop_all: "Shop All",
     nav_dogs: "For Dogs",
     nav_cats: "For Cats",
@@ -168,6 +177,71 @@ const translations = {
     success_order_id_label: "Order ID:",
     success_close: "Continue Shopping",
 
+    // Gallery Section
+    gallery_subtitle: "LuxePaws Homes",
+    gallery_title: "Inspired Installations",
+    gallery_cap1: "Urban Loft, Munich",
+    gallery_cap2: "Minimalist Condo, Berlin",
+    gallery_cap3: "Cozy Chalet, Zurich",
+    gallery_cap4: "Penthouse Kitchen, Vienna",
+    
+    // Custom Section
+    custom_subtitle: "Tailored Luxury",
+    custom_title: "Bespoke Furniture",
+    custom_desc: "Need specific dimensions or a unique wood finish to match your home interior? Speak directly with our master craftsmen. We offer customized sizing, premium wood selections (Walnut, Ash, Oak), and designer fabric wraps tailored to your styling preferences.",
+    custom_badge_h: "Handcrafted in Bavaria",
+    custom_badge_p: "100% Sustainable Solid Wood",
+    custom_form_name: "Your Name",
+    custom_form_email: "Email Address",
+    custom_form_pet: "Pet Type & Size",
+    custom_opt_ds: "Small Dog (e.g. Pug, Frenchie)",
+    custom_opt_dl: "Medium/Large Dog (e.g. Retriever)",
+    custom_opt_c: "Cat (e.g. Maine Coon, British Shorthair)",
+    custom_form_wood: "Wood Choice",
+    custom_opt_oak: "Premium Oak",
+    custom_opt_ash: "Ash Wood",
+    custom_opt_walnut: "Classic Walnut",
+    custom_form_notes: "Inquiry Details / Dimensions",
+    custom_notes_ph: "Describe your preferred sizes, color tones, or special requests...",
+    custom_submit: "Send Inquiry",
+    custom_success: "Thank you! Your custom inquiry has been successfully sent to our database.",
+    
+    // Blog Section
+    blog_subtitle: "LuxePaws Journal",
+    blog_title: "Living with Design",
+    blog_tag1: "Interior",
+    blog_post1_title: "Integrating Pet Beds Into Modern Living Rooms",
+    blog_post1_excerpt: "Discover how to position your pet's nesting space to complement Scandinavian minimalism and maintain design cohesion.",
+    blog_tag2: "Architecture",
+    blog_post2_title: "The Rise of 'Catification': Wall Climbing Guides",
+    blog_post2_excerpt: "Unlock your cat's climbing instincts without sacrificing wall space. The ultimate architectural climbing layout guide.",
+    blog_tag3: "Health",
+    blog_post3_title: "The Ergonomics of Elevated Pet Feeder Bowls",
+    blog_post3_excerpt: "Why vet science recommends elevated oak wood stands to improve digestion and posture for aging cats and dogs.",
+    blog_read_more: "Read Article",
+    
+    // Reviews Section
+    reviews_subtitle: "Happy Families",
+    reviews_title: "Client Testimonials",
+    review1_text: "\"The Nido dog bed has changed our living room! It looks like a designer sculpture rather than a pet bed. Our Frenchie loves it!\"",
+    reviewer1_title: "Owner of French Bulldog (Munich)",
+    review2_text: "\"Outstanding craftsmanship. The wood finish matches our oak cabinets perfectly, and the bowls are very easy to clean. Best purchase!\"",
+    reviewer2_title: "Owner of Golden Retriever (Hamburg)",
+    review3_text: "\"The Torre cat tower is sturdy and elegant. Our Maine Coon sits on the top cocoon every single day. Worth every euro.\"",
+    reviewer3_title: "Owner of Maine Coon (Vienna)",
+    
+    // FAQ Section
+    faq_subtitle: "Common Questions",
+    faq_title: "Frequently Asked Questions",
+    faq_q1: "What materials are used in LuxePaws furniture?",
+    faq_a1: "We use certified premium materials: 100% sustainable European solid wood (Oak, Ash, Walnut), hypoallergenic natural wool felts, and highly durable designer upholstery fabrics built to resist scratch wear.",
+    faq_q2: "Can I wash the cushions and fabric elements?",
+    faq_a2: "Yes, all our pet bed covers and cushion cases feature premium hidden zippers and are fully machine washable on a gentle cycle (30°C / cold wash).",
+    faq_q3: "Do you ship internationally? What are the delivery times?",
+    faq_a3: "Yes, we deliver worldwide. In-stock products ship within 48 hours. Custom craft works take approximately 2-4 weeks to manufacture in Bavaria before express dispatch.",
+    faq_q4: "How do I clean and maintain the wood stands?",
+    faq_a4: "All wooden stands are sealed with water-resistant pet-safe oils. Simply wipe down spills with a damp cloth. Avoid harsh chemical cleaners to protect the natural timber glaze.",
+
     // Colors
     "Grey": "Grey",
     "Cream": "Cream",
@@ -179,6 +253,15 @@ const translations = {
     "Standard": "Standard"
   },
   th: {
+    nav_home: "หน้าแรก",
+    nav_products: "สินค้า",
+    nav_collections: "คอลเลกชัน",
+    nav_gallery: "ผลงานติดตั้ง",
+    nav_custom: "ออกแบบเอง",
+    nav_blog: "บทความ",
+    nav_reviews: "รีวิวลูกค้า",
+    nav_faq: "คำถามที่พบบ่อย",
+    nav_contact: "ติดต่อเรา",
     nav_shop_all: "เลือกช้อปทั้งหมด",
     nav_dogs: "สำหรับสุนัข",
     nav_cats: "สำหรับแมว",
@@ -272,6 +355,71 @@ const translations = {
     success_desc: "ขอบคุณสำหรับการสั่งซื้อ ข้อมูลการสั่งซื้อของคุณได้รับการบันทึกในฐานข้อมูลระบบเรียบร้อยแล้ว",
     success_order_id_label: "รหัสคำสั่งซื้อ:",
     success_close: "เลือกช้อปสินค้าต่อ",
+
+    // Gallery Section
+    gallery_subtitle: "บ้านของ LuxePaws",
+    gallery_title: "แรงบันดาลใจการติดตั้ง",
+    gallery_cap1: "เออร์บันลอฟท์, มิวนิก",
+    gallery_cap2: "คอนโดมินิมอล, เบอร์ลิน",
+    gallery_cap3: "ชาเลต์แสนอบอุ่น, ซูริก",
+    gallery_cap4: "ครัวเพนท์เฮาส์, เวียนนา",
+    
+    // Custom Section
+    custom_subtitle: "ความหรูหราที่สั่งตัดได้",
+    custom_title: "เฟอร์นิเจอร์สั่งทำพิเศษ",
+    custom_desc: "หากคุณต้องการขนาดที่เฉพาะเจาะจงหรือสีเนื้อไม้ที่เข้ากับสไตล์บ้านของคุณ สามารถพูดคุยกับช่างฝีมือของเราได้โดยตรง เรามีบริการปรับขนาด เลือกเกรดเนื้อไม้ระดับพรีเมียม (วอลนัท, แอช, โอ๊ก) และหุ้มผ้าบุดีไซเนอร์ที่ตรงตามสไตล์ของคุณ",
+    custom_badge_h: "งานฝีมือในแคว้นบาวาเรีย",
+    custom_badge_p: "ไม้แท้จากแหล่งธรรมชาติ 100%",
+    custom_form_name: "ชื่อของคุณ",
+    custom_form_email: "ที่อยู่อีเมล",
+    custom_form_pet: "ประเภทและขนาดของสัตว์เลี้ยง",
+    custom_opt_ds: "สุนัขขนาดเล็ก (เช่น ปั๊ก, เฟรนช์บลูด็อก)",
+    custom_opt_dl: "สุนัขขนาดกลาง/ใหญ่ (เช่น โกลเดนรีทรีฟเวอร์)",
+    custom_opt_c: "แมว (เช่น เมนคูน, บริติชชอร์ตแฮร์)",
+    custom_form_wood: "เนื้อไม้ที่เลือก",
+    custom_opt_oak: "ไม้โอ๊คพรีเมียม",
+    custom_opt_ash: "ไม้แอชธรรมชาติ",
+    custom_opt_walnut: "ไม้คลาสสิกวอลนัท",
+    custom_form_notes: "รายละเอียดการสั่งทำ / ขนาด",
+    custom_notes_ph: "อธิบายขนาดที่คุณต้องการ โทนสี หรือความต้องการพิเศษ...",
+    custom_submit: "ส่งคำขอเสนอราคา",
+    custom_success: "ขอบคุณค่ะ! ข้อมูลคำขอออกแบบเองของคุณได้รับการส่งไปยังระบบเรียบร้อยแล้ว",
+    
+    // Blog Section
+    blog_subtitle: "บันทึกเรื่องราว LuxePaws",
+    blog_title: "การใช้ชีวิตอย่างมีดีไซน์",
+    blog_tag1: "อินทีเรีย",
+    blog_post1_title: "การจัดวางที่นอนสัตว์เลี้ยงในห้องนั่งเล่นโมเดิร์น",
+    blog_post1_excerpt: "ค้นพบวิธีการจัดวางพื้นที่นอนของสัตว์เลี้ยงให้กลมกลืนกับสไตล์มินิมอลแบบสแกนดิเนเวียโดยไม่ทำลายความสวยงามของห้อง",
+    blog_tag2: "สถาปัตยกรรม",
+    blog_post2_title: "การเติบโตของ 'Catification': คู่มือคอนโดแมวติดผนัง",
+    blog_post2_excerpt: "ตอบสนองสัญชาตญาณการปีนป่ายของแมวโดยไม่เสียพื้นที่ใช้สอยในแนวราบ คู่มือการออกแบบคอนโดแมวฉบับสมบูรณ์",
+    blog_tag3: "สุขภาพสัตว์เลี้ยง",
+    blog_post3_title: "สรีรศาสตร์ของชามอาหารสัตว์เลี้ยงแบบยกสูง",
+    blog_post3_excerpt: "ทำไมสัตวแพทย์จึงแนะนำชั้นวางชามข้าวไม้โอ๊คแบบยกสูง เพื่อช่วยในการย่อยอาหารและการวางท่าทางที่ดีสำหรับสุนัขและแมว",
+    blog_read_more: "อ่านบทความ",
+    
+    // Reviews Section
+    reviews_subtitle: "ครอบครัวที่มีความสุข",
+    reviews_title: "ความคิดเห็นจากลูกค้า",
+    review1_text: "\"ที่นอนสุนัข Nido เปลี่ยนห้องนั่งเล่นของเราไปเลย! มันดูเหมือนประติมากรรมตกแต่งบ้านมากกว่าที่นอนหมาทั่วไป เจ้าเฟรนช์ของเราชอบมากค่ะ!\"",
+    reviewer1_title: "เจ้าของเฟรนช์บลูด็อก (มิวนิก)",
+    review2_text: "\"งานฝีมือที่ยอดเยี่ยมมาก สีเนื้อไม้โอ๊คเข้ากับตู้กับข้าวของเราได้อย่างลงตัวสุด ๆ ชามทำความสะอาดง่ายมาก แนะนำเลยครับ!\"",
+    reviewer2_title: "เจ้าของโกลเดนรีทรีฟเวอร์ (ฮัมบูร์ก)",
+    review3_text: "\"คอนโดแมว Torre แข็งแรงและสวยงามหรูหรามาก เจ้าเมนคูนของเราขึ้นไปนอนบนโดมบนสุดทุกวันเลยค่ะ คุ้มค่าเงินทุกยูโรจริงๆ\"",
+    reviewer3_title: "เจ้าของเมนคูน (เวียนนา)",
+    
+    // FAQ Section
+    faq_subtitle: "คำถามที่พบบ่อย",
+    faq_title: "คำถามทั่วไปเกี่ยวกับการสั่งทำ",
+    faq_q1: "วัสดุที่ใช้ในเฟอร์นิเจอร์ LuxePaws คืออะไร?",
+    faq_a1: "เราใช้วัสดุระดับพรีเมียมที่ผ่านการรับรอง: ไม้แท้ยุโรป 100% จากป่าหมุนเวียน (ไม้โอ๊ค, ไม้แอช, ไม้วอลนัท), ใยสักหลาดขนแกะธรรมชาติที่ไม่ก่อให้เกิดอาการแพ้ และผ้าบุดีไซเนอร์ที่หนาเป็นพิเศษสำหรับต้านทานรอยขีดข่วนของกรงเล็บสัตว์เลี้ยง",
+    faq_q2: "สามารถถอดซักเบาะและชิ้นส่วนผ้าได้หรือไม่?",
+    faq_a2: "ได้ค่ะ ปลอกที่นอนสัตว์เลี้ยงและปลอกเบาะรองนั่งทั้งหมดของเราใช้ซิปซ่อนคุณภาพสูง และสามารถถอดซักด้วยเครื่องซักผ้าโหมดถนอมผ้าได้ตามปกติ (อุณหภูมิ 30°C / ซักเย็น)",
+    faq_q3: "คุณมีบริการจัดส่งไปต่างประเทศหรือไม่? และใช้เวลาจัดส่งนานเท่าใด?",
+    faq_a3: "เราจัดส่งสินค้าทั่วโลกค่ะ สำหรับสินค้าพร้อมส่งจะดำเนินการแพ็คและส่งออกภายใน 48 ชั่วโมง ส่วนงานสั่งทำพิเศษจะใช้เวลาผลิตในแคว้นบาวาเรียประมาณ 2-4 สัปดาห์ก่อนจัดส่งแบบด่วนพิเศษ",
+    faq_q4: "วิธีการดูแลรักษาและทำความสะอาดที่วางชามข้าวไม้อย่างไร?",
+    faq_a4: "ชั้นวางไม้ทั้งหมดเคลือบสารป้องกันน้ำซึมด้วยน้ำมันธรรมชาติที่ปลอดภัยต่อสัตว์เลี้ยง เพียงเช็ดสิ่งสกปรกออกด้วยผ้าชุบน้ำหมาด ๆ และควรหลีกเลี่ยงน้ำยาทำความสะอาดที่มีฤทธิ์กัดกร่อนเพื่อถนอมเนื้อไม้ให้เงางามยืนยาว",
 
     // Colors
     "Grey": "สีเทา",
@@ -1049,6 +1197,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
       productGrid.innerHTML = '';
       cards.forEach(card => productGrid.appendChild(card));
+    });
+  }
+
+  // --- FAQ Accordion Logic ---
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  faqQuestions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const faqItem = btn.parentElement;
+      const isActive = faqItem.classList.contains('active');
+      
+      // Close other items
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+        const answer = item.querySelector('.faq-answer');
+        if (answer) answer.style.maxHeight = null;
+      });
+      
+      if (!isActive) {
+        faqItem.classList.add('active');
+        const answer = faqItem.querySelector('.faq-answer');
+        if (answer) answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // --- Custom Inquiry Form Submission ---
+  const customInquiryForm = document.getElementById('customInquiryForm');
+  if (customInquiryForm) {
+    customInquiryForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('customSubmitBtn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = currentLang === 'th' ? 'กำลังส่งข้อมูล...' : 'Sending...';
+      }
+
+      const name = document.getElementById('customName').value;
+      const email = document.getElementById('customEmail').value;
+      const petType = document.getElementById('customPetType').value;
+      const wood = document.getElementById('customWood').value;
+      const notes = document.getElementById('customNotes').value;
+
+      if (db) {
+        try {
+          await db.collection('custom_inquiries').add({
+            name,
+            email,
+            pet_type: petType,
+            wood_choice: wood,
+            notes,
+            created_at: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          
+          alert(translations[currentLang].custom_success || "Inquiry sent successfully!");
+          customInquiryForm.reset();
+        } catch (err) {
+          console.error("Custom inquiry save failed:", err);
+          alert(currentLang === 'th' ? "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง" : "Failed to save inquiry. Please try again.");
+        }
+      } else {
+        // Mock success fallback
+        console.log("Mock custom design inquiry submitted:", { name, email, petType, wood, notes });
+        alert(translations[currentLang].custom_success || "Inquiry sent successfully!");
+        customInquiryForm.reset();
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = translations[currentLang].custom_submit || 'Send Inquiry';
+      }
     });
   }
 

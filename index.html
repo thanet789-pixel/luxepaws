@@ -31,10 +31,15 @@
       
       <!-- Navigation Links (Middle) -->
       <nav class="nav-links">
-        <a href="#" class="filter-link" data-target="all" data-i18n="nav_shop_all">Shop All</a>
-        <a href="#" class="filter-link" data-target="dog" data-i18n="nav_dogs">For Dogs</a>
-        <a href="#" class="filter-link" data-target="cat" data-i18n="nav_cats">For Cats</a>
-        <a href="#about" id="navAbout" data-i18n="nav_story">Our Story</a>
+        <a href="#heroSection" data-i18n="nav_home">Home</a>
+        <a href="#shop" class="filter-link" data-target="all" data-i18n="nav_products">Products</a>
+        <a href="#collectionsSection" data-i18n="nav_collections">Collections</a>
+        <a href="#gallerySection" data-i18n="nav_gallery">Gallery</a>
+        <a href="#customSection" data-i18n="nav_custom">Custom Design</a>
+        <a href="#blogSection" data-i18n="nav_blog">Blog</a>
+        <a href="#reviewsSection" data-i18n="nav_reviews">Reviews</a>
+        <a href="#faqSection" data-i18n="nav_faq">FAQ</a>
+        <a href="#contactSection" data-i18n="nav_contact">Contact</a>
       </nav>
       
       <!-- Navigation Actions (Right) -->
@@ -275,6 +280,236 @@
       </div>
       <div class="story-img">
         <img src="assets/hero_banner.png" alt="Elegant dog bed in beautifully designed apartment" id="storyImgElement">
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery-section" id="gallerySection">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle" data-i18n="gallery_subtitle">LuxePaws Homes</span>
+        <h2 class="title" data-i18n="gallery_title">Inspired Installations</h2>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="assets/hero_banner.png" alt="LuxePaws dog bed in premium loft">
+          <div class="gallery-caption" data-i18n="gallery_cap1">Urban Loft, Munich</div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/hero_slide2_1783520720625.png" alt="LuxePaws climbing wall in modern room">
+          <div class="gallery-caption" data-i18n="gallery_cap2">Minimalist Condo, Berlin</div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/hero_slide3_1783520737485.png" alt="LuxePaws bed by fireplace">
+          <div class="gallery-caption" data-i18n="gallery_cap3">Cozy Chalet, Zurich</div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/hero_slide4_1783520750258.png" alt="LuxePaws double feeder stand">
+          <div class="gallery-caption" data-i18n="gallery_cap4">Penthouse Kitchen, Vienna</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Custom Design Section -->
+  <section class="custom-section" id="customSection">
+    <div class="container">
+      <div class="custom-wrap">
+        <div class="custom-info">
+          <span class="subtitle" data-i18n="custom_subtitle">Tailored Luxury</span>
+          <h2 class="title" data-i18n="custom_title">Bespoke Furniture</h2>
+          <p data-i18n="custom_desc">Need specific dimensions or a unique wood finish to match your home interior? Speak directly with our master craftsmen. We offer customized sizing, premium wood selections (Walnut, Ash, Oak), and designer fabric wraps tailored to your styling preferences.</p>
+          <div class="craftsman-badge">
+            <i class="fa-solid fa-stamp"></i>
+            <div>
+              <strong data-i18n="custom_badge_h">Handcrafted in Bavaria</strong>
+              <p data-i18n="custom_badge_p">100% Sustainable Solid Wood</p>
+            </div>
+          </div>
+        </div>
+        <div class="custom-form-card">
+          <form id="customInquiryForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="custom_form_name">Your Name</label>
+                <input type="text" id="customName" required placeholder="e.g. John Doe" data-i18n-placeholder="checkout_name_ph">
+              </div>
+              <div class="form-group">
+                <label data-i18n="custom_form_email">Email</label>
+                <input type="email" id="customEmail" required placeholder="e.g. john@example.com" data-i18n-placeholder="checkout_email_ph">
+              </div>
+            </div>
+            <div class="form-group">
+              <label data-i18n="custom_form_pet">Pet Type & Size</label>
+              <select id="customPetType">
+                <option value="dog_small" data-i18n="custom_opt_ds">Small Dog (e.g. Pug, Frenchie)</option>
+                <option value="dog_large" data-i18n="custom_opt_dl">Medium/Large Dog (e.g. Retriever)</option>
+                <option value="cat" data-i18n="custom_opt_c">Cat (e.g. Maine Coon, British Shorthair)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="custom_form_wood">Wood Choice</label>
+              <select id="customWood">
+                <option value="oak" data-i18n="custom_opt_oak">Premium Oak</option>
+                <option value="ash" data-i18n="custom_opt_ash">Ash Wood</option>
+                <option value="walnut" data-i18n="custom_opt_walnut">Classic Walnut</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="custom_form_notes">Inquiry Details / Dimensions</label>
+              <textarea id="customNotes" rows="3" placeholder="Describe your preferred sizes, color tones, or special requests..." data-i18n-placeholder="custom_notes_ph"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="customSubmitBtn" data-i18n="custom_submit">Send Inquiry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="blog-section" id="blogSection">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle" data-i18n="blog_subtitle">LuxePaws Journal</span>
+        <h2 class="title" data-i18n="blog_title">Living with Design</h2>
+      </div>
+      <div class="blog-grid">
+        <article class="blog-card">
+          <div class="blog-img-wrap">
+            <img src="assets/hero_banner.png" alt="Pet furniture placement tips">
+          </div>
+          <div class="blog-content">
+            <span class="blog-tag" data-i18n="blog_tag1">Interior</span>
+            <h3 data-i18n="blog_post1_title">Integrating Pet Beds Into Modern Living Rooms</h3>
+            <p data-i18n="blog_post1_excerpt">Discover how to position your pet's nesting space to complement Scandinavian minimalism and maintain design cohesion.</p>
+            <a href="#" class="read-more" data-i18n="blog_read_more">Read Article <i class="fa-solid fa-arrow-right-long"></i></a>
+          </div>
+        </article>
+        <article class="blog-card">
+          <div class="blog-img-wrap">
+            <img src="assets/hero_slide2_1783520720625.png" alt="Cat climbing systems design">
+          </div>
+          <div class="blog-content">
+            <span class="blog-tag" data-i18n="blog_tag2">Architecture</span>
+            <h3 data-i18n="blog_post2_title">The Rise of 'Catification': Wall Climbing Guides</h3>
+            <p data-i18n="blog_post2_excerpt">Unlock your cat's climbing instincts without sacrificing wall space. The ultimate architectural climbing layout guide.</p>
+            <a href="#" class="read-more" data-i18n="blog_read_more">Read Article <i class="fa-solid fa-arrow-right-long"></i></a>
+          </div>
+        </article>
+        <article class="blog-card">
+          <div class="blog-img-wrap">
+            <img src="assets/hero_slide4_1783520750258.png" alt="Feeding bowl ergonomics">
+          </div>
+          <div class="blog-content">
+            <span class="blog-tag" data-i18n="blog_tag3">Health</span>
+            <h3 data-i18n="blog_post3_title">The Ergonomics of Elevated Pet Feeder Bowls</h3>
+            <p data-i18n="blog_post3_excerpt">Why vet science recommends elevated oak wood stands to improve digestion and posture for aging cats and dogs.</p>
+            <a href="#" class="read-more" data-i18n="blog_read_more">Read Article <i class="fa-solid fa-arrow-right-long"></i></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews-section" id="reviewsSection">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle" data-i18n="reviews_subtitle">Happy Families</span>
+        <h2 class="title" data-i18n="reviews_title">Client Testimonials</h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p class="review-text" data-i18n="review1_text">"The Nido dog bed has changed our living room! It looks like a designer sculpture rather than a pet bed. Our Frenchie loves it!"</p>
+          <div class="reviewer-info">
+            <strong class="reviewer-name">Sarah K.</strong>
+            <span class="reviewer-title" data-i18n="reviewer1_title">Owner of French Bulldog (Munich)</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p class="review-text" data-i18n="review2_text">"Outstanding craftsmanship. The wood finish matches our oak cabinets perfectly, and the bowls are very easy to clean. Best purchase!"</p>
+          <div class="reviewer-info">
+            <strong class="reviewer-name">Marc L.</strong>
+            <span class="reviewer-title" data-i18n="reviewer2_title">Owner of Golden Retriever (Hamburg)</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p class="review-text" data-i18n="review3_text">"The Torre cat tower is sturdy and elegant. Our Maine Coon sits on the top cocoon every single day. Worth every euro."</p>
+          <div class="reviewer-info">
+            <strong class="reviewer-name">Emma R.</strong>
+            <span class="reviewer-title" data-i18n="reviewer3_title">Owner of Maine Coon (Vienna)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section" id="faqSection">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle" data-i18n="faq_subtitle">Common Questions</span>
+        <h2 class="title" data-i18n="faq_title">Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q1">What materials are used in LuxePaws furniture?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p data-i18n="faq_a1">We use certified premium materials: 100% sustainable European solid wood (Oak, Ash, Walnut), hypoallergenic natural wool felts, and highly durable designer upholstery fabrics built to resist scratch wear.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q2">Can I wash the cushions and fabric elements?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p data-i18n="faq_a2">Yes, all our pet bed covers and cushion cases feature premium hidden zippers and are fully machine washable on a gentle cycle (30°C / cold wash).</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q3">Do you ship internationally? What are the delivery times?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p data-i18n="faq_a3">Yes, we deliver worldwide. In-stock products ship within 48 hours. Custom craft works take approximately 2-4 weeks to manufacture in Bavaria before express dispatch.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q4">How do I clean and maintain the wood stands?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p data-i18n="faq_a4">All wooden stands are sealed with water-resistant pet-safe oils. Simply wipe down spills with a damp cloth. Avoid harsh chemical cleaners to protect the natural timber glaze.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
