@@ -1273,6 +1273,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- High-Performance Scrollspy Navigation Highlight ---
+  const spySections = document.querySelectorAll('section[id], footer[id]');
+  const navItems = document.querySelectorAll('.nav-links a');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-20% 0px -60% 0px',
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        
+        navItems.forEach(item => {
+          const href = item.getAttribute('href');
+          if (href === `#${id}`) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      }
+    });
+  }, observerOptions);
+
+  spySections.forEach(section => observer.observe(section));
+
   // Initialize: Load products from Supabase or Fallback
   loadProducts();
   
