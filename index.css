@@ -202,10 +202,10 @@ header.scrolled {
 }
 
 .nav-links a {
-  font-family: var(--font-accent); /* Premium Tenor Sans */
-  font-size: 0.75rem; /* Highly visible */
+  font-family: var(--font-sans); /* Montserrat + IBM Plex Sans Thai */
+  font-size: 0.72rem; /* Clean and elegant scale */
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   padding: 0.6rem 0;
   color: var(--color-dark);
   position: relative;

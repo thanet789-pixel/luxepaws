@@ -786,7 +786,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Style inner links to look like Apple's big links
         const innerLinks = navLinks.querySelectorAll('a');
         innerLinks.forEach(link => {
-          link.style.fontFamily = 'var(--font-accent)';
+          link.style.fontFamily = 'var(--font-sans)';
           link.style.fontSize = '1.25rem';
           link.style.fontWeight = '400';
           link.style.width = '100%';
