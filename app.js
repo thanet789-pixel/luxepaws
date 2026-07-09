@@ -761,9 +761,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelector('.nav-links');
   if (menuToggle && navLinks) {
     menuToggle.addEventListener('click', () => {
-      const isOpen = navLinks.style.display === 'flex';
+      const isOpen = menuToggle.classList.contains('open');
       if (isOpen) {
         navLinks.style.display = 'none';
+        navLinks.removeAttribute('style');
+        const innerLinks = navLinks.querySelectorAll('a');
+        innerLinks.forEach(link => link.removeAttribute('style'));
         menuToggle.classList.remove('open');
         document.body.style.overflow = '';
       } else {
@@ -798,10 +801,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Close menu when a link inside is clicked
+    // Close menu when a link inside is clicked (only in mobile view)
     navLinks.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A') {
+      if (e.target.closest('a') && menuToggle.classList.contains('open')) {
         navLinks.style.display = 'none';
+        navLinks.removeAttribute('style');
+        const innerLinks = navLinks.querySelectorAll('a');
+        innerLinks.forEach(link => link.removeAttribute('style'));
         menuToggle.classList.remove('open');
         document.body.style.overflow = '';
       }
