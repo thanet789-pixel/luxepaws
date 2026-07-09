@@ -614,20 +614,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- Mobile Navigation Toggle ---
+  // --- Mobile Navigation Toggle (Apple-style Full Screen Menu) ---
   const menuToggle = document.getElementById('menuToggle');
   const navLinks = document.querySelector('.nav-links');
   if (menuToggle && navLinks) {
     menuToggle.addEventListener('click', () => {
-      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-      navLinks.style.flexDirection = 'column';
-      navLinks.style.position = 'absolute';
-      navLinks.style.top = '100%';
-      navLinks.style.left = '0';
-      navLinks.style.width = '100%';
-      navLinks.style.backgroundColor = 'var(--color-white)';
-      navLinks.style.padding = '2rem';
-      navLinks.style.boxShadow = 'var(--shadow-premium)';
+      const isOpen = navLinks.style.display === 'flex';
+      if (isOpen) {
+        navLinks.style.display = 'none';
+        menuToggle.classList.remove('open');
+        document.body.style.overflow = '';
+      } else {
+        navLinks.style.display = 'flex';
+        navLinks.style.flexDirection = 'column';
+        navLinks.style.position = 'fixed';
+        navLinks.style.top = '48px';
+        navLinks.style.left = '0';
+        navLinks.style.width = '100%';
+        navLinks.style.height = 'calc(100vh - 48px)';
+        navLinks.style.backgroundColor = '#161617';
+        navLinks.style.padding = '3rem 2.5rem';
+        navLinks.style.boxShadow = 'none';
+        navLinks.style.zIndex = '999';
+        navLinks.style.gap = '1.8rem';
+        
+        // Style inner links to look like Apple's big links
+        const innerLinks = navLinks.querySelectorAll('a');
+        innerLinks.forEach(link => {
+          link.style.fontSize = '1.35rem';
+          link.style.fontWeight = '400';
+          link.style.width = '100%';
+          link.style.borderBottom = '1px solid rgba(255, 255, 255, 0.08)';
+          link.style.paddingBottom = '0.8rem';
+          link.style.color = '#f5f5f7';
+          link.style.opacity = '0.9';
+        });
+
+        menuToggle.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+
+    // Close menu when a link inside is clicked
+    navLinks.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') {
+        navLinks.style.display = 'none';
+        menuToggle.classList.remove('open');
+        document.body.style.overflow = '';
+      }
     });
   }
 
