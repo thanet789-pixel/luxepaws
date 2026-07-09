@@ -202,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Render tab tables
       renderOrdersTable();
       renderProductsTable();
+      loadCmsData();
       
       console.log("Dashboard database loading completed successfully.");
     } catch (err) {
@@ -591,5 +592,470 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // ==========================================
+  // 6. STOREFRONT CMS & CONTENT MANAGER
+  // ==========================================
+
+  const cmsSectionSelect = document.getElementById('cmsSectionSelect');
+  const cmsSectionGroups = document.querySelectorAll('.cms-section-group');
+
+  if (cmsSectionSelect) {
+    cmsSectionSelect.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      cmsSectionGroups.forEach(group => {
+        if (group.id === `cmsGroup_${selected}`) {
+          group.style.display = 'block';
+        } else {
+          group.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  function renderCmsInputs() {
+    // 1. Render Hero carousel slide inputs (5 items)
+    const heroContainer = document.getElementById('heroSlidesInputsContainer');
+    if (heroContainer) {
+      let html = '';
+      for (let i = 1; i <= 5; i++) {
+        html += `
+          <div class="cms-card-item">
+            <h5>Carousel Slide ${i}</h5>
+            <div class="cms-image-preview-container">
+              <img src="assets/hero_banner.png" id="prev_hero_img_${i}" class="cms-image-preview">
+              <div class="cms-image-controls">
+                <input type="text" id="hero_img_${i}" placeholder="Image URL (e.g. assets/hero_banner.png)">
+                <input type="file" id="file_hero_img_${i}" accept="image/*" data-target="hero_img_${i}" data-prev="prev_hero_img_${i}">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Slide Title (EN)</label>
+                <input type="text" id="hero_title_en_${i}" placeholder="e.g. Sustainable Luxury">
+              </div>
+              <div class="form-group col-6">
+                <label>Slide Title (TH)</label>
+                <input type="text" id="hero_title_th_${i}" placeholder="e.g. ความหรูหราที่ยั่งยืน">
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      heroContainer.innerHTML = html;
+    }
+
+    // 2. Render Gallery items (4 items)
+    const galleryContainer = document.getElementById('galleryInputsContainer');
+    if (galleryContainer) {
+      let html = '';
+      for (let i = 1; i <= 4; i++) {
+        html += `
+          <div class="cms-card-item">
+            <h5>Gallery Photo Item ${i}</h5>
+            <div class="cms-image-preview-container">
+              <img src="assets/hero_banner.png" id="prev_gallery_img_${i}" class="cms-image-preview">
+              <div class="cms-image-controls">
+                <input type="text" id="gallery_img_${i}" placeholder="Image URL">
+                <input type="file" id="file_gallery_img_${i}" accept="image/*" data-target="gallery_img_${i}" data-prev="prev_gallery_img_${i}">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Caption / Room Location (EN)</label>
+                <input type="text" id="gallery_cap_en_${i}" placeholder="e.g. Urban Loft, Munich">
+              </div>
+              <div class="form-group col-6">
+                <label>Caption / Room Location (TH)</label>
+                <input type="text" id="gallery_cap_th_${i}" placeholder="e.g. เออร์บันลอฟท์, มิวนิก">
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      galleryContainer.innerHTML = html;
+    }
+
+    // 3. Render Blog items (3 posts)
+    const blogContainer = document.getElementById('blogInputsContainer');
+    if (blogContainer) {
+      let html = '';
+      for (let i = 1; i <= 3; i++) {
+        html += `
+          <div class="cms-card-item">
+            <h5>Editorial Blog Card ${i}</h5>
+            <div class="cms-image-preview-container">
+              <img src="assets/hero_banner.png" id="prev_blog_img_${i}" class="cms-image-preview">
+              <div class="cms-image-controls">
+                <input type="text" id="blog_img_${i}" placeholder="Image URL">
+                <input type="file" id="file_blog_img_${i}" accept="image/*" data-target="blog_img_${i}" data-prev="prev_blog_img_${i}">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Topic Tag (EN)</label>
+                <input type="text" id="blog_tag_en_${i}" placeholder="e.g. Health">
+              </div>
+              <div class="form-group col-6">
+                <label>Topic Tag (TH)</label>
+                <input type="text" id="blog_tag_th_${i}" placeholder="e.g. สุขภาพสัตว์เลี้ยง">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Blog Title (EN)</label>
+                <input type="text" id="blog_title_en_${i}" placeholder="Article Headline (EN)">
+              </div>
+              <div class="form-group col-6">
+                <label>Blog Title (TH)</label>
+                <input type="text" id="blog_title_th_${i}" placeholder="Article Headline (TH)">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Short Excerpt description (EN)</label>
+                <textarea id="blog_excerpt_en_${i}" rows="2" placeholder="Brief summary of the article (EN)"></textarea>
+              </div>
+              <div class="form-group col-6">
+                <label>Short Excerpt description (TH)</label>
+                <textarea id="blog_excerpt_th_${i}" rows="2" placeholder="สรุปย่อของบทความ (TH)"></textarea>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      blogContainer.innerHTML = html;
+    }
+
+    // 4. Render Customer Reviews (3 items)
+    const reviewContainer = document.getElementById('reviewInputsContainer');
+    if (reviewContainer) {
+      let html = '';
+      for (let i = 1; i <= 3; i++) {
+        html += `
+          <div class="cms-card-item">
+            <h5>Customer Testimonial Card ${i}</h5>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Testimonial Text (EN)</label>
+                <textarea id="review_text_en_${i}" rows="3" placeholder="Feedback paragraph (EN)"></textarea>
+              </div>
+              <div class="form-group col-6">
+                <label>Testimonial Text (TH)</label>
+                <textarea id="review_text_th_${i}" rows="3" placeholder="ข้อความรีวิวของลูกค้า (TH)"></textarea>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>Reviewer Name</label>
+                <input type="text" id="review_name_${i}" placeholder="e.g. Sarah K.">
+              </div>
+              <div class="form-group col-4">
+                <label>Subtitle & Location (EN)</label>
+                <input type="text" id="review_title_en_${i}" placeholder="e.g. Owner of French Bulldog (Munich)">
+              </div>
+              <div class="form-group col-4">
+                <label>Subtitle & Location (TH)</label>
+                <input type="text" id="review_title_th_${i}" placeholder="e.g. เจ้าของเฟรนช์บลูด็อก (มิวนิก)">
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      reviewContainer.innerHTML = html;
+    }
+
+    // 5. Render FAQ items (4 items)
+    const faqContainer = document.getElementById('faqInputsContainer');
+    if (faqContainer) {
+      let html = '';
+      for (let i = 1; i <= 4; i++) {
+        html += `
+          <div class="cms-card-item">
+            <h5>FAQ Accordion Item ${i}</h5>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Question (EN)</label>
+                <input type="text" id="faq_q_en_${i}" placeholder="FAQ Question (EN)">
+              </div>
+              <div class="form-group col-6">
+                <label>Question (TH)</label>
+                <input type="text" id="faq_q_th_${i}" placeholder="คำถามทั่วไป (TH)">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Answer (EN)</label>
+                <textarea id="faq_a_en_${i}" rows="3" placeholder="FAQ Answer (EN)"></textarea>
+              </div>
+              <div class="form-group col-6">
+                <label>Answer (TH)</label>
+                <textarea id="faq_a_th_${i}" rows="3" placeholder="คำอธิบาย/คำตอบ (TH)"></textarea>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      faqContainer.innerHTML = html;
+    }
+  }
+
+  function setupCmsUploads() {
+    const fileInputs = document.querySelectorAll('#cmsPanel input[type="file"]');
+    fileInputs.forEach(fileInput => {
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const textInputId = fileInput.getAttribute('data-target');
+        const prevImgId = fileInput.getAttribute('data-prev');
+        const textInput = document.getElementById(textInputId);
+        const prevImg = document.getElementById(prevImgId);
+        
+        if (textInput) textInput.value = "Uploading file to Firebase Storage...";
+
+        if (firebase.storage) {
+          try {
+            console.log("Uploading file to Firebase Storage:", file.name);
+            const storageRef = firebase.storage().ref();
+            const fileRef = storageRef.child(`storefront/${Date.now()}_${file.name}`);
+            const snapshot = await fileRef.put(file);
+            const downloadUrl = await snapshot.ref.getDownloadURL();
+            
+            console.log("File uploaded successfully. URL:", downloadUrl);
+            if (textInput) textInput.value = downloadUrl;
+            if (prevImg) prevImg.src = downloadUrl;
+          } catch (err) {
+            console.error("Firebase Storage upload failed:", err);
+            alert("Firebase Storage upload failed. Please verify rules permit authenticated writes.");
+            if (textInput) textInput.value = "";
+          }
+        } else {
+          // Fallback offline path simulation
+          const fakeUrl = `assets/${file.name}`;
+          if (textInput) textInput.value = fakeUrl;
+          if (prevImg) prevImg.src = fakeUrl;
+        }
+      });
+    });
+
+    // Sync input text changes to image uploader previews immediately
+    const textInputs = document.querySelectorAll('#cmsPanel input[type="text"]');
+    textInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        const idNum = input.id.split('_').pop();
+        let prevImg = null;
+        if (input.id.startsWith('hero_img_')) prevImg = document.getElementById(`prev_hero_img_${idNum}`);
+        else if (input.id.startsWith('gallery_img_')) prevImg = document.getElementById(`prev_gallery_img_${idNum}`);
+        else if (input.id.startsWith('blog_img_')) prevImg = document.getElementById(`prev_blog_img_${idNum}`);
+        else if (input.id === 'story_img') prevImg = document.getElementById('prev_story_img');
+        
+        if (prevImg && input.value) {
+          prevImg.src = input.value;
+        }
+      });
+    });
+  }
+
+  window.loadCmsData = async function() {
+    if (!db) return;
+    
+    try {
+      console.log("Fetching storefront CMS configurations from Firebase Firestore...");
+      const doc = await db.collection('storefront_settings').doc('main').get();
+      
+      if (doc.exists) {
+        const data = doc.data();
+        
+        // 1. Populate Hero Carousel
+        if (Array.isArray(data.hero_slides)) {
+          data.hero_slides.forEach((slide, idx) => {
+            const i = idx + 1;
+            if (document.getElementById(`hero_img_${i}`)) {
+              document.getElementById(`hero_img_${i}`).value = slide.img || '';
+              document.getElementById(`prev_hero_img_${i}`).src = slide.img || 'assets/hero_banner.png';
+              document.getElementById(`hero_title_en_${i}`).value = slide.title_en || '';
+              document.getElementById(`hero_title_th_${i}`).value = slide.title_th || '';
+            }
+          });
+        }
+        
+        // 2. Populate Story Philosophy
+        if (data.story) {
+          document.getElementById('story_img').value = data.story.img || '';
+          document.getElementById('prev_story_img').src = data.story.img || 'assets/hero_banner.png';
+          document.getElementById('story_title_en').value = data.story.title_en || '';
+          document.getElementById('story_title_th').value = data.story.title_th || '';
+          document.getElementById('story_p1_en').value = data.story.p1_en || '';
+          document.getElementById('story_p1_th').value = data.story.p1_th || '';
+          document.getElementById('story_p2_en').value = data.story.p2_en || '';
+          document.getElementById('story_p2_th').value = data.story.p2_th || '';
+          document.getElementById('story_btn_en').value = data.story.btn_en || '';
+          document.getElementById('story_btn_th').value = data.story.btn_th || '';
+        }
+        
+        // 3. Populate Gallery
+        if (Array.isArray(data.gallery)) {
+          data.gallery.forEach((item, idx) => {
+            const i = idx + 1;
+            if (document.getElementById(`gallery_img_${i}`)) {
+              document.getElementById(`gallery_img_${i}`).value = item.img || '';
+              document.getElementById(`prev_gallery_img_${i}`).src = item.img || 'assets/hero_banner.png';
+              document.getElementById(`gallery_cap_en_${i}`).value = item.cap_en || '';
+              document.getElementById(`gallery_cap_th_${i}`).value = item.cap_th || '';
+            }
+          });
+        }
+        
+        // 4. Populate Blog Cards
+        if (Array.isArray(data.blog)) {
+          data.blog.forEach((post, idx) => {
+            const i = idx + 1;
+            if (document.getElementById(`blog_img_${i}`)) {
+              document.getElementById(`blog_img_${i}`).value = post.img || '';
+              document.getElementById(`prev_blog_img_${i}`).src = post.img || 'assets/hero_banner.png';
+              document.getElementById(`blog_tag_en_${i}`).value = post.tag_en || '';
+              document.getElementById(`blog_tag_th_${i}`).value = post.tag_th || '';
+              document.getElementById(`blog_title_en_${i}`).value = post.title_en || '';
+              document.getElementById(`blog_title_th_${i}`).value = post.title_th || '';
+              document.getElementById(`blog_excerpt_en_${i}`).value = post.excerpt_en || '';
+              document.getElementById(`blog_excerpt_th_${i}`).value = post.excerpt_th || '';
+            }
+          });
+        }
+        
+        // 5. Populate Testimonials
+        if (Array.isArray(data.reviews)) {
+          data.reviews.forEach((review, idx) => {
+            const i = idx + 1;
+            if (document.getElementById(`review_name_${i}`)) {
+              document.getElementById(`review_text_en_${i}`).value = review.text_en || '';
+              document.getElementById(`review_text_th_${i}`).value = review.text_th || '';
+              document.getElementById(`review_name_${i}`).value = review.name || '';
+              document.getElementById(`review_title_en_${i}`).value = review.title_en || '';
+              document.getElementById(`review_title_th_${i}`).value = review.title_th || '';
+            }
+          });
+        }
+        
+        // 6. Populate FAQ Accordions
+        if (Array.isArray(data.faq)) {
+          data.faq.forEach((item, idx) => {
+            const i = idx + 1;
+            if (document.getElementById(`faq_q_en_${i}`)) {
+              document.getElementById(`faq_q_en_${i}`).value = item.q_en || '';
+              document.getElementById(`faq_q_th_${i}`).value = item.q_th || '';
+              document.getElementById(`faq_a_en_${i}`).value = item.a_en || '';
+              document.getElementById(`faq_a_th_${i}`).value = item.a_th || '';
+            }
+          });
+        }
+      }
+    } catch (err) {
+      console.error("CMS load settings failed:", err);
+    }
+  };
+
+  const saveCmsBtn = document.getElementById('saveCmsBtn');
+  if (saveCmsBtn) {
+    saveCmsBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      saveCmsBtn.disabled = true;
+      saveCmsBtn.textContent = 'Saving storefront content...';
+      
+      const payload = {
+        hero_slides: [],
+        story: {
+          img: document.getElementById('story_img').value.trim(),
+          title_en: document.getElementById('story_title_en').value.trim(),
+          title_th: document.getElementById('story_title_th').value.trim(),
+          p1_en: document.getElementById('story_p1_en').value.trim(),
+          p1_th: document.getElementById('story_p1_th').value.trim(),
+          p2_en: document.getElementById('story_p2_en').value.trim(),
+          p2_th: document.getElementById('story_p2_th').value.trim(),
+          btn_en: document.getElementById('story_btn_en').value.trim(),
+          btn_th: document.getElementById('story_btn_th').value.trim()
+        },
+        gallery: [],
+        blog: [],
+        reviews: [],
+        faq: []
+      };
+      
+      // Collect Hero Slides
+      for (let i = 1; i <= 5; i++) {
+        payload.hero_slides.push({
+          img: document.getElementById(`hero_img_${i}`).value.trim(),
+          title_en: document.getElementById(`hero_title_en_${i}`).value.trim(),
+          title_th: document.getElementById(`hero_title_th_${i}`).value.trim()
+        });
+      }
+      
+      // Collect Gallery
+      for (let i = 1; i <= 4; i++) {
+        payload.gallery.push({
+          img: document.getElementById(`gallery_img_${i}`).value.trim(),
+          cap_en: document.getElementById(`gallery_cap_en_${i}`).value.trim(),
+          cap_th: document.getElementById(`gallery_cap_th_${i}`).value.trim()
+        });
+      }
+      
+      // Collect Blog
+      for (let i = 1; i <= 3; i++) {
+        payload.blog.push({
+          img: document.getElementById(`blog_img_${i}`).value.trim(),
+          tag_en: document.getElementById(`blog_tag_en_${i}`).value.trim(),
+          tag_th: document.getElementById(`blog_tag_th_${i}`).value.trim(),
+          title_en: document.getElementById(`blog_title_en_${i}`).value.trim(),
+          title_th: document.getElementById(`blog_title_th_${i}`).value.trim(),
+          excerpt_en: document.getElementById(`blog_excerpt_en_${i}`).value.trim(),
+          excerpt_th: document.getElementById(`blog_excerpt_th_${i}`).value.trim()
+        });
+      }
+      
+      // Collect Reviews
+      for (let i = 1; i <= 3; i++) {
+        payload.reviews.push({
+          stars: 5,
+          text_en: document.getElementById(`review_text_en_${i}`).value.trim(),
+          text_th: document.getElementById(`review_text_th_${i}`).value.trim(),
+          name: document.getElementById(`review_name_${i}`).value.trim(),
+          title_en: document.getElementById(`review_title_en_${i}`).value.trim(),
+          title_th: document.getElementById(`review_title_th_${i}`).value.trim()
+        });
+      }
+      
+      // Collect FAQ
+      for (let i = 1; i <= 4; i++) {
+        payload.faq.push({
+          q_en: document.getElementById(`faq_q_en_${i}`).value.trim(),
+          q_th: document.getElementById(`faq_q_th_${i}`).value.trim(),
+          a_en: document.getElementById(`faq_a_en_${i}`).value.trim(),
+          a_th: document.getElementById(`faq_a_th_${i}`).value.trim()
+        });
+      }
+      
+      if (db) {
+        try {
+          console.log("Writing storefront CMS settings to Firebase...", payload);
+          await db.collection('storefront_settings').doc('main').set(payload);
+          alert("Storefront customized content saved successfully!");
+        } catch (err) {
+          console.error("Save storefront CMS failed:", err);
+          alert("Failed to save storefront configuration. Verify Firestore permission rules.");
+        }
+      } else {
+        alert("Offline demo mode. Content changes simulated locally.");
+      }
+      
+      saveCmsBtn.disabled = false;
+      saveCmsBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Content Changes';
+    });
+  }
+
+  // Run dynamic input renderers and uploader change hook setup
+  renderCmsInputs();
+  setupCmsUploads();
 
 });

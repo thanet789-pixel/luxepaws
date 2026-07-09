@@ -12,6 +12,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
   
   <!-- Custom CSS -->
   <link rel="stylesheet" href="index.css">
@@ -101,6 +102,9 @@
           <button class="tab-btn" data-tab="products">
             <i class="fa-solid fa-box-open"></i> Manage Products
           </button>
+          <button class="tab-btn" data-tab="cms">
+            <i class="fa-solid fa-pen-to-square"></i> Storefront CMS
+          </button>
         </div>
 
         <!-- Orders Panel -->
@@ -160,6 +164,128 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <!-- CMS Panel -->
+        <div class="tab-panel" id="cmsPanel">
+          <div class="panel-header">
+            <h3>Storefront CMS & Content Customization</h3>
+            <button class="btn btn-primary" id="saveCmsBtn">
+              <i class="fa-solid fa-floppy-disk"></i> Save Content Changes
+            </button>
+          </div>
+          
+          <div class="cms-selector-row" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+            <label for="cmsSectionSelect" style="font-weight: 500; font-size: 0.9rem;">Select Section to Customize:</label>
+            <select id="cmsSectionSelect" class="form-control" style="max-width: 300px; padding: 0.5rem; border-radius: 4px; border: 1px solid #eae6df;">
+              <option value="hero">Hero Slider Carousel</option>
+              <option value="story">About Philosophy</option>
+              <option value="gallery">Gallery Installations</option>
+              <option value="blog">Editorial Blog Journal</option>
+              <option value="reviews">Customer Reviews & Ratings</option>
+              <option value="faq">FAQ Accordion</option>
+            </select>
+          </div>
+
+          <form id="cmsForm" class="admin-form">
+            <!-- 1. Hero Subform -->
+            <div class="cms-section-group" id="cmsGroup_hero">
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">1. Hero Slider (5 Carousel Slides)</h4>
+              <div id="heroSlidesInputsContainer">
+                <!-- Rendered dynamically in JS -->
+              </div>
+            </div>
+
+            <!-- 2. Story Subform -->
+            <div class="cms-section-group" id="cmsGroup_story" style="display: none;">
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">2. Brand Story / Philosophy</h4>
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label>Philosophy Image</label>
+                  <div class="cms-image-preview-container">
+                    <img src="assets/hero_banner.png" id="prev_story_img" class="cms-image-preview">
+                    <div class="cms-image-controls">
+                      <input type="text" id="story_img" placeholder="Image URL">
+                      <input type="file" id="file_story_img" accept="image/*">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label>Story Title (EN)</label>
+                  <input type="text" id="story_title_en" placeholder="Designed for pets. Fits your style.">
+                </div>
+                <div class="form-group col-6">
+                  <label>Story Title (TH)</label>
+                  <input type="text" id="story_title_th" placeholder="ออกแบบเพื่อสัตว์เลี้ยง ลงตัวกับสไตล์ของคุณ">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label>Story Paragraph 1 (EN)</label>
+                  <textarea id="story_p1_en" rows="3" placeholder="Paragraph 1..."></textarea>
+                </div>
+                <div class="form-group col-6">
+                  <label>Story Paragraph 1 (TH)</label>
+                  <textarea id="story_p1_th" rows="3" placeholder="ย่อหน้าที่ 1..."></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label>Story Paragraph 2 (EN)</label>
+                  <textarea id="story_p2_en" rows="3" placeholder="Paragraph 2..."></textarea>
+                </div>
+                <div class="form-group col-6">
+                  <label>Story Paragraph 2 (TH)</label>
+                  <textarea id="story_p2_th" rows="3" placeholder="ย่อหน้าที่ 2..."></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label>Button Text (EN)</label>
+                  <input type="text" id="story_btn_en" placeholder="Discover Collection">
+                </div>
+                <div class="form-group col-6">
+                  <label>Button Text (TH)</label>
+                  <input type="text" id="story_btn_th" placeholder="ค้นพบคอลเลกชันของเรา">
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Gallery Subform -->
+            <div class="cms-section-group" id="cmsGroup_gallery" style="display: none;">
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">3. Gallery Installations (4 Items)</h4>
+              <div id="galleryInputsContainer">
+                <!-- Rendered dynamically in JS -->
+              </div>
+            </div>
+
+            <!-- 4. Blog Subform -->
+            <div class="cms-section-group" id="cmsGroup_blog" style="display: none;">
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">4. Editorial Blog Journal (3 Posts)</h4>
+              <div id="blogInputsContainer">
+                <!-- Rendered dynamically in JS -->
+              </div>
+            </div>
+
+            <!-- 5. Reviews Subform -->
+            <div class="cms-section-group" id="cmsGroup_reviews" style="display: none;">
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">5. Customer Reviews (3 Cards)</h4>
+              <div id="reviewInputsContainer">
+                <!-- Rendered dynamically in JS -->
+              </div>
+            </div>
+
+            <!-- 6. FAQ Subform -->
+            <div class="cms-section-group" id="cmsGroup_faq" style="display: none;">
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">6. Frequently Asked Questions (4 Items)</h4>
+              <div id="faqInputsContainer">
+                <!-- Rendered dynamically in JS -->
+              </div>
+            </div>
+
+          </form>
         </div>
 
       </div>

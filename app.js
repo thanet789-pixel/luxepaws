@@ -1308,9 +1308,161 @@ document.addEventListener('DOMContentLoaded', () => {
 
   spySections.forEach(section => observer.observe(section));
 
+  async function applyCmsSettings() {
+    if (db) {
+      try {
+        console.log("Fetching custom CMS storefront settings from Firebase Firestore...");
+        const doc = await db.collection('storefront_settings').doc('main').get();
+        if (doc.exists) {
+          const data = doc.data();
+          
+          // 1. Override Translations keys for brand story (Philosophy)
+          if (data.story) {
+            translations.en.story_title = data.story.title_en || translations.en.story_title;
+            translations.th.story_title = data.story.title_th || translations.th.story_title;
+            translations.en.story_p1 = data.story.p1_en || translations.en.story_p1;
+            translations.th.story_p1 = data.story.p1_th || translations.th.story_p1;
+            translations.en.story_p2 = data.story.p2_en || translations.en.story_p2;
+            translations.th.story_p2 = data.story.p2_th || translations.th.story_p2;
+            translations.en.story_btn = data.story.btn_en || translations.en.story_btn;
+            translations.th.story_btn = data.story.btn_th || translations.th.story_btn;
+            
+            // Render custom story image directly
+            const storyImg = document.querySelector('.story-img-wrap img');
+            if (storyImg && data.story.img) storyImg.src = data.story.img;
+          }
+          
+          // 2. Override Hero Slides text & images
+          if (Array.isArray(data.hero_slides)) {
+            const slides = document.querySelectorAll('.slide');
+            data.hero_slides.forEach((slide, idx) => {
+              if (slides[idx]) {
+                const img = slides[idx].querySelector('img');
+                const title = slides[idx].querySelector('.hero-title');
+                
+                if (img && slide.img) img.src = slide.img;
+                
+                const key = `hero_slide_title_${idx + 1}`;
+                translations.en[key] = slide.title_en;
+                translations.th[key] = slide.title_th;
+                
+                if (title) {
+                  title.setAttribute('data-i18n', key);
+                }
+              }
+            });
+          }
+          
+          // 3. Override Gallery images and captions
+          if (Array.isArray(data.gallery)) {
+            const galleryItems = document.querySelectorAll('.gallery-grid .gallery-item');
+            data.gallery.forEach((item, idx) => {
+              if (galleryItems[idx]) {
+                const img = galleryItems[idx].querySelector('img');
+                const cap = galleryItems[idx].querySelector('.gallery-caption');
+                
+                if (img && item.img) img.src = item.img;
+                
+                const key = `gallery_cap_${idx + 1}`;
+                translations.en[key] = item.cap_en;
+                translations.th[key] = item.cap_th;
+                if (cap) cap.setAttribute('data-i18n', key);
+              }
+            });
+          }
+          
+          // 4. Override Blog cards
+          if (Array.isArray(data.blog)) {
+            const blogCards = document.querySelectorAll('.blog-grid .blog-card');
+            data.blog.forEach((post, idx) => {
+              if (blogCards[idx]) {
+                const img = blogCards[idx].querySelector('.blog-img-wrap img');
+                const tag = blogCards[idx].querySelector('.blog-content .blog-tag');
+                const title = blogCards[idx].querySelector('.blog-content h3');
+                const excerpt = blogCards[idx].querySelector('.blog-content p');
+                
+                if (img && post.img) img.src = post.img;
+                
+                const keyTag = `blog_tag_${idx + 1}`;
+                const keyTitle = `blog_title_${idx + 1}`;
+                const keyExcerpt = `blog_excerpt_${idx + 1}`;
+                
+                translations.en[keyTag] = post.tag_en;
+                translations.th[keyTag] = post.tag_th;
+                translations.en[keyTitle] = post.title_en;
+                translations.th[keyTitle] = post.title_th;
+                translations.en[keyExcerpt] = post.excerpt_en;
+                translations.th[keyExcerpt] = post.excerpt_th;
+                
+                if (tag) tag.setAttribute('data-i18n', keyTag);
+                if (title) title.setAttribute('data-i18n', keyTitle);
+                if (excerpt) excerpt.setAttribute('data-i18n', keyExcerpt);
+              }
+            });
+          }
+          
+          // 5. Override Customer Reviews
+          if (Array.isArray(data.reviews)) {
+            const reviewCards = document.querySelectorAll('.reviews-grid .review-card');
+            data.reviews.forEach((review, idx) => {
+              if (reviewCards[idx]) {
+                const text = reviewCards[idx].querySelector('.review-text');
+                const name = reviewCards[idx].querySelector('.reviewer-name');
+                const title = reviewCards[idx].querySelector('.reviewer-title');
+                
+                if (name && review.name) name.textContent = review.name;
+                
+                const keyText = `review_text_${idx + 1}`;
+                const keyTitle = `reviewer_title_${idx + 1}`;
+                
+                translations.en[keyText] = review.text_en;
+                translations.th[keyText] = review.text_th;
+                translations.en[keyTitle] = review.title_en;
+                translations.th[keyTitle] = review.title_th;
+                
+                if (text) text.setAttribute('data-i18n', keyText);
+                if (title) title.setAttribute('data-i18n', keyTitle);
+              }
+            });
+          }
+          
+          // 6. Override FAQ accordion
+          if (Array.isArray(data.faq)) {
+            const faqItems = document.querySelectorAll('.faq-list .faq-item');
+            data.faq.forEach((item, idx) => {
+              if (faqItems[idx]) {
+                const qSpan = faqItems[idx].querySelector('.faq-question span');
+                const aPara = faqItems[idx].querySelector('.faq-answer p');
+                
+                const keyQ = `faq_q_${idx + 1}`;
+                const keyA = `faq_a_${idx + 1}`;
+                
+                translations.en[keyQ] = item.q_en;
+                translations.th[keyQ] = item.q_th;
+                translations.en[keyA] = item.a_en;
+                translations.th[keyA] = item.a_th;
+                
+                if (qSpan) qSpan.setAttribute('data-i18n', keyQ);
+                if (aPara) aPara.setAttribute('data-i18n', keyA);
+              }
+            });
+          }
+          
+          // Re-translate all elements with the overridden translations!
+          setLanguage(currentLang);
+        }
+      } catch (err) {
+        console.warn("Failed to load storefront custom CMS configurations:", err);
+      }
+    }
+  }
+
   // Initialize: Load products from Supabase or Fallback
   loadProducts();
   
   // Set language configuration (will trigger grid render and cart updates)
   setLanguage(currentLang);
+
+  // Load and apply CMS custom settings asynchronously
+  applyCmsSettings();
 });
