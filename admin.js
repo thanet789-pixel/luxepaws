@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginWrapper = document.getElementById('loginWrapper');
   const dashboardWrapper = document.getElementById('dashboardWrapper');
   const loginForm = document.getElementById('loginForm');
-  const loginEmail = document.getElementById('loginEmail');
+  const loginIdentifier = document.getElementById('loginIdentifier');
   const loginPassword = document.getElementById('loginPassword');
   const loginError = document.getElementById('loginError');
   const adminUserEmail = document.getElementById('adminUserEmail');
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Authenticated admin state
         loginWrapper.style.display = 'none';
         dashboardWrapper.style.display = 'block';
-        adminUserEmail.textContent = session.user.email;
+        adminUserEmail.textContent = session.user.email || session.user.phone || 'Admin';
         loadDashboardData();
       } else {
         // Unauthenticated login state
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       loginError.style.display = 'none';
       
-      const email = loginEmail.value.trim();
+      const identifier = loginIdentifier.value.trim();
       const password = loginPassword.value.trim();
       const submitBtn = document.getElementById('loginSubmitBtn');
 
@@ -130,10 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (supabase) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
+        const isEmail = identifier.includes('@');
+        const loginPayload = isEmail ? { email: identifier, password } : { phone: identifier, password };
+        const { data, error } = await supabase.auth.signInWithPassword(loginPayload);
 
         if (error) {
           loginError.textContent = error.message;
