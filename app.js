@@ -1,43 +1,28 @@
 // LuxePaws Premium E-commerce Logic with Supabase Backend & Multilingual Support (EN & TH)
 
-// --- Supabase Credentials Configuration ---
-const SUPABASE_URL = 'https://oylfiyelvquejtswpbxu.supabase.co'; 
-const SUPABASE_ANON_KEY = 'sb_publishable_XaV__6RxvquvwygZrW9HYw_l6Ct7Tfd'; 
-
-// Safe Memory Storage fallback for Supabase Auth in private browsing modes
-const MemoryStorage = {
-  store: {},
-  getItem(key) { return this.store[key] || null; },
-  setItem(key, value) { this.store[key] = value; },
-  removeItem(key) { delete this.store[key]; }
+// --- Firebase Configuration ---
+const firebaseConfig = {
+  apiKey: "AIzaSyCU0NcUIX951m0nMp398xu2utNZPj1Wup4",
+  authDomain: "luxepaws-cab68.firebaseapp.com",
+  projectId: "luxepaws-cab68",
+  storageBucket: "luxepaws-cab68.firebasestorage.app",
+  messagingSenderId: "1053657082729",
+  appId: "1:1053657082729:web:cffb22f8fa94f6684e6bf8",
+  measurementId: "G-2ZGWS1X47Y"
 };
 
-let safeAuthStorage = null;
-try {
-  localStorage.setItem('__storage_test__', '1');
-  localStorage.removeItem('__storage_test__');
-  safeAuthStorage = localStorage;
-} catch (e) {
-  console.warn("localStorage is blocked. Falling back to in-memory storage for Supabase Auth.");
-  safeAuthStorage = MemoryStorage;
-}
+// Initialize Firebase
+let firebaseApp = null;
+let db = null;
+let auth = null;
 
-let supabase = null;
-if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-  try {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        storage: safeAuthStorage,
-        persistSession: true,
-        autoRefreshToken: true
-      }
-    });
-    console.log("Supabase client initialized successfully.");
-  } catch (e) {
-    console.error("Failed to initialize Supabase client:", e);
-  }
-} else {
-  console.log("Supabase credentials not configured. Running with local mock database fallback.");
+try {
+  firebaseApp = firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  auth = firebase.auth();
+  console.log("Firebase initialized successfully.");
+} catch (e) {
+  console.error("Failed to initialize Firebase client:", e);
 }
 
 // --- Local Mock Data Fallback ---
@@ -383,21 +368,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadProducts() {
     isLoaded = false;
-    if (supabase) {
+    if (db) {
       try {
-        console.log("Fetching products from Supabase database...");
+        console.log("Fetching products from Firebase Firestore...");
         
-        // Race the Supabase request against a 3-second timeout to prevent hangs
-        const fetchPromise = supabase.from('products').select('*').order('id', { ascending: true });
+        // Race the Firestore query against a 3-second timeout
+        const fetchPromise = db.collection('products').orderBy('id', 'asc').get().then(snapshot => {
+          const products = [];
+          snapshot.forEach(doc => {
+            const docData = doc.data();
+            products.push({ id: docData.id || doc.id, ...docData });
+          });
+          return products;
+        });
+        
         const timeoutPromise = new Promise((_, reject) => 
           setTimeout(() => reject(new Error("Database connection timed out (3s)")), 3000)
         );
 
-        const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+        const data = await Promise.race([fetchPromise, timeoutPromise]);
         
-        if (error) throw error;
         if (!data || data.length === 0) {
-          throw new Error("No data returned or empty table");
+          throw new Error("No data returned or empty collection");
         }
         
         activeProducts = data || [];
@@ -916,30 +908,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let orderId = 'LP-' + Math.floor(100000 + Math.random() * 900000);
 
-      if (supabase) {
+      if (db) {
         try {
-          // Write the checkout order row to Supabase 'orders' database table
-          const { data, error } = await supabase.from('orders').insert([{
+          // Write the checkout order row to Firebase Firestore 'orders' collection
+          const orderRef = await db.collection('orders').add({
             customer_name: name,
             customer_email: email,
             shipping_address: address,
             items: itemsList,
             total_price: subtotal,
-            status: 'pending'
-          }]).select();
+            status: 'pending',
+            created_at: firebase.firestore.FieldValue.serverTimestamp()
+          });
 
-          if (error) throw error;
-          
-          if (data && data[0] && data[0].id) {
-            orderId = 'LP-' + data[0].id.toString().padStart(6, '0');
-          }
-          console.log("Order saved on Supabase database successfully:", data);
+          // Generate an order ID using the Firestore doc ID
+          orderId = 'LP-' + orderRef.id.slice(0, 8).toUpperCase();
+          console.log("Order saved on Firebase Firestore successfully:", orderRef.id);
         } catch (err) {
           console.error("Database order insertion failed:", err);
           // Fallback to random order ID if connection is lost so customer is not stuck
         }
       } else {
-        console.log("Supabase not connected. Local checkout simulation succeeded.");
+        console.log("Firebase not connected. Local checkout simulation succeeded.");
       }
 
       // Display success details

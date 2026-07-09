@@ -1,42 +1,29 @@
 // LuxePaws Premium E-commerce Admin Dashboard Logic
 // Powered by Supabase Auth, PostgreSQL Database, and CRUD APIs
 
-// --- Supabase Credentials Configuration ---
-const SUPABASE_URL = 'https://oylfiyelvquejtswpbxu.supabase.co'; 
-const SUPABASE_ANON_KEY = 'sb_publishable_XaV__6RxvquvwygZrW9HYw_l6Ct7Tfd'; 
-
-// Safe Memory Storage fallback for Supabase Auth in private browsing modes
-const MemoryStorage = {
-  store: {},
-  getItem(key) { return this.store[key] || null; },
-  setItem(key, value) { this.store[key] = value; },
-  removeItem(key) { delete this.store[key]; }
+// --- Firebase Configuration ---
+const firebaseConfig = {
+  apiKey: "AIzaSyCU0NcUIX951m0nMp398xu2utNZPj1Wup4",
+  authDomain: "luxepaws-cab68.firebaseapp.com",
+  projectId: "luxepaws-cab68",
+  storageBucket: "luxepaws-cab68.firebasestorage.app",
+  messagingSenderId: "1053657082729",
+  appId: "1:1053657082729:web:cffb22f8fa94f6684e6bf8",
+  measurementId: "G-2ZGWS1X47Y"
 };
 
-let safeAuthStorage = null;
-try {
-  localStorage.setItem('__storage_test__', '1');
-  localStorage.removeItem('__storage_test__');
-  safeAuthStorage = localStorage;
-} catch (e) {
-  console.warn("localStorage is blocked. Falling back to in-memory storage for Supabase Auth.");
-  safeAuthStorage = MemoryStorage;
-}
+// Initialize Firebase
+let firebaseApp = null;
+let db = null;
+let auth = null;
 
-let supabase = null;
 try {
-  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        storage: safeAuthStorage,
-        persistSession: true,
-        autoRefreshToken: true
-      }
-    });
-    console.log("Supabase Admin client initialized successfully.");
-  }
+  firebaseApp = firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  auth = firebase.auth();
+  console.log("Firebase initialized successfully.");
 } catch (e) {
-  console.error("Failed to initialize Supabase Admin client:", e);
+  console.error("Failed to initialize Firebase client:", e);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,14 +78,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
 
   // Check auth state on load
-  if (supabase) {
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth Event triggered:", event);
-      if (session) {
+  if (auth) {
+    auth.onAuthStateChanged((user) => {
+      console.log("Auth state changed. User:", user);
+      if (user) {
         // Authenticated admin state
         loginWrapper.style.display = 'none';
         dashboardWrapper.style.display = 'block';
-        adminUserEmail.textContent = session.user.email || session.user.phone || 'Admin';
+        
+        // Strip out mock phone domain if present
+        let displayUser = user.email || 'Admin';
+        if (displayUser.endsWith('@phone.luxepaws.com')) {
+          displayUser = displayUser.replace('@phone.luxepaws.com', '');
+        }
+        adminUserEmail.textContent = displayUser;
         loadDashboardData();
       } else {
         // Unauthenticated login state
@@ -107,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   } else {
-    // If Supabase fails to initialize, show dummy dashboard for demonstration
+    // If Firebase fails to initialize, show dummy dashboard for demonstration
     loginWrapper.style.display = 'none';
     dashboardWrapper.style.display = 'block';
     adminUserEmail.textContent = "offline-demo@luxepaws.com";
@@ -129,20 +122,20 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Authenticating...';
       }
 
-      if (supabase) {
+      if (auth) {
+        // If it's a phone number (e.g. starts with + or contains only digits), convert to mock email
         const isEmail = identifier.includes('@');
-        const loginPayload = isEmail ? { email: identifier, password } : { phone: identifier, password };
-        const { data, error } = await supabase.auth.signInWithPassword(loginPayload);
+        const loginEmail = isEmail ? identifier : `${identifier}@phone.luxepaws.com`;
 
-        if (error) {
+        try {
+          await auth.signInWithEmailAndPassword(loginEmail, password);
+        } catch (error) {
           loginError.textContent = error.message;
           loginError.style.display = 'block';
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Log In';
           }
-        } else {
-          console.log("Logged in successfully:", data);
         }
       } else {
         // Offline demo login fallback
@@ -156,8 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle Logout click
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
-      if (supabase) {
-        await supabase.auth.signOut();
+      if (auth) {
+        await auth.signOut();
       } else {
         loginWrapper.style.display = 'flex';
         dashboardWrapper.style.display = 'none';
@@ -170,22 +163,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
 
   async function loadDashboardData() {
-    if (!supabase) return;
+    if (!db) return;
     
     try {
       console.log("Loading dashboard data...");
       
-      // Fetch Products and Orders from database
-      const productsPromise = supabase.from('products').select('*').order('id', { ascending: true });
-      const ordersPromise = supabase.from('orders').select('*').order('created_at', { ascending: false });
+      // Fetch Products and Orders from Firebase Firestore
+      const productsPromise = db.collection('products').orderBy('id', 'asc').get().then(snapshot => {
+        const list = [];
+        snapshot.forEach(doc => list.push({ docId: doc.id, id: doc.data().id || doc.id, ...doc.data() }));
+        return list;
+      });
 
-      const [productsRes, ordersRes] = await Promise.all([productsPromise, ordersPromise]);
+      const ordersPromise = db.collection('orders').get().then(snapshot => {
+        const list = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          // Convert server timestamp to Date/ISO string if present
+          let createdAtStr = new Date().toISOString();
+          if (data.created_at) {
+            createdAtStr = data.created_at.toDate ? data.created_at.toDate().toISOString() : new Date(data.created_at).toISOString();
+          }
+          list.push({ docId: doc.id, id: doc.id, ...data, created_at: createdAtStr });
+        });
+        // Sort by created_at desc manually
+        list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        return list;
+      });
 
-      if (productsRes.error) throw productsRes.error;
-      if (ordersRes.error) throw ordersRes.error;
+      const [productsData, ordersData] = await Promise.all([productsPromise, ordersPromise]);
 
-      dbProducts = productsRes.data || [];
-      dbOrders = ordersRes.data || [];
+      dbProducts = productsData || [];
+      dbOrders = ordersData || [];
 
       // Update metrics panel
       calculateAndRenderMetrics();
@@ -197,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log("Dashboard database loading completed successfully.");
     } catch (err) {
       console.error("Dashboard data load error:", err);
-      alert("Error reading backend data. Please ensure table RLS security policies are fully run in the SQL editor.");
+      alert("Error reading Firebase data. Please check Firestore security rules settings.");
     }
   }
 
@@ -251,7 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     dbOrders.forEach(order => {
-      const orderIdString = 'LP-' + order.id.toString().padStart(6, '0');
+      // Handle both old numeric IDs and new alphanumeric Firestore IDs
+      const orderIdString = String(order.id).length > 10 ? 'LP-' + String(order.id).slice(0, 8).toUpperCase() : 'LP-' + String(order.id).padStart(6, '0');
       const date = new Date(order.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
       
       // Build order items list
@@ -281,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <td><strong>€${parseFloat(order.total_price).toFixed(2)}</strong></td>
         <td><span class="badge ${badgeClass}">${order.status}</span></td>
         <td>
-          <select class="status-select" data-order-id="${order.id}">
+          <select class="status-select" data-order-id="${order.docId}">
             <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
             <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
             <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
@@ -298,21 +308,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const orderId = e.target.getAttribute('data-order-id');
         const newStatus = e.target.value;
         
-        if (supabase) {
+        if (db) {
           try {
             console.log(`Updating order ID ${orderId} to status: ${newStatus}...`);
-            const { error } = await supabase
-              .from('orders')
-              .update({ status: newStatus })
-              .eq('id', orderId);
-
-            if (error) throw error;
+            await db.collection('orders').doc(orderId).update({ status: newStatus });
             
             // Reload dashboard metrics and rows
             loadDashboardData();
           } catch (err) {
             console.error("Order status update failed:", err);
-            alert("Failed to update status. Please confirm admin database write permission.");
+            alert("Failed to update status. Please confirm Firestore database permissions.");
           }
         } else {
           alert("Offline demo mode. Status update simulated.");
@@ -380,10 +385,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${swatchesHtml}</td>
         <td>
           <div class="actions-cell">
-            <button class="btn btn-secondary btn-small btn-edit" data-product-id="${product.id}">
+            <button class="btn btn-secondary btn-small btn-edit" data-product-id="${product.docId}">
               <i class="fa-solid fa-pen-to-square"></i> Edit
             </button>
-            <button class="btn btn-danger btn-small btn-delete" data-product-id="${product.id}">
+            <button class="btn btn-danger btn-small btn-delete" data-product-id="${product.docId}">
               <i class="fa-solid fa-trash-can"></i> Delete
             </button>
           </div>
@@ -425,11 +430,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Edit Product Modal populate
   function openProductModalForEdit(id) {
-    const product = dbProducts.find(p => String(p.id) === String(id));
+    const product = dbProducts.find(p => String(p.docId) === String(id));
     if (!product) return;
 
     modalTitle.textContent = "Edit Product Information";
-    productIdField.value = product.id;
+    productIdField.value = product.docId;
     prodTitleEn.value = product.title_en;
     prodTitleTh.value = product.title_th;
     prodPrice.value = product.price;
@@ -507,41 +512,34 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBtn.textContent = 'Saving product...';
       }
 
-      if (supabase) {
+      if (db) {
         try {
           if (prodId) {
-            // Edit mode: Update DB row
-            console.log(`Updating product ID ${prodId} on Supabase...`);
-            const { error } = await supabase
-              .from('products')
-              .update(payload)
-              .eq('id', prodId);
-              
-            if (error) throw error;
+            // Edit mode: Update Firestore document
+            console.log(`Updating product doc ID ${prodId} on Firebase...`);
+            await db.collection('products').doc(prodId).update(payload);
           } else {
-            // Add mode: Insert new DB row
-            console.log("Inserting new product to Supabase...");
-            const { error } = await supabase
-              .from('products')
-              .insert([payload]);
-
-            if (error) throw error;
+            // Add mode: Add new Firestore document
+            console.log("Inserting new product to Firebase...");
+            // Get next integer ID for sorting consistency
+            const nextId = dbProducts.length > 0 ? Math.max(...dbProducts.map(p => parseInt(p.id) || 0)) + 1 : 1;
+            await db.collection('products').add({ id: nextId, ...payload });
           }
           
           closeProductModal();
           loadDashboardData();
         } catch (err) {
           console.error("Database save failed:", err);
-          alert("Save operation failed. Please check table structure policy settings.");
+          alert("Save operation failed. Please check Firestore security rules configuration.");
         }
       } else {
         // Offline demo save
         if (prodId) {
-          const idx = dbProducts.findIndex(p => String(p.id) === String(prodId));
-          if (idx !== -1) dbProducts[idx] = { id: prodId, ...payload };
+          const idx = dbProducts.findIndex(p => String(p.docId) === String(prodId));
+          if (idx !== -1) dbProducts[idx] = { docId: prodId, id: dbProducts[idx].id, ...payload };
         } else {
           const newId = dbProducts.length > 0 ? Math.max(...dbProducts.map(p => p.id)) + 1 : 1;
-          dbProducts.push({ id: newId, ...payload });
+          dbProducts.push({ docId: 'mock_' + newId, id: newId, ...payload });
         }
         closeProductModal();
         calculateAndRenderMetrics();
@@ -557,23 +555,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Delete product logic
   async function deleteProduct(id) {
-    if (supabase) {
+    if (db) {
       try {
-        console.log(`Deleting product ID ${id} from Supabase...`);
-        const { error } = await supabase
-          .from('products')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
+        console.log(`Deleting product doc ID ${id} from Firebase...`);
+        await db.collection('products').doc(id).delete();
         
         loadDashboardData();
       } catch (err) {
         console.error("Database deletion failed:", err);
-        alert("Deletion failed. Verify authenticated admin write permissions.");
+        alert("Deletion failed. Verify Firestore write permissions.");
       }
     } else {
-      dbProducts = dbProducts.filter(p => String(p.id) !== String(id));
+      dbProducts = dbProducts.filter(p => String(p.docId) !== String(id));
       calculateAndRenderMetrics();
       renderProductsTable();
     }
