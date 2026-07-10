@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Authenticating...';
+        submitBtn.textContent = 'กำลังยืนยันตัวตน...';
       }
 
       if (auth) {
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
           loginError.style.display = 'block';
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Log In';
+            submitBtn.textContent = 'เข้าสู่ระบบ';
           }
         }
       } else {
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dbOrders.length === 0) {
       ordersTableBody.innerHTML = `
         <tr>
-          <td colspan="7" class="text-center text-muted">No customer orders registered yet.</td>
+          <td colspan="7" class="text-center text-muted">ยังไม่มีรายการสั่งซื้อของลูกค้าลงทะเบียนในระบบในขณะนี้</td>
         </tr>
       `;
       return;
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dbOrders.forEach(order => {
       // Handle both old numeric IDs and new alphanumeric Firestore IDs
       const orderIdString = String(order.id).length > 10 ? 'LP-' + String(order.id).slice(0, 8).toUpperCase() : 'LP-' + String(order.id).padStart(6, '0');
-      const date = new Date(order.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      const date = new Date(order.created_at).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
       
       // Build order items list
       let itemsHtml = '<ul class="order-items-list">';
@@ -276,8 +276,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Status badge class mapping
       let badgeClass = 'badge-pending';
-      if (order.status === 'shipped') badgeClass = 'badge-shipped';
-      if (order.status === 'completed') badgeClass = 'badge-completed';
+      let statusTh = 'รอดำเนินการ';
+      if (order.status === 'shipped') {
+        badgeClass = 'badge-shipped';
+        statusTh = 'จัดส่งแล้ว';
+      }
+      if (order.status === 'completed') {
+        badgeClass = 'badge-completed';
+        statusTh = 'เสร็จสมบูรณ์';
+      }
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -290,12 +297,12 @@ document.addEventListener('DOMContentLoaded', () => {
         </td>
         <td>${itemsHtml}</td>
         <td><strong>฿${parseFloat(order.total_price).toFixed(2)}</strong></td>
-        <td><span class="badge ${badgeClass}">${order.status}</span></td>
+        <td><span class="badge ${badgeClass}">${statusTh}</span></td>
         <td>
           <select class="status-select" data-order-id="${order.docId}">
-            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
-            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
-            <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>รอดำเนินการ (Pending)</option>
+            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>จัดส่งแล้ว (Shipped)</option>
+            <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>เสร็จสมบูรณ์ (Completed)</option>
           </select>
         </td>
       `;
@@ -346,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dbProducts.length === 0) {
       productsTableBody.innerHTML = `
         <tr>
-          <td colspan="6" class="text-center text-muted">No products in catalog database.</td>
+          <td colspan="6" class="text-center text-muted">ไม่มีรายการสินค้าลงทะเบียนในคลังสินค้าในขณะนี้</td>
         </tr>
       `;
       return;
@@ -387,10 +394,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>
           <div class="actions-cell">
             <button class="btn btn-secondary btn-small btn-edit" data-product-id="${product.docId}">
-              <i class="fa-solid fa-pen-to-square"></i> Edit
+              <i class="fa-solid fa-pen-to-square"></i> แก้ไข
             </button>
             <button class="btn btn-danger btn-small btn-delete" data-product-id="${product.docId}">
-              <i class="fa-solid fa-trash-can"></i> Delete
+              <i class="fa-solid fa-trash-can"></i> ลบ
             </button>
           </div>
         </td>
@@ -411,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteBtns.forEach(btn => {
       btn.addEventListener('click', async () => {
         const prodId = btn.getAttribute('data-product-id');
-        if (confirm("Are you sure you want to delete this product from the store catalog database?")) {
+        if (confirm("คุณแน่ใจหรือไม่ที่จะลบสินค้านี้ออกจากคลังระบบฐานข้อมูลร้านค้า?")) {
           deleteProduct(prodId);
         }
       });
@@ -423,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     openAddProductBtn.addEventListener('click', () => {
       productForm.reset();
       productIdField.value = '';
-      modalTitle.textContent = "Add New Product";
+      modalTitle.textContent = "เพิ่มสินค้าใหม่";
       productModal.classList.add('open');
       productModalBackdrop.classList.add('open');
     });
@@ -434,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const product = dbProducts.find(p => String(p.docId) === String(id));
     if (!product) return;
 
-    modalTitle.textContent = "Edit Product Information";
+    modalTitle.textContent = "แก้ไขรายละเอียดสินค้า";
     productIdField.value = product.docId;
     prodTitleEn.value = product.title_en;
     prodTitleTh.value = product.title_th;
@@ -510,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const saveBtn = document.getElementById('saveProductBtn');
       if (saveBtn) {
         saveBtn.disabled = true;
-        saveBtn.textContent = 'Saving product...';
+        saveBtn.textContent = 'กำลังบันทึกข้อมูลสินค้า...';
       }
 
       if (db) {
@@ -531,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
           loadDashboardData();
         } catch (err) {
           console.error("Database save failed:", err);
-          alert("Save operation failed. Please check Firestore security rules configuration.");
+          alert("บันทึกข้อมูลล้มเหลว กรุณาตรวจสอบสิทธิ์การเขียนข้อมูลลงฐานข้อมูล Firestore");
         }
       } else {
         // Offline demo save
@@ -549,7 +556,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (saveBtn) {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Save Product';
+        saveBtn.textContent = 'บันทึกสินค้า';
       }
     });
   }
@@ -564,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadDashboardData();
       } catch (err) {
         console.error("Database deletion failed:", err);
-        alert("Deletion failed. Verify Firestore write permissions.");
+        alert("ลบข้อมูลสินค้าล้มเหลว กรุณาตรวจสอบสิทธิ์การเขียนข้อมูลลงฐานข้อมูล Firestore");
       }
     } else {
       dbProducts = dbProducts.filter(p => String(p.docId) !== String(id));
@@ -621,22 +628,22 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 1; i <= 5; i++) {
         html += `
           <div class="cms-card-item">
-            <h5>Carousel Slide ${i}</h5>
+            <h5>รูปภาพสไลด์แบนเนอร์ที่ ${i}</h5>
             <div class="cms-image-preview-container">
               <img src="assets/hero_banner.png" id="prev_hero_img_${i}" class="cms-image-preview">
               <div class="cms-image-controls">
-                <input type="text" id="hero_img_${i}" placeholder="Image URL (e.g. assets/hero_banner.png)">
+                <input type="text" id="hero_img_${i}" placeholder="ลิงก์รูปภาพ (เช่น assets/hero_banner.png)">
                 <input type="file" id="file_hero_img_${i}" accept="image/*" data-target="hero_img_${i}" data-prev="prev_hero_img_${i}">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
-                <label>Slide Title (EN)</label>
-                <input type="text" id="hero_title_en_${i}" placeholder="e.g. Sustainable Luxury">
+                <label>หัวข้อบนภาพสไลด์ (อังกฤษ)</label>
+                <input type="text" id="hero_title_en_${i}" placeholder="เช่น Sustainable Luxury">
               </div>
               <div class="form-group col-6">
-                <label>Slide Title (TH)</label>
-                <input type="text" id="hero_title_th_${i}" placeholder="e.g. ความหรูหราที่ยั่งยืน">
+                <label>หัวข้อบนภาพสไลด์ (ไทย)</label>
+                <input type="text" id="hero_title_th_${i}" placeholder="เช่น ความหรูหราที่ยั่งยืน">
               </div>
             </div>
           </div>
@@ -652,22 +659,22 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 1; i <= 4; i++) {
         html += `
           <div class="cms-card-item">
-            <h5>Gallery Photo Item ${i}</h5>
+            <h5>ภาพแกลเลอรีรีวิวติดตั้งที่ ${i}</h5>
             <div class="cms-image-preview-container">
               <img src="assets/hero_banner.png" id="prev_gallery_img_${i}" class="cms-image-preview">
               <div class="cms-image-controls">
-                <input type="text" id="gallery_img_${i}" placeholder="Image URL">
+                <input type="text" id="gallery_img_${i}" placeholder="ลิงก์รูปภาพ (URL)">
                 <input type="file" id="file_gallery_img_${i}" accept="image/*" data-target="gallery_img_${i}" data-prev="prev_gallery_img_${i}">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
-                <label>Caption / Room Location (EN)</label>
-                <input type="text" id="gallery_cap_en_${i}" placeholder="e.g. Urban Loft, Munich">
+                <label>คำอธิบายภาพ / สถานที่ติดตั้ง (อังกฤษ)</label>
+                <input type="text" id="gallery_cap_en_${i}" placeholder="เช่น Urban Loft, Munich">
               </div>
               <div class="form-group col-6">
-                <label>Caption / Room Location (TH)</label>
-                <input type="text" id="gallery_cap_th_${i}" placeholder="e.g. เออร์บันลอฟท์, มิวนิก">
+                <label>คำอธิบายภาพ / สถานที่ติดตั้ง (ไทย)</label>
+                <input type="text" id="gallery_cap_th_${i}" placeholder="เช่น เออร์บันลอฟท์, มิวนิก">
               </div>
             </div>
           </div>
@@ -676,49 +683,49 @@ document.addEventListener('DOMContentLoaded', () => {
       galleryContainer.innerHTML = html;
     }
 
-    // 3. Render Blog items (3 posts)
+    // 3. Render Blog items (4 posts - matching updated design)
     const blogContainer = document.getElementById('blogInputsContainer');
     if (blogContainer) {
       let html = '';
-      for (let i = 1; i <= 3; i++) {
+      for (let i = 1; i <= 4; i++) {
         html += `
           <div class="cms-card-item">
-            <h5>Editorial Blog Card ${i}</h5>
+            <h5>บล็อกการ์ดบทความที่ ${i}</h5>
             <div class="cms-image-preview-container">
               <img src="assets/hero_banner.png" id="prev_blog_img_${i}" class="cms-image-preview">
               <div class="cms-image-controls">
-                <input type="text" id="blog_img_${i}" placeholder="Image URL">
+                <input type="text" id="blog_img_${i}" placeholder="ลิงก์รูปภาพ (URL)">
                 <input type="file" id="file_blog_img_${i}" accept="image/*" data-target="blog_img_${i}" data-prev="prev_blog_img_${i}">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
-                <label>Topic Tag (EN)</label>
-                <input type="text" id="blog_tag_en_${i}" placeholder="e.g. Health">
+                <label>ป้ายแท็กหัวข้อ (อังกฤษ)</label>
+                <input type="text" id="blog_tag_en_${i}" placeholder="เช่น Health">
               </div>
               <div class="form-group col-6">
-                <label>Topic Tag (TH)</label>
-                <input type="text" id="blog_tag_th_${i}" placeholder="e.g. สุขภาพสัตว์เลี้ยง">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-6">
-                <label>Blog Title (EN)</label>
-                <input type="text" id="blog_title_en_${i}" placeholder="Article Headline (EN)">
-              </div>
-              <div class="form-group col-6">
-                <label>Blog Title (TH)</label>
-                <input type="text" id="blog_title_th_${i}" placeholder="Article Headline (TH)">
+                <label>ป้ายแท็กหัวข้อ (ไทย)</label>
+                <input type="text" id="blog_tag_th_${i}" placeholder="เช่น สุขภาพสัตว์เลี้ยง">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
-                <label>Short Excerpt description (EN)</label>
-                <textarea id="blog_excerpt_en_${i}" rows="2" placeholder="Brief summary of the article (EN)"></textarea>
+                <label>ชื่อบทความหลัก (อังกฤษ)</label>
+                <input type="text" id="blog_title_en_${i}" placeholder="ชื่อหัวเรื่องภาษาอังกฤษ">
               </div>
               <div class="form-group col-6">
-                <label>Short Excerpt description (TH)</label>
-                <textarea id="blog_excerpt_th_${i}" rows="2" placeholder="สรุปย่อของบทความ (TH)"></textarea>
+                <label>ชื่อบทความหลัก (ไทย)</label>
+                <input type="text" id="blog_title_th_${i}" placeholder="ชื่อหัวเรื่องภาษาไทย">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>คำอธิบายย่อยเกริ่นนำ (อังกฤษ)</label>
+                <textarea id="blog_excerpt_en_${i}" rows="2" placeholder="สรุปย่อภาษาอังกฤษของบทความ..."></textarea>
+              </div>
+              <div class="form-group col-6">
+                <label>คำอธิบายย่อยเกริ่นนำ (ไทย)</label>
+                <textarea id="blog_excerpt_th_${i}" rows="2" placeholder="สรุปย่อภาษาไทยของบทความ..."></textarea>
               </div>
             </div>
           </div>
@@ -734,29 +741,29 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 1; i <= 3; i++) {
         html += `
           <div class="cms-card-item">
-            <h5>Customer Testimonial Card ${i}</h5>
+            <h5>บล็อกความคิดเห็นลูกค้าที่ ${i}</h5>
             <div class="form-row">
               <div class="form-group col-6">
-                <label>Testimonial Text (EN)</label>
-                <textarea id="review_text_en_${i}" rows="3" placeholder="Feedback paragraph (EN)"></textarea>
+                <label>ข้อความความคิดเห็นรีวิว (อังกฤษ)</label>
+                <textarea id="review_text_en_${i}" rows="3" placeholder="ข้อความรีวิวภาษาอังกฤษ..."></textarea>
               </div>
               <div class="form-group col-6">
-                <label>Testimonial Text (TH)</label>
-                <textarea id="review_text_th_${i}" rows="3" placeholder="ข้อความรีวิวของลูกค้า (TH)"></textarea>
+                <label>ข้อความความคิดเห็นรีวิว (ไทย)</label>
+                <textarea id="review_text_th_${i}" rows="3" placeholder="ข้อความรีวิวภาษาไทย..."></textarea>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-4">
-                <label>Reviewer Name</label>
-                <input type="text" id="review_name_${i}" placeholder="e.g. Sarah K.">
+                <label>ชื่อลูกค้าผู้รีวิว</label>
+                <input type="text" id="review_name_${i}" placeholder="เช่น Sarah K.">
               </div>
               <div class="form-group col-4">
-                <label>Subtitle & Location (EN)</label>
-                <input type="text" id="review_title_en_${i}" placeholder="e.g. Owner of French Bulldog (Munich)">
+                <label>รายละเอียด / ข้อมูลผู้ซื้อ (อังกฤษ)</label>
+                <input type="text" id="review_title_en_${i}" placeholder="เช่น Owner of French Bulldog (Munich)">
               </div>
               <div class="form-group col-4">
-                <label>Subtitle & Location (TH)</label>
-                <input type="text" id="review_title_th_${i}" placeholder="e.g. เจ้าของเฟรนช์บลูด็อก (มิวนิก)">
+                <label>รายละเอียด / ข้อมูลผู้ซื้อ (ไทย)</label>
+                <input type="text" id="review_title_th_${i}" placeholder="เช่น เจ้าของสุนัขเฟรนช์บลูด็อก (มิวนิก)">
               </div>
             </div>
           </div>
@@ -772,25 +779,25 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 1; i <= 4; i++) {
         html += `
           <div class="cms-card-item">
-            <h5>FAQ Accordion Item ${i}</h5>
+            <h5>คำถามพบบ่อยรายการที่ ${i}</h5>
             <div class="form-row">
               <div class="form-group col-6">
-                <label>Question (EN)</label>
+                <label>คำถามหลัก (อังกฤษ)</label>
                 <input type="text" id="faq_q_en_${i}" placeholder="FAQ Question (EN)">
               </div>
               <div class="form-group col-6">
-                <label>Question (TH)</label>
-                <input type="text" id="faq_q_th_${i}" placeholder="คำถามทั่วไป (TH)">
+                <label>คำถามหลัก (ไทย)</label>
+                <input type="text" id="faq_q_th_${i}" placeholder="คำถามพบบ่อย (TH)">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
-                <label>Answer (EN)</label>
+                <label>คำตอบ / คำอธิบาย (อังกฤษ)</label>
                 <textarea id="faq_a_en_${i}" rows="3" placeholder="FAQ Answer (EN)"></textarea>
               </div>
               <div class="form-group col-6">
-                <label>Answer (TH)</label>
-                <textarea id="faq_a_th_${i}" rows="3" placeholder="คำอธิบาย/คำตอบ (TH)"></textarea>
+                <label>คำตอบ / คำอธิบาย (ไทย)</label>
+                <textarea id="faq_a_th_${i}" rows="3" placeholder="คำอธิบายหรือคำตอบ (TH)"></textarea>
               </div>
             </div>
           </div>
@@ -1002,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       // Collect Blog
-      for (let i = 1; i <= 3; i++) {
+      for (let i = 1; i <= 4; i++) {
         payload.blog.push({
           img: document.getElementById(`blog_img_${i}`).value.trim(),
           tag_en: document.getElementById(`blog_tag_en_${i}`).value.trim(),
@@ -1040,17 +1047,17 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           console.log("Writing storefront CMS settings to Firebase...", payload);
           await db.collection('storefront_settings').doc('main').set(payload);
-          alert("Storefront customized content saved successfully!");
+          alert("บันทึกข้อมูลการปรับแต่งหน้าเว็บไซต์ (CMS) สำเร็จเรียบร้อยแล้ว!");
         } catch (err) {
           console.error("Save storefront CMS failed:", err);
-          alert("Failed to save storefront configuration. Verify Firestore permission rules.");
+          alert("ไม่สามารถบันทึกการปรับแต่งได้ กรุณาตรวจสอบสิทธิ์การเขียนฐานข้อมูล Firestore");
         }
       } else {
-        alert("Offline demo mode. Content changes simulated locally.");
+        alert("โหมดออฟไลน์ทดสอบจำลอง: การเปลี่ยนแปลงข้อมูลถูกจำลองไว้เรียบร้อยแล้ว");
       }
       
       saveCmsBtn.disabled = false;
-      saveCmsBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Content Changes';
+      saveCmsBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกการแก้ไข';
     });
   }
 

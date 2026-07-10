@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LuxePaws Admin Dashboard | Management Panel</title>
+  <title>LuxePaws Admin Dashboard | ระบบจัดการหลังบ้าน</title>
   
   <!-- FontAwesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,21 +27,21 @@
     <div class="login-card">
       <a href="index.html" class="login-brand" style="text-decoration: none; display: block; margin-bottom: 1.5rem;">
         <h2>Luxe<span>Paws</span></h2>
-        <span class="admin-badge">Admin Panel</span>
+        <span class="admin-badge">ระบบจัดการหลังบ้าน</span>
       </a>
-      <p class="login-subtitle">Access your store control center</p>
+      <p class="login-subtitle">ลงชื่อเข้าใช้งานศูนย์ควบคุมร้านค้า LuxePaws</p>
       
       <form id="loginForm" class="admin-form">
         <div class="form-group">
-          <label for="loginIdentifier">Email or Phone Number</label>
-          <input type="text" id="loginIdentifier" required placeholder="admin@luxepaws.com or +66812345678">
+          <label for="loginIdentifier">อีเมล หรือ เบอร์โทรศัพท์</label>
+          <input type="text" id="loginIdentifier" required placeholder="admin@luxepaws.com หรือ +66812345678">
         </div>
         <div class="form-group">
-          <label for="loginPassword">Password</label>
+          <label for="loginPassword">รหัสผ่าน</label>
           <input type="password" id="loginPassword" required placeholder="••••••••">
         </div>
         <div id="loginError" class="error-msg" style="display: none;"></div>
-        <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">Log In</button>
+        <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">เข้าสู่ระบบ</button>
       </form>
     </div>
   </div>
@@ -55,12 +55,12 @@
       <div class="admin-nav-container">
         <a href="index.html" class="admin-logo" style="text-decoration: none;">
           <h2>Luxe<span>Paws</span></h2>
-          <span class="admin-badge">Admin Dashboard</span>
+          <span class="admin-badge">แผงควบคุมหลังบ้าน</span>
         </a>
         <div class="admin-user-info">
-          <span id="adminUserEmail">admin@luxepaws.com</span>
+          <span>ผู้ใช้งาน: <strong id="adminUserEmail">admin@luxepaws.com</strong></span>
           <button class="btn btn-secondary btn-logout" id="logoutBtn">
-            <i class="fa-solid fa-right-from-bracket"></i> Logout
+            <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
           </button>
         </div>
       </div>
@@ -73,21 +73,21 @@
         <div class="metric-card">
           <div class="metric-icon"><i class="fa-solid fa-baht-sign"></i></div>
           <div class="metric-info">
-            <h3>Total Revenue</h3>
+            <h3>ยอดขายรวม (บาท)</h3>
             <p class="metric-value" id="revenueMetric">฿0.00</p>
           </div>
         </div>
         <div class="metric-card">
           <div class="metric-icon"><i class="fa-solid fa-cart-shopping"></i></div>
           <div class="metric-info">
-            <h3>Total Orders</h3>
+            <h3>จำนวนออเดอร์ทั้งหมด</h3>
             <p class="metric-value" id="ordersMetric">0</p>
           </div>
         </div>
         <div class="metric-card">
           <div class="metric-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
           <div class="metric-info">
-            <h3>Active Catalog</h3>
+            <h3>สินค้าในระบบคลัง</h3>
             <p class="metric-value" id="productsMetric">0</p>
           </div>
         </div>
@@ -97,40 +97,40 @@
       <div class="admin-content-card">
         <div class="admin-tabs">
           <button class="tab-btn active" data-tab="orders">
-            <i class="fa-solid fa-list-check"></i> Customer Orders
+            <i class="fa-solid fa-list-check"></i> ออเดอร์ลูกค้า
           </button>
           <button class="tab-btn" data-tab="products">
-            <i class="fa-solid fa-box-open"></i> Manage Products
+            <i class="fa-solid fa-box-open"></i> คลังสินค้า
           </button>
           <button class="tab-btn" data-tab="cms">
-            <i class="fa-solid fa-pen-to-square"></i> Storefront CMS
+            <i class="fa-solid fa-pen-to-square"></i> ปรับแต่งหน้าเว็บ (CMS)
           </button>
         </div>
 
         <!-- Orders Panel -->
         <div class="tab-panel active" id="ordersPanel">
           <div class="panel-header">
-            <h3>Orders Management</h3>
+            <h3>รายการสั่งซื้อของลูกค้า</h3>
             <button class="btn btn-secondary btn-refresh" id="refreshOrdersBtn">
-              <i class="fa-solid fa-arrows-rotate"></i> Refresh
+              <i class="fa-solid fa-arrows-rotate"></i> ดึงข้อมูลใหม่
             </button>
           </div>
           <div class="table-responsive">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Order ID</th>
-                  <th>Date & Time</th>
-                  <th>Customer Info</th>
-                  <th>Items Purchased</th>
-                  <th>Total Price</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>รหัสออเดอร์</th>
+                  <th>วันที่ & เวลา</th>
+                  <th>ข้อมูลลูกค้า</th>
+                  <th>รายการสินค้า</th>
+                  <th>ยอดรวมสุทธิ</th>
+                  <th>สถานะจัดส่ง</th>
+                  <th>การจัดการ</th>
                 </tr>
               </thead>
               <tbody id="ordersTableBody">
                 <tr>
-                  <td colspan="7" class="text-center text-muted">Loading orders...</td>
+                  <td colspan="7" class="text-center text-muted">กำลังโหลดข้อมูลออเดอร์...</td>
                 </tr>
               </tbody>
             </table>
@@ -140,26 +140,26 @@
         <!-- Products Panel -->
         <div class="tab-panel" id="productsPanel">
           <div class="panel-header">
-            <h3>Product Catalog Management</h3>
+            <h3>รายการสินค้าคลัง (Store Catalog)</h3>
             <button class="btn btn-primary" id="openAddProductBtn">
-              <i class="fa-solid fa-plus"></i> Add New Product
+              <i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่
             </button>
           </div>
           <div class="table-responsive">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Image</th>
-                  <th>Title (EN / TH)</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Swatches</th>
-                  <th>Actions</th>
+                  <th>รูปภาพ</th>
+                  <th>ชื่อสินค้า (อังกฤษ / ไทย)</th>
+                  <th>หมวดหมู่</th>
+                  <th>ราคาสินค้า</th>
+                  <th>ตัวเลือกสี (Swatches)</th>
+                  <th>การจัดการ</th>
                 </tr>
               </thead>
               <tbody id="productsTableBody">
                 <tr>
-                  <td colspan="6" class="text-center text-muted">Loading products...</td>
+                  <td colspan="6" class="text-center text-muted">กำลังโหลดข้อมูลสินค้า...</td>
                 </tr>
               </tbody>
             </table>
@@ -169,28 +169,28 @@
         <!-- CMS Panel -->
         <div class="tab-panel" id="cmsPanel">
           <div class="panel-header">
-            <h3>Storefront CMS & Content Customization</h3>
+            <h3>ระบบปรับแต่งเนื้อหาหน้าเว็บไซต์ (Storefront CMS)</h3>
             <button class="btn btn-primary" id="saveCmsBtn">
-              <i class="fa-solid fa-floppy-disk"></i> Save Content Changes
+              <i class="fa-solid fa-floppy-disk"></i> บันทึกการแก้ไข
             </button>
           </div>
           
           <div class="cms-selector-row" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
-            <label for="cmsSectionSelect" style="font-weight: 500; font-size: 0.9rem;">Select Section to Customize:</label>
-            <select id="cmsSectionSelect" class="form-control" style="max-width: 300px; padding: 0.5rem; border-radius: 4px; border: 1px solid #eae6df;">
-              <option value="hero">Hero Slider Carousel</option>
-              <option value="story">About Philosophy</option>
-              <option value="gallery">Gallery Installations</option>
-              <option value="blog">Editorial Blog Journal</option>
-              <option value="reviews">Customer Reviews & Ratings</option>
-              <option value="faq">FAQ Accordion</option>
+            <label for="cmsSectionSelect" style="font-weight: 500; font-size: 0.9rem;">เลือกส่วนของหน้าเว็บที่จะปรับแต่ง:</label>
+            <select id="cmsSectionSelect" class="form-control" style="max-width: 300px; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--color-admin-border); background-color: var(--color-admin-input-bg); color: var(--color-admin-text);">
+              <option value="hero">ภาพสไลด์แบนเนอร์หลัก (Hero Slides)</option>
+              <option value="story">ประวัติ & ปรัชญาแบรนด์ (Story/Philosophy)</option>
+              <option value="gallery">ภาพแกลเลอรีรีวิว (Gallery)</option>
+              <option value="blog">บทความและเรื่องเล่า (Editorial Blog)</option>
+              <option value="reviews">รีวิวจากลูกค้า (Customer Reviews)</option>
+              <option value="faq">คำถามที่พบบ่อย (FAQ)</option>
             </select>
           </div>
 
           <form id="cmsForm" class="admin-form">
             <!-- 1. Hero Subform -->
             <div class="cms-section-group" id="cmsGroup_hero">
-              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">1. Hero Slider (5 Carousel Slides)</h4>
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-admin-border); padding-bottom: 0.5rem; color: var(--color-accent);">1. แบนเนอร์ภาพสไลด์หลัก (5 ภาพสไลด์)</h4>
               <div id="heroSlidesInputsContainer">
                 <!-- Rendered dynamically in JS -->
               </div>
@@ -198,14 +198,14 @@
 
             <!-- 2. Story Subform -->
             <div class="cms-section-group" id="cmsGroup_story" style="display: none;">
-              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">2. Brand Story / Philosophy</h4>
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-admin-border); padding-bottom: 0.5rem; color: var(--color-accent);">2. ประวัติ & ปรัชญาแบรนด์</h4>
               <div class="form-row">
                 <div class="form-group col-12">
-                  <label>Philosophy Image</label>
+                  <label>รูปภาพหลัก (แบรนด์และสตอรี่)</label>
                   <div class="cms-image-preview-container">
                     <img src="assets/hero_banner.png" id="prev_story_img" class="cms-image-preview">
                     <div class="cms-image-controls">
-                      <input type="text" id="story_img" placeholder="Image URL">
+                      <input type="text" id="story_img" placeholder="ลิงก์รูปภาพ (Image URL)">
                       <input type="file" id="file_story_img" accept="image/*">
                     </div>
                   </div>
@@ -213,41 +213,41 @@
               </div>
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label>Story Title (EN)</label>
+                  <label>หัวเรื่อง (อังกฤษ)</label>
                   <input type="text" id="story_title_en" placeholder="Designed for pets. Fits your style.">
                 </div>
                 <div class="form-group col-6">
-                  <label>Story Title (TH)</label>
+                  <label>หัวเรื่อง (ไทย)</label>
                   <input type="text" id="story_title_th" placeholder="ออกแบบเพื่อสัตว์เลี้ยง ลงตัวกับสไตล์ของคุณ">
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label>Story Paragraph 1 (EN)</label>
+                  <label>เนื้อหาย่อหน้าที่ 1 (อังกฤษ)</label>
                   <textarea id="story_p1_en" rows="3" placeholder="Paragraph 1..."></textarea>
                 </div>
                 <div class="form-group col-6">
-                  <label>Story Paragraph 1 (TH)</label>
+                  <label>เนื้อหาย่อหน้าที่ 1 (ไทย)</label>
                   <textarea id="story_p1_th" rows="3" placeholder="ย่อหน้าที่ 1..."></textarea>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label>Story Paragraph 2 (EN)</label>
+                  <label>เนื้อหาย่อหน้าที่ 2 (อังกฤษ)</label>
                   <textarea id="story_p2_en" rows="3" placeholder="Paragraph 2..."></textarea>
                 </div>
                 <div class="form-group col-6">
-                  <label>Story Paragraph 2 (TH)</label>
+                  <label>เนื้อหาย่อหน้าที่ 2 (ไทย)</label>
                   <textarea id="story_p2_th" rows="3" placeholder="ย่อหน้าที่ 2..."></textarea>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label>Button Text (EN)</label>
+                  <label>ข้อความบนปุ่ม (อังกฤษ)</label>
                   <input type="text" id="story_btn_en" placeholder="Discover Collection">
                 </div>
                 <div class="form-group col-6">
-                  <label>Button Text (TH)</label>
+                  <label>ข้อความบนปุ่ม (ไทย)</label>
                   <input type="text" id="story_btn_th" placeholder="ค้นพบคอลเลกชันของเรา">
                 </div>
               </div>
@@ -255,7 +255,7 @@
 
             <!-- 3. Gallery Subform -->
             <div class="cms-section-group" id="cmsGroup_gallery" style="display: none;">
-              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">3. Gallery Installations (4 Items)</h4>
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-admin-border); padding-bottom: 0.5rem; color: var(--color-accent);">3. ภาพแกลเลอรีจัดแสดงสิ่งติดตั้ง (4 ภาพรีวิว)</h4>
               <div id="galleryInputsContainer">
                 <!-- Rendered dynamically in JS -->
               </div>
@@ -263,7 +263,7 @@
 
             <!-- 4. Blog Subform -->
             <div class="cms-section-group" id="cmsGroup_blog" style="display: none;">
-              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">4. Editorial Blog Journal (3 Posts)</h4>
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-admin-border); padding-bottom: 0.5rem; color: var(--color-accent);">4. บทความข่าวสารและเรื่องราวบรรณาธิการ (4 บทความ)</h4>
               <div id="blogInputsContainer">
                 <!-- Rendered dynamically in JS -->
               </div>
@@ -271,7 +271,7 @@
 
             <!-- 5. Reviews Subform -->
             <div class="cms-section-group" id="cmsGroup_reviews" style="display: none;">
-              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">5. Customer Reviews (3 Cards)</h4>
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-admin-border); padding-bottom: 0.5rem; color: var(--color-accent);">5. บล็อกความคิดเห็นของลูกค้า (3 รีวิว)</h4>
               <div id="reviewInputsContainer">
                 <!-- Rendered dynamically in JS -->
               </div>
@@ -279,7 +279,7 @@
 
             <!-- 6. FAQ Subform -->
             <div class="cms-section-group" id="cmsGroup_faq" style="display: none;">
-              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; color: var(--color-accent);">6. Frequently Asked Questions (4 Items)</h4>
+              <h4 style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-admin-border); padding-bottom: 0.5rem; color: var(--color-accent);">6. คำถามพบบ่อย FAQ (4 รายการคำถาม)</h4>
               <div id="faqInputsContainer">
                 <!-- Rendered dynamically in JS -->
               </div>
@@ -298,7 +298,7 @@
   <div class="product-modal-backdrop" id="productModalBackdrop"></div>
   <div class="product-modal" id="productModal">
     <div class="modal-header">
-      <h3 id="modalTitle">Add New Product</h3>
+      <h3 id="modalTitle">เพิ่มสินค้าใหม่</h3>
       <button class="modal-close" id="closeProductModalBtn">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -308,64 +308,64 @@
       
       <div class="form-row">
         <div class="form-group col-6">
-          <label for="prodTitleEn">Product Title (English)</label>
-          <input type="text" id="prodTitleEn" required placeholder="e.g. Nido Felt Dog Bed">
+          <label for="prodTitleEn">ชื่อสินค้า (ภาษาอังกฤษ)</label>
+          <input type="text" id="prodTitleEn" required placeholder="เช่น Nido Felt Dog Bed">
         </div>
         <div class="form-group col-6">
-          <label for="prodTitleTh">Product Title (Thai)</label>
-          <input type="text" id="prodTitleTh" required placeholder="e.g. ที่นอนสุนัขใยสักหลาด Nido">
+          <label for="prodTitleTh">ชื่อสินค้า (ภาษาไทย)</label>
+          <input type="text" id="prodTitleTh" required placeholder="เช่น ที่นอนสุนัขใยสักหลาด Nido">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group col-4">
-          <label for="prodPrice">Price (฿)</label>
-          <input type="number" step="0.01" id="prodPrice" required placeholder="189.00">
+          <label for="prodPrice">ราคาขาย (บาท ฿)</label>
+          <input type="number" step="0.01" id="prodPrice" required placeholder="3900">
         </div>
         <div class="form-group col-4">
-          <label for="prodCategory">Category Slug</label>
+          <label for="prodCategory">หมวดหมู่สำหรับระบบ (Slug)</label>
           <select id="prodCategory" required>
-            <option value="dog">dog</option>
-            <option value="cat">cat</option>
-            <option value="accessories">accessories</option>
+            <option value="dog">dog (สุนัข)</option>
+            <option value="cat">cat (แมว)</option>
+            <option value="accessories">accessories (อุปกรณ์ตกแต่ง)</option>
           </select>
         </div>
         <div class="form-group col-4">
-          <label for="prodSwatches">Swatches (Comma separated)</label>
+          <label for="prodSwatches">สีตัวเลือกสินค้า (คั่นด้วยจุลภาค ,)</label>
           <input type="text" id="prodSwatches" placeholder="Grey, Cream, Charcoal">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group col-6">
-          <label for="prodCatEn">Category Label (English)</label>
-          <input type="text" id="prodCatEn" required placeholder="e.g. Beds & Cushions">
+          <label for="prodCatEn">ป้ายหมวดหมู่แสดงผล (ภาษาอังกฤษ)</label>
+          <input type="text" id="prodCatEn" required placeholder="เช่น Beds & Cushions">
         </div>
         <div class="form-group col-6">
-          <label for="prodCatTh">Category Label (Thai)</label>
-          <input type="text" id="prodCatTh" required placeholder="e.g. ที่นอนและเบาะหนุน">
+          <label for="prodCatTh">ป้ายหมวดหมู่แสดงผล (ภาษาไทย)</label>
+          <input type="text" id="prodCatTh" required placeholder="เช่น ที่นอนและเบาะหนุน">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group col-6">
-          <label for="prodBadgeEn">Badge (English) - Optional</label>
-          <input type="text" id="prodBadgeEn" placeholder="e.g. Bestseller">
+          <label for="prodBadgeEn">ป้ายกำกับพิเศษ (อังกฤษ) - ถ้ามี</label>
+          <input type="text" id="prodBadgeEn" placeholder="เช่น Bestseller">
         </div>
         <div class="form-group col-6">
-          <label for="prodBadgeTh">Badge (Thai) - Optional</label>
-          <input type="text" id="prodBadgeTh" placeholder="e.g. ขายดีที่สุด">
+          <label for="prodBadgeTh">ป้ายกำกับพิเศษ (ไทย) - ถ้ามี</label>
+          <input type="text" id="prodBadgeTh" placeholder="เช่น ขายดีที่สุด">
         </div>
       </div>
 
       <div class="form-group">
-        <label for="prodImageUrl">Product Image Link (URL or relative path)</label>
+        <label for="prodImageUrl">ลิงก์รูปภาพสินค้าหลัก (Image URL)</label>
         <input type="text" id="prodImageUrl" required placeholder="assets/dog_bed.png">
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="cancelProductBtn">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="saveProductBtn">Save Product</button>
+        <button type="button" class="btn btn-secondary" id="cancelProductBtn">ยกเลิก</button>
+        <button type="submit" class="btn btn-primary" id="saveProductBtn">บันทึกสินค้า</button>
       </div>
     </form>
   </div>
