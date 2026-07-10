@@ -1812,7 +1812,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title_th: "การจัดระเบียบที่นอนสัตว์เลี้ยงเข้ากับห้องนั่งเล่นยุคใหม่",
       excerpt_en: "Discover how to position your pet's nesting space to complement Scandinavian minimalism and maintain design cohesion.",
       excerpt_th: "ค้นพบวิธีการจัดวางและเลือกซื้อที่นอนสัตว์เลี้ยงให้เข้ากับสไตล์มินิมอลแบบสแกนดิเนเวียได้อย่างกลมกลืน",
-      img: "assets/hero_banner.png",
+      img: "assets/blog_post1.png",
       date: "July 8, 2026",
       body_en: `
         <p>A beautiful home should be a sanctuary for everyone who lives in it—including your four-legged companions. For too long, pet owners have felt forced to choose between design integrity and their pet’s comfort. Standard pet beds are often bulky, brightly colored eyesores that disrupt the visual flow of a curated space.</p>
@@ -1843,7 +1843,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title_th: "ศิลปะการแต่งบ้านเพื่อเจ้าเหมียว: คู่มือติดตั้งคอนโดปีนป่ายติดผนัง",
       excerpt_en: "Unlock your cat's climbing instincts without sacrificing wall space. The ultimate architectural climbing layout guide.",
       excerpt_th: "ไขความลับสัญชาตญาณการปีนป่ายของแมวโดยไม่เสียพื้นที่ทางเดิน ด้วยไอเดียการจัดสัดส่วนแนวผนัง",
-      img: "assets/hero_slide2_1783520720625.png",
+      img: "assets/blog_post2.png",
       date: "July 9, 2026",
       body_en: `
         <p>Cats are natural climbers. In the wild, high vantage points offer safety, a clear view of their territory, and optimal hunting positions. In our homes, vertical space is often overlooked, leaving active felines with restricted territory and leading to stress-related behaviors.</p>
@@ -1874,7 +1874,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title_th: "สรีรศาสตร์ของการเลือกชามอาหารสัตว์เลี้ยงแบบยกสูง",
       excerpt_en: "Why vet science recommends elevated oak wood stands to improve digestion and posture for aging cats and dogs.",
       excerpt_th: "ทำไมสัตวแพทย์จึงแนะนำชั้นวางชามอาหารไม้โอ๊คแบบยกสูง เพื่อช่วยเรื่องระบบย่อยอาหารและข้อต่อ",
-      img: "assets/hero_slide4_1783520750258.png",
+      img: "assets/blog_post3.png",
       date: "July 10, 2026",
       body_en: `
         <p>Have you noticed how felines and canines feed? Traditional pet bowls placed directly on the kitchen floor force your pet to bend low, straining their neck muscles and compressing their esophagus. This posture is not only uncomfortable but can actively harm their long-term health.</p>
@@ -1905,7 +1905,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title_th: "ผ้าสักหลาดขนสัตว์และไม้จริง: การเลือกวัสดุเฟอร์นิเจอร์สัตว์เลี้ยงที่ยั่งยืน",
       excerpt_en: "Why luxury pet furniture relies on natural wool felt and certified European timber for longevity and pet wellness.",
       excerpt_th: "เจาะลึกทำไมเฟอร์นิเจอร์สัตว์เลี้ยงระดับไฮเอนด์จึงเลือกใช้ใยขนแกะธรรมชาติและไม้ป่าหมุนเวียนเพื่อสุขภาพสัตว์เลี้ยง",
-      img: "assets/hero_slide5_1783520762144.png",
+      img: "assets/blog_post4.png",
       date: "July 10, 2026",
       body_en: `
         <p>In an era dominated by cheap plastics and engineered particle boards, choosing high-end furniture for your pet is a vote for sustainability, indoor air quality, and product longevity. Pet furniture experiences high physical wear: scratching, clawing, chewing, and frequent cleaning.</p>
@@ -1918,7 +1918,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>Investing in furniture crafted with natural hardwood and heavy felt means purchasing an heirloom piece. These materials are built to withstand natural pet behaviors and can be renewed or repaired over a lifetime, reducing environmental waste and saving you money in the long run.</p>
       `,
       body_th: `
-        <p>ในยุคที่ตลาดเต็มไปด้วยพลาสติกราคาถูกและแผ่นไม้ปาร์ติเกิลอัดกาว การเลือกเฟอร์นิเจอร์คุณภาพสูงให้สัตว์เลี้ยงคือการดูแลสุขอนามัยภายในบ้าน สุขภาพของสัตว์เลี้ยง และการันตีความคุ้มค่าระยะยาว เนื่องจากเฟอร์นิเจอร์สัตว์เลี้ยงต้องเผชิญกับแรงขีดข่วน กัด แทะ และทำความสะอาดบ่อยครั้ง</p>
+        <p>ในยุคที่ตลาดเต็มไปด้วยพลาสติกราคาถูกและแผ่นไม้ปาร์ติเกิลอัดกาว การเลือกเฟอร์นิเจอร์คุณภาพสูงให้สัตว์เลี้ยงคือการดูแลสุขอนามัยภายในบ้าน สุขภาพของสัตว์เลี้ยง และการันตีความคุค่าระยะยาว เนื่องจากเฟอร์นิเจอร์สัตว์เลี้ยงต้องเผชิญกับแรงขีดข่วน กัด แทะ และทำความสะอาดบ่อยครั้ง</p>
         <p>นี่คือเหตุผลที่ LuxePaws เจาะจงเลือกใช้เพียงสองวัสดุหลัก: ใยสักหลาดขนแกะธรรมชาติ 100% และไม้แท้จากป่าหมุนเวียนยุโรป</p>
         <h3>1. ความบริสุทธิ์ของใยขนแกะธรรมชาติ (100% Organic Wool Felt)</h3>
         <p>ใยสังเคราะห์จำพวกโพลีเอสเตอร์มักจะสะสมไฟฟ้าสถิต ดักจับฝุ่นและกลิ่นตัวของสัตว์เลี้ยงได้ง่าย ต่างจากใยสักหลาดขนแกะธรรมชาติ 100% ที่ไม่ก่อให้เกิดอาการแพ้ มีแรงสะท้อนฝุ่นธรรมชาติ และเคลือบด้วยน้ำมันลาโนลินอ่อน ๆ ตามธรรมชาติ ช่วยต้านน้ำซึมและทำความสะอาดง่ายด้วยการดูดฝุ่นเบา ๆ</p>
