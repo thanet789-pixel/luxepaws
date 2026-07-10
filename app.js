@@ -1106,9 +1106,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const badge = currentLang === 'th' ? product.badge_th : product.badge_en;
     const priceVal = product.price ? parseFloat(product.price) : 0.00;
     
-    // Detailed Description key mapping
-    const descKey = `p${product.id}_desc_detail`;
-    const description = translations[currentLang][descKey] || (currentLang === 'th' ? 'ไม่มีรายละเอียดภาษาไทย' : 'No description available');
+    // Detailed Description from database or fallback to static translations
+    const description = currentLang === 'th' 
+      ? (product.description_th || translations['th'][`p${product.id}_desc_detail`] || 'ไม่มีรายละเอียดสินค้าในขณะนี้')
+      : (product.description_en || translations['en'][`p${product.id}_desc_detail`] || 'No description available');
 
     // Populate Details
     if (modalProductTitle) modalProductTitle.textContent = title;

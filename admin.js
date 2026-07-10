@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const prodBadgeEn = document.getElementById('prodBadgeEn');
   const prodBadgeTh = document.getElementById('prodBadgeTh');
   const prodImageUrl = document.getElementById('prodImageUrl');
+  const prodSubImages = document.getElementById('prodSubImages');
+  const prodDescEn = document.getElementById('prodDescEn');
+  const prodDescTh = document.getElementById('prodDescTh');
 
   let dbProducts = [];
   let dbOrders = [];
@@ -479,6 +482,9 @@ document.addEventListener('DOMContentLoaded', () => {
     prodBadgeEn.value = product.badge_en || '';
     prodBadgeTh.value = product.badge_th || '';
     prodImageUrl.value = product.image_url;
+    prodSubImages.value = Array.isArray(product.images) ? product.images.join(', ') : '';
+    prodDescEn.value = product.description_en || '';
+    prodDescTh.value = product.description_th || '';
 
     // Parse swatches to comma-separated text
     let swatchesArray = [];
@@ -528,6 +534,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const swatchesText = prodSwatches.value.trim();
       const swatchesList = swatchesText ? swatchesText.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
 
+      // Convert sub-images comma text back to clean JSON array and prepend main image
+      const subImagesText = prodSubImages.value.trim();
+      let imagesList = subImagesText ? subImagesText.split(',').map(img => img.trim()).filter(img => img.length > 0) : [];
+      if (imageUrl && !imagesList.includes(imageUrl)) {
+        imagesList.unshift(imageUrl);
+      }
+
       const payload = {
         title_en: titleEn,
         title_th: titleTh,
@@ -538,6 +551,9 @@ document.addEventListener('DOMContentLoaded', () => {
         badge_en: badgeEn,
         badge_th: badgeTh,
         image_url: imageUrl,
+        images: imagesList,
+        description_en: prodDescEn.value.trim() || null,
+        description_th: prodDescTh.value.trim() || null,
         swatches: swatchesList
       };
 

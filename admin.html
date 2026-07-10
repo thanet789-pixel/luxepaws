@@ -388,9 +388,26 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="prodImageUrl">ลิงก์รูปภาพสินค้าหลัก (Image URL)</label>
-        <input type="text" id="prodImageUrl" required placeholder="assets/dog_bed.png">
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label for="prodImageUrl">ลิงก์รูปภาพสินค้าหลัก (Main Image URL)</label>
+          <input type="text" id="prodImageUrl" required placeholder="เช่น assets/dog_bed.png หรือ https://images.unsplash.com/...">
+        </div>
+        <div class="form-group col-6">
+          <label for="prodSubImages">ลิงก์รูปภาพย่อยเพิ่มเติม (คั่นด้วยจุลภาค ,)</label>
+          <input type="text" id="prodSubImages" placeholder="เช่น assets/dog_bed_v2.png, assets/dog_bed_v3.png">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label for="prodDescEn">รายละเอียดสินค้า (ภาษาอังกฤษ)</label>
+          <textarea id="prodDescEn" rows="4" placeholder="Product details & specifications (EN)"></textarea>
+        </div>
+        <div class="form-group col-6">
+          <label for="prodDescTh">รายละเอียดสินค้า (ภาษาไทย)</label>
+          <textarea id="prodDescTh" rows="4" placeholder="รายละเอียดและข้อมูลจำเพาะสินค้า (TH)"></textarea>
+        </div>
       </div>
 
       <div class="modal-footer">
