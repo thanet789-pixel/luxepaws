@@ -105,6 +105,9 @@
           <button class="tab-btn" data-tab="cms">
             <i class="fa-solid fa-pen-to-square"></i> ปรับแต่งหน้าเว็บ (CMS)
           </button>
+          <button class="tab-btn" data-tab="users">
+            <i class="fa-solid fa-users"></i> จัดการผู้ใช้
+          </button>
         </div>
 
         <!-- Orders Panel -->
@@ -286,6 +289,33 @@
             </div>
 
           </form>
+        </div>
+
+        <!-- Users Panel -->
+        <div class="tab-panel" id="usersPanel">
+          <div class="panel-header">
+            <h3>รายชื่อผู้ใช้งานและผู้ติดตามข่าวสาร (Subscribers)</h3>
+            <button class="btn btn-secondary btn-refresh" id="refreshUsersBtn">
+              <i class="fa-solid fa-arrows-rotate"></i> ดึงข้อมูลใหม่
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">ลำดับที่</th>
+                  <th>อีเมลผู้ใช้งาน (Email Address)</th>
+                  <th>วันที่เข้าร่วม / สมัครข่าวสาร</th>
+                  <th style="width: 180px;">การจัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr>
+                  <td colspan="4" class="text-center text-muted">กำลังโหลดข้อมูลผู้ใช้งาน...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>

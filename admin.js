@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const ordersTableBody = document.getElementById('ordersTableBody');
   const productsTableBody = document.getElementById('productsTableBody');
   const refreshOrdersBtn = document.getElementById('refreshOrdersBtn');
+  const usersTableBody = document.getElementById('usersTableBody');
+  const refreshUsersBtn = document.getElementById('refreshUsersBtn');
 
   // Product Modal elements
   const openAddProductBtn = document.getElementById('openAddProductBtn');
@@ -72,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let dbProducts = [];
   let dbOrders = [];
+  let dbSubscribers = [];
 
   // ==========================================
   // 1. SUPABASE AUTHENTICATION CONTROLLER
@@ -191,10 +194,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return list;
       });
 
-      const [productsData, ordersData] = await Promise.all([productsPromise, ordersPromise]);
+      const subscribersPromise = db.collection('subscribers').get().then(snapshot => {
+        const list = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          let subscribedAtStr = new Date().toISOString();
+          if (data.subscribed_at) {
+            subscribedAtStr = data.subscribed_at.toDate ? data.subscribed_at.toDate().toISOString() : new Date(data.subscribed_at).toISOString();
+          }
+          list.push({ docId: doc.id, email: data.email || '', subscribed_at: subscribedAtStr });
+        });
+        list.sort((a, b) => new Date(b.subscribed_at) - new Date(a.subscribed_at));
+        return list;
+      });
+
+      const [productsData, ordersData, subscribersData] = await Promise.all([productsPromise, ordersPromise, subscribersPromise]);
 
       dbProducts = productsData || [];
       dbOrders = ordersData || [];
+      dbSubscribers = subscribersData || [];
 
       // Update metrics panel
       calculateAndRenderMetrics();
@@ -202,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Render tab tables
       renderOrdersTable();
       renderProductsTable();
+      renderUsersTable();
       loadCmsData();
       
       console.log("Dashboard database loading completed successfully.");
@@ -238,9 +257,13 @@ document.addEventListener('DOMContentLoaded', () => {
     dbOrders = [
       { id: 1, created_at: new Date().toISOString(), customer_name: "Mock Customer", customer_email: "test@example.com", shipping_address: "Bangkok", items: [{title: "Nido Felt Dog Bed", qty: 1, price: 6900, color: "Grey"}], total_price: 6900, status: "pending" }
     ];
+    dbSubscribers = [
+      { docId: "sub_1", email: "thanet789@gmail.com", subscribed_at: new Date().toISOString() }
+    ];
     calculateAndRenderMetrics();
     renderOrdersTable();
     renderProductsTable();
+    renderUsersTable();
   }
 
   // ==========================================
@@ -340,6 +363,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (refreshOrdersBtn) {
     refreshOrdersBtn.addEventListener('click', loadDashboardData);
+  }
+
+  if (refreshUsersBtn) {
+    refreshUsersBtn.addEventListener('click', loadDashboardData);
   }
 
   // ==========================================
@@ -577,6 +604,68 @@ document.addEventListener('DOMContentLoaded', () => {
       dbProducts = dbProducts.filter(p => String(p.docId) !== String(id));
       calculateAndRenderMetrics();
       renderProductsTable();
+    }
+  }
+
+  // ==========================================
+  // 4.5. USER & NEWSLETTER SUBSCRIBERS CONTROLLER
+  // ==========================================
+
+  function renderUsersTable() {
+    if (!usersTableBody) return;
+    usersTableBody.innerHTML = '';
+
+    if (dbSubscribers.length === 0) {
+      usersTableBody.innerHTML = `
+        <tr>
+          <td colspan="4" class="text-center text-muted">ยังไม่มีรายชื่อผู้ใช้งานหรือผู้ติดตามลงทะเบียนในระบบในขณะนี้</td>
+        </tr>
+      `;
+      return;
+    }
+
+    dbSubscribers.forEach((sub, idx) => {
+      const date = new Date(sub.subscribed_at).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${idx + 1}</strong></td>
+        <td><strong>${sub.email}</strong></td>
+        <td>${date}</td>
+        <td>
+          <button class="btn btn-danger btn-small btn-delete-user" data-subscriber-id="${sub.docId}">
+            <i class="fa-solid fa-user-minus"></i> ลบผู้ใช้งาน
+          </button>
+        </td>
+      `;
+      usersTableBody.appendChild(tr);
+    });
+
+    // Bind subscriber deletion events
+    const deleteUserBtns = usersTableBody.querySelectorAll('.btn-delete-user');
+    deleteUserBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const subId = btn.getAttribute('data-subscriber-id');
+        if (confirm("คุณแน่ใจหรือไม่ที่จะลบผู้ใช้งาน/ผู้ติดตามคนนี้ออกจากระบบ?")) {
+          deleteSubscriber(subId);
+        }
+      });
+    });
+  }
+
+  async function deleteSubscriber(id) {
+    if (db) {
+      try {
+        console.log(`Deleting subscriber doc ID ${id} from Firebase...`);
+        await db.collection('subscribers').doc(id).delete();
+        loadDashboardData();
+      } catch (err) {
+        console.error("Subscriber deletion failed:", err);
+        alert("ลบข้อมูลผู้ใช้งานไม่สำเร็จ กรุณาตรวจสอบสิทธิ์การเขียนข้อมูลลงฐานข้อมูล Firestore");
+      }
+    } else {
+      dbSubscribers = dbSubscribers.filter(s => String(s.docId) !== String(id));
+      calculateAndRenderMetrics();
+      renderUsersTable();
     }
   }
 
