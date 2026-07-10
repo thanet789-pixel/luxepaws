@@ -721,6 +721,25 @@
     </button>
   </div>
 
+  <!-- Search Overlay Modal -->
+  <div class="search-overlay" id="searchOverlay">
+    <button class="search-close" id="searchCloseBtn" aria-label="Close search">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="search-container">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass search-icon-input"></i>
+        <input type="text" id="searchInput" placeholder="Search LuxePaws products..." data-i18n-placeholder="search_placeholder" autocomplete="off">
+      </div>
+      <div class="search-results-section" id="searchResultsSection">
+        <h4 id="searchResultsTitle" data-i18n="search_featured_products">Featured Suggestions</h4>
+        <div class="search-results-grid" id="searchResultsGrid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Custom JavaScript -->
   <script src="app.js"></script>
 </body>

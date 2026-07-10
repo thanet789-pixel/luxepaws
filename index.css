@@ -2595,4 +2595,233 @@ html[lang="th"] .remove-item-btn {
   }
 }
 
+/* Fullscreen Search Overlay Styles */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(250, 248, 245, 0.98);
+  z-index: 1080;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  padding-top: 7rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.search-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-close {
+  position: absolute;
+  top: 2.2rem;
+  right: 3rem;
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  z-index: 1090;
+}
+
+.search-close:hover {
+  color: var(--color-dark);
+  transform: scale(1.08);
+}
+
+.search-container {
+  width: 90%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  border-bottom: 2px solid var(--color-dark);
+  padding-bottom: 0.8rem;
+}
+
+.search-icon-input {
+  font-size: 1.5rem;
+  color: var(--color-dark);
+}
+
+.search-input-wrap input {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--color-dark);
+  outline: none;
+}
+
+.search-results-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.search-results-section h4 {
+  font-family: var(--font-accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+  max-height: 58vh;
+  overflow-y: auto;
+  padding-right: 0.6rem;
+}
+
+/* Custom Scrollbar for results grid */
+.search-results-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.search-results-grid::-webkit-scrollbar-track {
+  background: rgba(28, 27, 25, 0.02);
+}
+
+.search-results-grid::-webkit-scrollbar-thumb {
+  background: rgba(28, 27, 25, 0.12);
+  border-radius: 4px;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  background-color: var(--color-white);
+  border-radius: 4px;
+  border: 1px solid rgba(28, 27, 25, 0.03);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.search-result-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(28, 27, 25, 0.03);
+  border-color: rgba(28, 27, 25, 0.08);
+}
+
+.search-result-item img {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 2px;
+  background-color: var(--color-light);
+  border: 1px solid rgba(28, 27, 25, 0.02);
+}
+
+.search-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.search-result-info h5 {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+.search-result-category {
+  font-family: var(--font-accent);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.search-result-price {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-accent);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .search-overlay {
+    padding-top: 5rem;
+  }
+  .search-close {
+    top: 1.5rem;
+    right: 1.8rem;
+    font-size: 1.4rem;
+  }
+  .search-container {
+    gap: 2rem;
+  }
+  .search-input-wrap input {
+    font-size: 1.3rem;
+  }
+  .search-icon-input {
+    font-size: 1.3rem;
+  }
+  .search-result-item {
+    gap: 1rem;
+    padding: 0.8rem;
+  }
+}
+
+/* Custom Toast Notification */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  z-index: 2000;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.toast-container.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast-container i {
+  color: var(--color-accent);
+  font-size: 1rem;
+}
+
+
+
 

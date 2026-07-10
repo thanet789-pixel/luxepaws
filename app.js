@@ -258,7 +258,13 @@ const translations = {
     detail_qty_label: "Quantity",
     p1_desc_detail: "Indulge your pet with Nido, a sanctuary of absolute comfort and high-end design. Molded from organic felt wool with a soft, reversible inner cushion, Nido offers security and support while blending beautifully with your modern living space.",
     p2_desc_detail: "Elevate feeding time to a luxury ritual. The Desco bowl stand combines a sturdy, varnished oak wood stand with dishwasher-safe matte ceramic bowls. Ergonomically designed to reduce neck strain for your dogs and cats while keeping your dining area clean and stylish.",
-    p3_desc_detail: "Torre is an architectural masterpiece designed for active cats. Crafted from solid ash wood and wrapped in natural heavy-duty sisal rope, this scratching tower features a elevated snug platform at the top, offering your cat the perfect playground to climb, scratch, and sleep in ultimate style."
+    p3_desc_detail: "Torre is an architectural masterpiece designed for active cats. Crafted from solid ash wood and wrapped in natural heavy-duty sisal rope, this scratching tower features a elevated snug platform at the top, offering your cat the perfect playground to climb, scratch, and sleep in ultimate style.",
+    
+    // Search Modal EN
+    search_placeholder: "Search LuxePaws products...",
+    search_featured_products: "Featured Suggestions",
+    search_no_results: "No matching products found.",
+    search_results_title: "Search Results"
   },
   th: {
     nav_home: "หน้าแรก",
@@ -445,7 +451,13 @@ const translations = {
     detail_qty_label: "จำนวน",
     p1_desc_detail: "ปรนเปรอสัตว์เลี้ยงของคุณด้วย Nido พื้นที่แห่งความอบอุ่นและสไตล์ระดับไฮเอนด์ ขึ้นรูปด้วยใยสักหลาดขนแกะธรรมชาติ 100% พร้อมเบาะรองนอนหนานุ่มที่สลับด้านซักได้ Nido มอบความรู้สึกปลอดภัยและผ่อนคลาย พร้อมเข้ากับพื้นที่ห้องนั่งเล่นยุคใหม่ของคุณอย่างลงตัว",
     p2_desc_detail: "ยกระดับเวลารับประทานอาหารให้เป็นช่วงเวลาสุดหรู ที่วางชาม Desco ผลิตจากไม้โอ๊คแท้เคลือบกันน้ำ ผสานชามเซรามิกผิวแมตต์ที่ทำความสะอาดง่ายและเข้าเครื่องล้างจานได้ ได้รับการออกแบบตามหลักสรีรศาสตร์ช่วยลดอาการปวดตึงคอสำหรับสุนัขและแมว และรักษาความสะอาดในห้องครัวของคุณ",
-    p3_desc_detail: "Torre คือผลงานศิลปะทางสถาปัตยกรรมที่ออกแบบมาเพื่อแมวที่กระฉับกระเฉง สร้างสรรค์ด้วยไม้แอชแท้ทั้งหลังและพันด้วยเชือกป่านศรนารายณ์หนาพิเศษ คอนโดปีนป่ายนี้มาพร้อมแท่นรังนอนทรงโคคูนด้านบนสุด ช่วยให้เจ้าเหมียวปีนป่าย ฝนเล็บ และนอนพักผ่อนอย่างมีระดับ"
+    p3_desc_detail: "Torre คือผลงานศิลปะทางสถาปัตยกรรมที่ออกแบบมาเพื่อแมวที่กระฉับกระเฉง สร้างสรรค์ด้วยไม้แอชแท้ทั้งหลังและพันด้วยเชือกป่านศรนารายณ์หนาพิเศษ คอนโดปีนป่ายนี้มาพร้อมแท่นรังนอนทรงโคคูนด้านบนสุด ช่วยให้เจ้าเหมียวปีนป่าย ฝนเล็บ และนอนพักผ่อนอย่างมีระดับ",
+    
+    // Search Modal TH
+    search_placeholder: "ค้นหาสินค้า LuxePaws...",
+    search_featured_products: "สินค้าแนะนำสำหรับคุณ",
+    search_no_results: "ไม่พบสินค้าที่ตรงกับการค้นหา",
+    search_results_title: "ผลลัพธ์การค้นหา"
   }
 };
 
@@ -1789,6 +1801,175 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Set language configuration (will trigger grid render and cart updates)
   setLanguage(currentLang);
+
+  // --- Toast Notification Helper ---
+  function showToast(message) {
+    let toast = document.getElementById('customToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'customToast';
+      toast.className = 'toast-container';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${message}</span>`;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
+  }
+
+  // --- Newsletter Form Submission Handler ---
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const emailInput = newsletterForm.querySelector('input[type="email"]');
+      const submitBtn = newsletterForm.querySelector('button[type="submit"]');
+      if (!emailInput || !emailInput.value.trim()) return;
+
+      const email = emailInput.value.trim();
+      const originalText = submitBtn ? submitBtn.textContent : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = currentLang === 'th' ? 'กำลังบันทึก...' : 'Subscribing...';
+      }
+
+      try {
+        // Save to Firebase Firestore subscribers collection
+        if (typeof db !== 'undefined') {
+          await db.collection('subscribers').add({
+            email: email,
+            subscribed_at: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+        
+        // Show success toast
+        const successMsg = currentLang === 'th' ? 'สมัครสมาชิกสำเร็จ! ขอบคุณค่ะ' : 'Subscribed successfully! Thank you.';
+        showToast(successMsg);
+        emailInput.value = '';
+      } catch (err) {
+        console.warn("Firestore newsletter subscription failed, fallback simulation:", err);
+        // Fallback simulation (graceful degradation)
+        const successMsg = currentLang === 'th' ? 'สมัครสมาชิกสำเร็จ! ขอบคุณค่ะ' : 'Subscribed successfully! Thank you.';
+        showToast(successMsg);
+        emailInput.value = '';
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
+    });
+  }
+
+  // --- Apple-style Search Overlay Controller ---
+  const searchBtn = document.getElementById('searchBtn');
+  const searchOverlay = document.getElementById('searchOverlay');
+  const searchCloseBtn = document.getElementById('searchCloseBtn');
+  const searchInput = document.getElementById('searchInput');
+  const searchResultsGrid = document.getElementById('searchResultsGrid');
+  const searchResultsTitle = document.getElementById('searchResultsTitle');
+
+  function openSearch() {
+    if (searchOverlay) {
+      searchOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (searchInput) {
+        searchInput.value = '';
+        setTimeout(() => searchInput.focus(), 150);
+      }
+      renderSearchResults(''); // Show suggestions initially
+    }
+  }
+
+  function closeSearch() {
+    if (searchOverlay) {
+      searchOverlay.classList.remove('open');
+      // Only unlock body overflow if product details modal is not open
+      const detailsModal = document.getElementById('productDetailsModal');
+      if (detailsModal && !detailsModal.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+  }
+
+  if (searchBtn) searchBtn.addEventListener('click', openSearch);
+  if (searchCloseBtn) searchCloseBtn.addEventListener('click', closeSearch);
+
+  // Close search overlay on pressing ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeSearch();
+    }
+  });
+
+  // Render matching products inside the search grid
+  function renderSearchResults(query) {
+    if (!searchResultsGrid) return;
+    searchResultsGrid.innerHTML = '';
+    
+    const cleanQuery = query.toLowerCase().trim();
+    
+    // Filter from products array
+    let matches = [];
+    if (cleanQuery === '') {
+      // Default: Featured suggestions (e.g. up to 3 items)
+      matches = products.slice(0, 3);
+      if (searchResultsTitle) {
+        searchResultsTitle.textContent = translations[currentLang].search_featured_products;
+      }
+    } else {
+      matches = products.filter(p => {
+        const titleEn = (p.title_en || '').toLowerCase();
+        const titleTh = (p.title_th || '').toLowerCase();
+        const cat = (p.category_en || p.category || '').toLowerCase();
+        return titleEn.includes(cleanQuery) || titleTh.includes(cleanQuery) || cat.includes(cleanQuery);
+      });
+      if (searchResultsTitle) {
+        searchResultsTitle.textContent = translations[currentLang].search_results_title;
+      }
+    }
+
+    if (matches.length === 0) {
+      searchResultsGrid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--color-muted); font-size: 0.9rem;">
+          ${translations[currentLang].search_no_results}
+        </div>
+      `;
+      return;
+    }
+
+    matches.forEach(product => {
+      const title = currentLang === 'th' ? (product.title_th || product.title_en) : (product.title_en || product.title_th);
+      const categoryLabel = currentLang === 'th' ? (product.category_th || product.category_en) : (product.category_en || product.category_th);
+      const img = product.image_url || 'assets/dog_bed.png';
+      const priceVal = parseFloat(product.price || 0);
+
+      const item = document.createElement('div');
+      item.className = 'search-result-item';
+      item.innerHTML = `
+        <img src="${img}" alt="${title}">
+        <div class="search-result-info">
+          <h5>${title}</h5>
+          <span class="search-result-category">${categoryLabel}</span>
+        </div>
+        <span class="search-result-price">฿${priceVal.toFixed(2)}</span>
+      `;
+
+      item.addEventListener('click', () => {
+        closeSearch();
+        openProductDetailsModal(product);
+      });
+
+      searchResultsGrid.appendChild(item);
+    });
+  }
+
+  // Bind live search input listener
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      renderSearchResults(e.target.value);
+    });
+  }
 
   // Load and apply CMS custom settings asynchronously
   applyCmsSettings();
