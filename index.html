@@ -374,40 +374,8 @@
         <span class="subtitle" data-i18n="blog_subtitle">LuxePaws Journal</span>
         <h2 class="title" data-i18n="blog_title">Living with Design</h2>
       </div>
-      <div class="blog-grid">
-        <article class="blog-card">
-          <div class="blog-img-wrap">
-            <img src="assets/hero_banner.png" alt="Pet furniture placement tips">
-          </div>
-          <div class="blog-content">
-            <span class="blog-tag" data-i18n="blog_tag1">Interior</span>
-            <h3 data-i18n="blog_post1_title">Integrating Pet Beds Into Modern Living Rooms</h3>
-            <p data-i18n="blog_post1_excerpt">Discover how to position your pet's nesting space to complement Scandinavian minimalism and maintain design cohesion.</p>
-            <a href="#" class="read-more" data-i18n="blog_read_more">Read Article <i class="fa-solid fa-arrow-right-long"></i></a>
-          </div>
-        </article>
-        <article class="blog-card">
-          <div class="blog-img-wrap">
-            <img src="assets/hero_slide2_1783520720625.png" alt="Cat climbing systems design">
-          </div>
-          <div class="blog-content">
-            <span class="blog-tag" data-i18n="blog_tag2">Architecture</span>
-            <h3 data-i18n="blog_post2_title">The Rise of 'Catification': Wall Climbing Guides</h3>
-            <p data-i18n="blog_post2_excerpt">Unlock your cat's climbing instincts without sacrificing wall space. The ultimate architectural climbing layout guide.</p>
-            <a href="#" class="read-more" data-i18n="blog_read_more">Read Article <i class="fa-solid fa-arrow-right-long"></i></a>
-          </div>
-        </article>
-        <article class="blog-card">
-          <div class="blog-img-wrap">
-            <img src="assets/hero_slide4_1783520750258.png" alt="Feeding bowl ergonomics">
-          </div>
-          <div class="blog-content">
-            <span class="blog-tag" data-i18n="blog_tag3">Health</span>
-            <h3 data-i18n="blog_post3_title">The Ergonomics of Elevated Pet Feeder Bowls</h3>
-            <p data-i18n="blog_post3_excerpt">Why vet science recommends elevated oak wood stands to improve digestion and posture for aging cats and dogs.</p>
-            <a href="#" class="read-more" data-i18n="blog_read_more">Read Article <i class="fa-solid fa-arrow-right-long"></i></a>
-          </div>
-        </article>
+      <div class="blog-grid" id="blogGrid">
+        <!-- Populated dynamically via JS -->
       </div>
     </div>
   </section>
@@ -719,6 +687,29 @@
     <button class="lightbox-arrow next" id="lightboxNextBtn" aria-label="Next enlarged image">
       <i class="fa-solid fa-chevron-right"></i>
     </button>
+  </div>
+
+  <!-- Blog Detail Modal -->
+  <div class="blog-modal-backdrop" id="blogModalBackdrop"></div>
+  <div class="blog-modal" id="blogDetailModal">
+    <button class="blog-modal-close" id="blogModalCloseBtn" aria-label="Close article">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="blog-modal-content">
+      <div class="blog-modal-header-wrap">
+        <span class="blog-modal-tag" id="blogModalTag"></span>
+        <h2 class="blog-modal-title" id="blogModalTitle"></h2>
+        <div class="blog-modal-meta">
+          <span id="blogModalAuthor">By LuxePaws Editor</span> • <span id="blogModalDate">July 10, 2026</span>
+        </div>
+      </div>
+      <div class="blog-modal-img-wrap">
+        <img src="" id="blogModalImage" alt="Article image">
+      </div>
+      <div class="blog-modal-body" id="blogModalBody">
+        <!-- Full article content populated dynamically -->
+      </div>
+    </div>
   </div>
 
   <!-- Search Overlay Modal -->

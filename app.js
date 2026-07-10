@@ -524,6 +524,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Re-render product grid in the selected language
     renderProductGrid();
 
+    // Re-render blog grid in the selected language
+    if (typeof renderBlogGrid === 'function') renderBlogGrid();
+
     // Re-render cart to update product titles and variables
     updateCartUI();
   }
@@ -1799,8 +1802,220 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize: Load products from Supabase or Fallback
   loadProducts();
   
-  // Set language configuration (will trigger grid render and cart updates)
-  setLanguage(currentLang);
+  // --- Blog Posts Specifications & Dynamic Render Engine ---
+  const blogPosts = [
+    {
+      id: 1,
+      tag_en: "Interior",
+      tag_th: "การตกแต่งภายใน",
+      title_en: "Integrating Pet Beds Into Modern Living Rooms",
+      title_th: "การจัดระเบียบที่นอนสัตว์เลี้ยงเข้ากับห้องนั่งเล่นยุคใหม่",
+      excerpt_en: "Discover how to position your pet's nesting space to complement Scandinavian minimalism and maintain design cohesion.",
+      excerpt_th: "ค้นพบวิธีการจัดวางและเลือกซื้อที่นอนสัตว์เลี้ยงให้เข้ากับสไตล์มินิมอลแบบสแกนดิเนเวียได้อย่างกลมกลืน",
+      img: "assets/hero_banner.png",
+      date: "July 8, 2026",
+      body_en: `
+        <p>A beautiful home should be a sanctuary for everyone who lives in it—including your four-legged companions. For too long, pet owners have felt forced to choose between design integrity and their pet’s comfort. Standard pet beds are often bulky, brightly colored eyesores that disrupt the visual flow of a curated space.</p>
+        <p>At LuxePaws, we believe in a different philosophy: pet furniture should elevate, not compromise, your home's aesthetics. Here is our guide on seamlessly integrating a pet bed into a modern Scandinavian living room.</p>
+        <h3>1. Color Harmony and Neutral Tones</h3>
+        <p>Choose pet furniture crafted from neutral, natural colors that blend with your room’s palette. Hues of warm oatmeal, slate grey, charcoal, and soft creams allow the bed to sit quietly in the space rather than clamoring for attention.</p>
+        <h3>2. Material Honesty</h3>
+        <p>Use beds constructed with genuine, high-quality organic materials. Wool felt, organic cotton canvas, and genuine leather details carry natural texture that complements other soft furnishings like rugs, throw blankets, and curtains.</p>
+        <h3>3. Placement as a Design Choice</h3>
+        <p>Rather than hiding the pet bed in a dark corner or a busy hallway, treat it as a deliberate design element. Place it adjacent to a statement lounge chair, or nestled beneath a floating side table. This preserves room flow while keeping your pet close to the family action.</p>
+      `,
+      body_th: `
+        <p>บ้านที่สวยงามควรเป็นสถานที่พักผ่อนที่ปลอดภัยสำหรับทุกคนที่อาศัยอยู่—รวมถึงเพื่อนรักสี่ขาของคุณด้วย เป็นเวลานานแล้วที่เจ้าของสัตว์เลี้ยงรู้สึกว่าต้องเลือกระหว่างความสวยงามของบ้านและความสะดวกสบายของสัตว์เลี้ยง เนื่องจากเบาะนอนสัตว์เลี้ยงทั่วไปมักจะมีสีสันฉูดฉาดและรูปทรงเทอะทะที่ทำลายบรรยากาศโดยรวมของห้อง</p>
+        <p>ที่ LuxePaws เราเชื่อในปรัชญาที่ต่างออกไป: เฟอร์นิเจอร์สัตว์เลี้ยงควรยกระดับสุนทรียภาพของบ้านคุณให้ดียิ่งขึ้น นี่คือคำแนะนำของเราในการจัดวางที่นอนสัตว์เลี้ยงให้เข้ากับห้องนั่งเล่นสไตล์สแกนดิเนเวียยุคใหม่ได้อย่างลงตัว</p>
+        <h3>1. ความสอดคล้องของสีและโทนสีธรรมชาติ</h3>
+        <p>เลือกเฟอร์นิเจอร์สัตว์เลี้ยงที่ทำจากสีที่เป็นกลางและเป็นธรรมชาติซึ่งเข้ากับจานสีของห้องคุณ โทนสีครีมอุ่น เทาชาร์โคล และน้ำตาลอ่อน ช่วยให้เบาะนอนอยู่ร่วมในพื้นที่ได้อย่างเงียบสงบและอบอุ่น</p>
+        <h3>2. ความซื่อสัตย์ในวัสดุแท้</h3>
+        <p>เลือกที่นอนที่สร้างขึ้นจากวัสดุธรรมชาติคุณภาพสูง เช่น ใยขนแกะธรรมชาติ 100% (Wool felt) หรือผ้าฝ้ายออร์แกนิก เพื่อนำผิวสัมผัสที่เป็นธรรมชาติมาเสริมความเข้ากันกับพรม ผ้าม่าน และเฟอร์นิเจอร์หลักตัวอื่น ๆ ในห้อง</p>
+        <h3>3. การจัดวางเสมือนชิ้นส่วนงานออกแบบ</h3>
+        <p>แทนที่จะซ่อนที่นอนของสัตว์เลี้ยงไว้ในมุมอับหรือทางเดินที่วุ่นวาย ให้จัดวางมันอย่างตั้งใจเคียงข้างกับเก้าอี้พักผ่อนตัวโปรด หรือจัดเข้ามุมใต้โต๊ะข้างลอยตัว วิธีนี้ช่วยรักษาทิศทางการเดินในห้องและช่วยให้สัตว์เลี้ยงรู้สึกปลอดภัยใกล้ชิดกับทุกคนในครอบครัว</p>
+      `
+    },
+    {
+      id: 2,
+      tag_en: "Architecture",
+      tag_th: "สถาปัตยกรรมแมว",
+      title_en: "The Rise of 'Catification': Wall Climbing Guides",
+      title_th: "ศิลปะการแต่งบ้านเพื่อเจ้าเหมียว: คู่มือติดตั้งคอนโดปีนป่ายติดผนัง",
+      excerpt_en: "Unlock your cat's climbing instincts without sacrificing wall space. The ultimate architectural climbing layout guide.",
+      excerpt_th: "ไขความลับสัญชาตญาณการปีนป่ายของแมวโดยไม่เสียพื้นที่ทางเดิน ด้วยไอเดียการจัดสัดส่วนแนวผนัง",
+      img: "assets/hero_slide2_1783520720625.png",
+      date: "July 9, 2026",
+      body_en: `
+        <p>Cats are natural climbers. In the wild, high vantage points offer safety, a clear view of their territory, and optimal hunting positions. In our homes, vertical space is often overlooked, leaving active felines with restricted territory and leading to stress-related behaviors.</p>
+        <p>The solution is 'Catification'—the art of designing your home's vertical space to accommodate feline needs while keeping it visually stunning.</p>
+        <h3>1. The Vertical Highway Concept</h3>
+        <p>Create a logical, continuous path for your cat to traverse the room without touching the floor. A good wall layout starts from an easy jumping point (like a sofa arm or a side table), leads to staggered ash wood steps, and culminates in a high-elevation resting platform or cocoon pod.</p>
+        <h3>2. Choosing the Right Anchors</h3>
+        <p>Safety is paramount when installing wall-mounted pet furniture. Ensure all heavy-duty shelves and climbing steps are anchored securely into wall studs or using specialized plasterboard toggle bolts. A shaking shelf will deter your cat from using it.</p>
+        <h3>3. Material Integration</h3>
+        <p>Modern catification avoids carpet-covered posts. Instead, opt for solid timber pieces wrapped in premium sisal rope. This provides superior grip and durability while matching wood flooring, timber panels, and high-end cabinetry.</p>
+      `,
+      body_th: `
+        <p>แมวเป็นนักปีนป่ายโดยสัญชาตญาณ ในป่าธรรมชาติ พื้นที่สูงมอบความรู้สึกปลอดภัย ช่วยให้พวกเขามองเห็นอาณาเขตได้กว้างไกลและล่าเหยื่อได้ดีขึ้น แต่ในบ้านของเรา พื้นที่แนวตั้งมักถูกมองข้าม ทำให้เจ้าเหมียวมีอาณาเขตจำกัดและเกิดพฤติกรรมความเครียดได้ง่าย</p>
+        <p>ทางออกคือ 'Catification'—ศิลปะการออกแบบพื้นที่แนวตั้งในบ้านคุณเพื่อตอบสนองความต้องการของแมว พร้อมทั้งรักษาสัดส่วนการตกแต่งภายในให้สวยงามตระการตา</p>
+        <h3>1. แนวคิด 'ทางหลวงแนวตั้ง' (Vertical Highway)</h3>
+        <p>สร้างเส้นทางปีนป่ายแนวผนังที่ต่อเนื่องและสมเหตุสมผล เพื่อให้แมวสามารถเดินสำรวจห้องได้โดยไม่ต้องลงสัมผัสพื้น เริ่มจากจุดกระโดดเริ่มต้นที่เหมาะสม (เช่น แขนโซฟาหรือโต๊ะข้าง) ขึ้นไปตามชั้นบันไดไม้แอชแบบสลับฟันปลา และสิ้นสุดที่รังนอนทรงสูง</p>
+        <h3>2. การยึดเกาะโครงสร้างที่มั่นคง</h3>
+        <p>ความปลอดภัยคือสิ่งสำคัญที่สุดในการติดตั้งชั้นลอยสำหรับสัตว์เลี้ยง ตรวจสอบให้แน่ใจว่าอุปกรณ์ยึดผนังทั้งหมดเจาะยึดเข้ากับโครงสร้างเสาหรือพุกผนังปูนที่แข็งแรง ชั้นลอยที่มีความโอนเอนจะทำให้แมวไม่กล้าก้าวขึ้นไปใช้งาน</p>
+        <h3>3. การผสานสไตล์วัสดุ</h3>
+        <p>หลีกเลี่ยงคอนโดแมวที่หุ้มด้วยพรมขนสัตว์เทียมสีสะท้อนแสง ให้หันมาเลือกใช้อุปกรณ์ไม้แท้ที่มีการพันเชือกป่านศรนารายณ์คุณภาพสูงสีนวลธรรมชาติ ซึ่งมอบการยึดเกาะที่ดีเยี่ยม ทนทานกว่า และเข้ากับสีพื้นไม้หรือตู้บิลต์อินสไตล์โมเดิร์นได้อย่างไร้รอยต่อ</p>
+      `
+    },
+    {
+      id: 3,
+      tag_en: "Health",
+      tag_th: "สุขภาพสัตว์เลี้ยง",
+      title_en: "The Ergonomics of Elevated Pet Feeder Bowls",
+      title_th: "สรีรศาสตร์ของการเลือกชามอาหารสัตว์เลี้ยงแบบยกสูง",
+      excerpt_en: "Why vet science recommends elevated oak wood stands to improve digestion and posture for aging cats and dogs.",
+      excerpt_th: "ทำไมสัตวแพทย์จึงแนะนำชั้นวางชามอาหารไม้โอ๊คแบบยกสูง เพื่อช่วยเรื่องระบบย่อยอาหารและข้อต่อ",
+      img: "assets/hero_slide4_1783520750258.png",
+      date: "July 10, 2026",
+      body_en: `
+        <p>Have you noticed how felines and canines feed? Traditional pet bowls placed directly on the kitchen floor force your pet to bend low, straining their neck muscles and compressing their esophagus. This posture is not only uncomfortable but can actively harm their long-term health.</p>
+        <p>Veterinarians and animal behaviorists widely recommend switching to elevated feeding platforms. Here's why ergonomic dining makes a massive difference.</p>
+        <h3>1. Improved Digestive Alignment</h3>
+        <p>When a pet eats from a floor-level bowl, gravity works against their digestive tract, requiring additional muscular effort to push food down the esophagus. An elevated stand allows the food to travel in a straight, natural path, significantly reducing instances of acid reflux, vomiting, and bloating.</p>
+        <h3>2. Joints Protection for Aging Pets</h3>
+        <p>For mature or senior pets suffering from arthritis, dysplasia, or spinal conditions, bending down to eat is painful. Elevating the bowls brings the food and water directly to their comfortable standing height, relieving pressure on the neck, shoulders, and forelimbs.</p>
+        <h3>3. Cleanliness and Stability</h3>
+        <p>Floor bowls are easily tipped over or pushed across the room. An ergonomic wooden feeder, like our Desco stand, provides a heavy, slip-resistant base that locks ceramic bowls in place. This prevents mealtime mess and keeps food and water cleaner.</p>
+      `,
+      body_th: `
+        <p>คุณเคยสังเกตท่าทางเวลาสัตว์เลี้ยงรับประทานอาหารหรือไม่? การวางชามอาหารไว้กับพื้นโดยตรง บังคับให้สุนัขและแมวต้องก้มตัวลงต่ำมาก ซึ่งทำให้กล้ามเนื้อคอตึงและหลอดอาหารเกิดการบีบตัว ท่าทางนี้ไม่เพียงแค่สร้างความอึดอัด แต่ยังส่งผลเสียระยะยาวต่อระบบทางเดินอาหาร</p>
+        <p>สัตวแพทย์และผู้เชี่ยวชาญพฤติกรรมสัตว์ต่างแนะนำให้เปลี่ยนมาใช้ชั้นวางชามอาหารระดับยกสูง นี่คือเหตุผลว่าทำไมสรีรศาสตร์การกินจึงมีความสำคัญอย่างมาก</p>
+        <h3>1. ทิศทางการย่อยอาหารที่เป็นธรรมชาติ</h3>
+        <p>การก้มกินจากพื้นจะทำให้หลอดอาหารโค้งงอและบดบังทิศทางของอาหาร ส่งผลให้ทางเดินอาหารทำงานหนักขึ้น การเปลี่ยนมาใช้อุปกรณ์ยกสูงช่วยให้อาหารเดินทางเป็นแนวตรงและราบรื่นตามธรรมชาติ ลดอาการกรดไหลย้อน ท้องอืด และอาเจียนหลังกินอาหาร</p>
+        <h3>2. ถนอมข้อต่อสำหรับสัตว์เลี้ยงที่มีอายุมาก</h3>
+        <p>สำหรับสุนัขและแมวอายุมากที่มีปัญหาข้อต่ออักเสบ โรคกระดูกสันหลัง หรือโรคข้อสะโพกเสื่อม การก้มลงต่ำมากจะสร้างความเจ็บปวด ชั้นวางที่ยกขึ้นจะช่วยนำอาหารและน้ำมาอยู่ในระดับความสูงที่พอเหมาะ ทำให้พวกเขาสามารถยืนทานได้โดยไม่ต้องรับแรงกดทับที่ไหล่และขาหน้า</p>
+        <h3>3. ความสะอาดและความมั่นคงของชาม</h3>
+        <p>ชามอาหารที่วางราบกับพื้นมักจะลื่นไถลหรือถูกคว่ำได้ง่าย ที่ป้อนอาหารไม้โอ๊ค Desco ของเรามีน้ำหนักที่พอดีและมียางรองกันลื่นใต้ฐาน ช่วยล็อกชามเซรามิกให้อยู่กับที่ ป้องกันเศษอาหารหกเลอะเทอะพื้นครัวของคุณ</p>
+      `
+    },
+    {
+      id: 4,
+      tag_en: "Materials",
+      tag_th: "วัสดุระดับพรีเมียม",
+      title_en: "Felt & Solid Timber: Choosing Sustainable Materials",
+      title_th: "ผ้าสักหลาดขนสัตว์และไม้จริง: การเลือกวัสดุเฟอร์นิเจอร์สัตว์เลี้ยงที่ยั่งยืน",
+      excerpt_en: "Why luxury pet furniture relies on natural wool felt and certified European timber for longevity and pet wellness.",
+      excerpt_th: "เจาะลึกทำไมเฟอร์นิเจอร์สัตว์เลี้ยงระดับไฮเอนด์จึงเลือกใช้ใยขนแกะธรรมชาติและไม้ป่าหมุนเวียนเพื่อสุขภาพสัตว์เลี้ยง",
+      img: "assets/hero_slide5_1783520762144.png",
+      date: "July 10, 2026",
+      body_en: `
+        <p>In an era dominated by cheap plastics and engineered particle boards, choosing high-end furniture for your pet is a vote for sustainability, indoor air quality, and product longevity. Pet furniture experiences high physical wear: scratching, clawing, chewing, and frequent cleaning.</p>
+        <p>Here is why LuxePaws focuses strictly on natural wool felt and certified solid timber materials.</p>
+        <h3>1. The Purity of 100% Wool Felt</h3>
+        <p>Synthetic fibers like polyester felt static-charge quickly and trap odors and pet dander. 100% organic wool felt is naturally hypoallergenic, anti-static, and dirt-repellent. The fibers contain natural lanolin oils which repel moisture, making it incredibly easy to clean with a simple brush or vacuum.</p>
+        <h3>2. Solid European Hardwoods</h3>
+        <p>Cheap particle board (MDF) furniture contains toxic formaldehyde adhesives that off-gas into your home. Solid European ash and oak timbers are renewable, structurally robust, and carry a unique timber glaze that improves with age. We seal our timbers only with water-based, pet-safe plant oils.</p>
+        <h3>3. Lifetime Value vs. Disposable Culture</h3>
+        <p>Investing in furniture crafted with natural hardwood and heavy felt means purchasing an heirloom piece. These materials are built to withstand natural pet behaviors and can be renewed or repaired over a lifetime, reducing environmental waste and saving you money in the long run.</p>
+      `,
+      body_th: `
+        <p>ในยุคที่ตลาดเต็มไปด้วยพลาสติกราคาถูกและแผ่นไม้ปาร์ติเกิลอัดกาว การเลือกเฟอร์นิเจอร์คุณภาพสูงให้สัตว์เลี้ยงคือการดูแลสุขอนามัยภายในบ้าน สุขภาพของสัตว์เลี้ยง และการันตีความคุ้มค่าระยะยาว เนื่องจากเฟอร์นิเจอร์สัตว์เลี้ยงต้องเผชิญกับแรงขีดข่วน กัด แทะ และทำความสะอาดบ่อยครั้ง</p>
+        <p>นี่คือเหตุผลที่ LuxePaws เจาะจงเลือกใช้เพียงสองวัสดุหลัก: ใยสักหลาดขนแกะธรรมชาติ 100% และไม้แท้จากป่าหมุนเวียนยุโรป</p>
+        <h3>1. ความบริสุทธิ์ของใยขนแกะธรรมชาติ (100% Organic Wool Felt)</h3>
+        <p>ใยสังเคราะห์จำพวกโพลีเอสเตอร์มักจะสะสมไฟฟ้าสถิต ดักจับฝุ่นและกลิ่นตัวของสัตว์เลี้ยงได้ง่าย ต่างจากใยสักหลาดขนแกะธรรมชาติ 100% ที่ไม่ก่อให้เกิดอาการแพ้ มีแรงสะท้อนฝุ่นธรรมชาติ และเคลือบด้วยน้ำมันลาโนลินอ่อน ๆ ตามธรรมชาติ ช่วยต้านน้ำซึมและทำความสะอาดง่ายด้วยการดูดฝุ่นเบา ๆ</p>
+        <h3>2. ไม้เนื้อแข็งแท้ยุโรป (Solid Timber)</h3>
+        <p>เฟอร์นิเจอร์ไม้บดอัดราคาถูกมักใช้สารเคมีจำพวกฟอร์มาลดีไฮด์ในการอัดกาว ซึ่งปล่อยก๊าซพิษจาง ๆ ออกมาทำลายสุขภาพการหายใจของสุนัขและแมวตลอดเวลา ไม้แอชและไม้โอ๊คแท้ 100% ปลอดภัย ไร้สารเคมี มีความทนทานสูง ปรับแต่งและขัดสีใหม่ได้ และเราเลือกเคลือบกันน้ำด้วยน้ำมันพืชธรรมชาติที่ปลอดภัยต่อการเลียแทะของสัตว์เลี้ยง</p>
+        <h3>3. มูลค่าชั่วอายุขัยและการลดขยะสิ่งแวดล้อม</h3>
+        <p>การลงทุนในงานฝีมือไม้จริงและสักหลาดธรรมชาติหมายถึงการครอบครองเฟอร์นิเจอร์ที่จะอยู่คู่กับคุณและสัตว์เลี้ยงไปชั่วชีวิต ไม่ต้องเปลี่ยนชิ้นใหม่บ่อยครั้ง ลดขยะอุตสาหกรรม และช่วยประหยัดเงินในกระเป๋าของคุณในระยะยาวได้อย่างแท้จริง</p>
+      `
+    }
+  ];
+
+  const blogGrid = document.getElementById('blogGrid');
+  const blogDetailModal = document.getElementById('blogDetailModal');
+  const blogModalBackdrop = document.getElementById('blogModalBackdrop');
+  const blogModalCloseBtn = document.getElementById('blogModalCloseBtn');
+
+  window.renderBlogGrid = function() {
+    if (!blogGrid) return;
+    blogGrid.innerHTML = '';
+
+    blogPosts.forEach(post => {
+      const title = currentLang === 'th' ? post.title_th : post.title_en;
+      const tag = currentLang === 'th' ? post.tag_th : post.tag_en;
+      const excerpt = currentLang === 'th' ? post.excerpt_th : post.excerpt_en;
+      const readMoreText = currentLang === 'th' ? 'อ่านบทความเพิ่มเติม' : 'Read Article';
+
+      const card = document.createElement('article');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-img-wrap">
+          <img src="${post.img}" alt="${title}">
+        </div>
+        <div class="blog-content">
+          <span class="blog-tag">${tag}</span>
+          <h3>${title}</h3>
+          <p>${excerpt}</p>
+          <a href="#" class="read-more" onclick="event.preventDefault(); openBlogDetail(${post.id});">${readMoreText} <i class="fa-solid fa-arrow-right-long"></i></a>
+        </div>
+      `;
+      
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.read-more')) return;
+        openBlogDetail(post.id);
+      });
+
+      blogGrid.appendChild(card);
+    });
+  };
+
+  window.openBlogDetail = function(postId) {
+    const post = blogPosts.find(p => p.id === postId);
+    if (!post) return;
+
+    const title = currentLang === 'th' ? post.title_th : post.title_en;
+    const tag = currentLang === 'th' ? post.tag_th : post.tag_en;
+    const body = currentLang === 'th' ? post.body_th : post.body_en;
+
+    const blogModalTitle = document.getElementById('blogModalTitle');
+    const blogModalTag = document.getElementById('blogModalTag');
+    const blogModalImage = document.getElementById('blogModalImage');
+    const blogModalBody = document.getElementById('blogModalBody');
+    const blogModalDate = document.getElementById('blogModalDate');
+    const blogModalAuthor = document.getElementById('blogModalAuthor');
+
+    if (blogModalTitle) blogModalTitle.textContent = title;
+    if (blogModalTag) blogModalTag.textContent = tag;
+    if (blogModalImage) blogModalImage.src = post.img;
+    if (blogModalBody) blogModalBody.innerHTML = body;
+    if (blogModalDate) blogModalDate.textContent = post.date;
+    if (blogModalAuthor) blogModalAuthor.textContent = currentLang === 'th' ? 'บรรณาธิการ LuxePaws' : 'By LuxePaws Editor';
+
+    if (blogDetailModal && blogModalBackdrop) {
+      blogDetailModal.classList.add('open');
+      blogModalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  window.closeBlogDetail = function() {
+    if (blogDetailModal && blogModalBackdrop) {
+      blogDetailModal.classList.remove('open');
+      blogModalBackdrop.classList.remove('open');
+      const detailsModal = document.getElementById('productDetailsModal');
+      const searchOverlay = document.getElementById('searchOverlay');
+      const checkoutModal = document.getElementById('checkoutModal');
+      if (
+        (!detailsModal || !detailsModal.classList.contains('open')) &&
+        (!searchOverlay || !searchOverlay.classList.contains('open')) &&
+        (!checkoutModal || !checkoutModal.classList.contains('open'))
+      ) {
+        document.body.style.overflow = '';
+      }
+    }
+  };
+
+  if (blogModalCloseBtn) blogModalCloseBtn.addEventListener('click', closeBlogDetail);
+  if (blogModalBackdrop) blogModalBackdrop.addEventListener('click', closeBlogDetail);
 
   // --- Toast Notification Helper ---
   function showToast(message) {
