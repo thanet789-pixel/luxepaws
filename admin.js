@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return sum;
     }, 0);
-    revenueMetric.textContent = `€${totalRevenue.toFixed(2)}`;
+    revenueMetric.textContent = `฿${totalRevenue.toFixed(2)}`;
 
     // 2. Total Orders count
     ordersMetric.textContent = dbOrders.length.toString();
@@ -232,11 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Offline mock dashboard loader
   function loadDashboardMockData() {
     dbProducts = [
-      { id: 1, title_en: "Nido Felt Dog Bed", title_th: "ที่นอน Nido", price: 189, category: "dog", swatches: ["Grey", "Cream"] },
-      { id: 2, title_en: "Desco Oak Bowl Stand", title_th: "ชามข้าว Desco", price: 99, category: "accessories", swatches: ["Oak"] }
+      { id: 1, title_en: "Nido Felt Dog Bed", title_th: "ที่นอน Nido", price: 6900, category: "dog", swatches: ["Grey", "Cream"] },
+      { id: 2, title_en: "Desco Oak Bowl Stand", title_th: "ชามข้าว Desco", price: 3500, category: "accessories", swatches: ["Oak"] }
     ];
     dbOrders = [
-      { id: 1, created_at: new Date().toISOString(), customer_name: "Mock Customer", customer_email: "test@example.com", shipping_address: "Bangkok", items: [{title: "Nido Felt Dog Bed", qty: 1, price: 189, color: "Grey"}], total_price: 189, status: "pending" }
+      { id: 1, created_at: new Date().toISOString(), customer_name: "Mock Customer", customer_email: "test@example.com", shipping_address: "Bangkok", items: [{title: "Nido Felt Dog Bed", qty: 1, price: 6900, color: "Grey"}], total_price: 6900, status: "pending" }
     ];
     calculateAndRenderMetrics();
     renderOrdersTable();
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let itemsHtml = '<ul class="order-items-list">';
       if (Array.isArray(order.items)) {
         order.items.forEach(item => {
-          itemsHtml += `<li><strong>${item.qty}x</strong> ${item.title} (${item.color}) - €${(item.price * item.qty).toFixed(2)}</li>`;
+          itemsHtml += `<li><strong>${item.qty}x</strong> ${item.title} (${item.color}) - ฿${(item.price * item.qty).toFixed(2)}</li>`;
         });
       }
       itemsHtml += '</ul>';
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="font-size: 0.75rem; color: var(--color-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${order.shipping_address}">${order.shipping_address}</div>
         </td>
         <td>${itemsHtml}</td>
-        <td><strong>€${parseFloat(order.total_price).toFixed(2)}</strong></td>
+        <td><strong>฿${parseFloat(order.total_price).toFixed(2)}</strong></td>
         <td><span class="badge ${badgeClass}">${order.status}</span></td>
         <td>
           <select class="status-select" data-order-id="${order.docId}">
@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div>Slug: <code>${product.category}</code></div>
           <div style="font-size: 0.75rem; color: var(--color-muted);">${product.category_en} / ${product.category_th}</div>
         </td>
-        <td><strong>€${priceVal.toFixed(2)}</strong></td>
+        <td><strong>฿${priceVal.toFixed(2)}</strong></td>
         <td>${swatchesHtml}</td>
         <td>
           <div class="actions-cell">

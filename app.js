@@ -31,7 +31,7 @@ const localProducts = [
     id: 1,
     title_en: "Nido Felt Dog Bed",
     title_th: "ที่นอนสุนัขใยสักหลาด Nido",
-    price: 189.00,
+    price: 6900.00,
     image_url: "assets/dog_bed.png",
     category: "dog",
     category_en: "Beds & Cushions",
@@ -44,7 +44,7 @@ const localProducts = [
     id: 2,
     title_en: "Desco Oak Bowl Stand",
     title_th: "ที่วางชามข้าว Desco ไม้โอ๊ค",
-    price: 99.00,
+    price: 3500.00,
     image_url: "assets/pet_bowl.png",
     category: "accessories",
     category_en: "Feeding & Care",
@@ -57,7 +57,7 @@ const localProducts = [
     id: 3,
     title_en: "Torre Cat Scratcher Tower",
     title_th: "คอนโดที่ฝนเล็บแมวรุ่น Torre",
-    price: 249.00,
+    price: 8900.00,
     image_url: "assets/cat_scratch.png",
     category: "cat",
     category_en: "Scratchers & Climbing",
@@ -228,7 +228,7 @@ const translations = {
     reviewer1_title: "Owner of French Bulldog (Munich)",
     review2_text: "\"Outstanding craftsmanship. The wood finish matches our oak cabinets perfectly, and the bowls are very easy to clean. Best purchase!\"",
     reviewer2_title: "Owner of Golden Retriever (Hamburg)",
-    review3_text: "\"The Torre cat tower is sturdy and elegant. Our Maine Coon sits on the top cocoon every single day. Worth every euro.\"",
+    review3_text: "\"The Torre cat tower is sturdy and elegant. Our Maine Coon sits on the top cocoon every single day. Worth every baht.\"",
     reviewer3_title: "Owner of Maine Coon (Vienna)",
     
     // FAQ Section
@@ -408,7 +408,7 @@ const translations = {
     reviewer1_title: "เจ้าของเฟรนช์บลูด็อก (มิวนิก)",
     review2_text: "\"งานฝีมือที่ยอดเยี่ยมมาก สีเนื้อไม้โอ๊คเข้ากับตู้กับข้าวของเราได้อย่างลงตัวสุด ๆ ชามทำความสะอาดง่ายมาก แนะนำเลยครับ!\"",
     reviewer2_title: "เจ้าของโกลเดนรีทรีฟเวอร์ (ฮัมบูร์ก)",
-    review3_text: "\"คอนโดแมว Torre แข็งแรงและสวยงามหรูหรามาก เจ้าเมนคูนของเราขึ้นไปนอนบนโดมบนสุดทุกวันเลยค่ะ คุ้มค่าเงินทุกยูโรจริงๆ\"",
+    review3_text: "\"คอนโดแมว Torre แข็งแรงและสวยงามหรูหรามาก เจ้าเมนคูนของเราขึ้นไปนอนบนโดมบนสุดทุกวันเลยค่ะ คุ้มค่าเงินทุกบาทจริงๆ\"",
     reviewer3_title: "เจ้าของเมนคูน (เวียนนา)",
     
     // FAQ Section
@@ -665,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="product-info">
           <div class="product-meta">
             <h3 class="product-title">${title}</h3>
-            <span class="product-price">€${priceVal.toFixed(2)}</span>
+            <span class="product-price">฿${priceVal.toFixed(2)}</span>
           </div>
           <span class="product-category">${categoryLabel}</span>
           ${swatchesHtml}
@@ -899,7 +899,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cart.length === 0) {
       if (cartEmptyMsg) cartEmptyMsg.style.display = 'block';
-      if (cartSubtotal) cartSubtotal.textContent = '€0.00';
+      if (cartSubtotal) cartSubtotal.textContent = '฿0.00';
     } else {
       if (cartEmptyMsg) cartEmptyMsg.style.display = 'none';
 
@@ -923,7 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div>
               <h4 class="cart-item-title">${title}</h4>
               <span class="cart-item-meta">${currentLang === 'th' ? 'สี' : 'Color'}: ${color}</span>
-              <div class="cart-item-price">€${(item.price).toFixed(2)}</div>
+              <div class="cart-item-price">฿${(item.price).toFixed(2)}</div>
             </div>
             <div class="cart-item-controls">
               <div class="qty-selector">
@@ -938,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cartItemsList.appendChild(cartItemEl);
       });
 
-      if (cartSubtotal) cartSubtotal.textContent = `€${subtotal.toFixed(2)}`;
+      if (cartSubtotal) cartSubtotal.textContent = `฿${subtotal.toFixed(2)}`;
     }
   }
 
@@ -1019,7 +1019,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const subtotal = cart.reduce((total, item) => total + (item.price * item.qty), 0);
-    if (checkoutSummaryTotal) checkoutSummaryTotal.textContent = `€${subtotal.toFixed(2)}`;
+    if (checkoutSummaryTotal) checkoutSummaryTotal.textContent = `฿${subtotal.toFixed(2)}`;
     
     closeCart();
     checkoutModal.classList.add('open');
