@@ -34,6 +34,12 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -49,7 +55,6 @@ body {
   font-family: var(--font-sans);
   font-weight: 300;
   line-height: 1.8; /* Open editorial line-height */
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -2138,6 +2143,9 @@ html[lang="th"] .remove-item-btn {
   .reviews-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .hotspot {
+    display: none !important; /* Hide hotspots on tablet/mobile to prevent popover touch conflicts and overflow */
+  }
 }
 
 @media (max-width: 600px) {
@@ -2159,6 +2167,21 @@ html[lang="th"] .remove-item-btn {
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;
+  }
+  .nav-actions {
+    gap: 0.8rem; /* Squeeze actions slightly for smaller mobile devices */
+  }
+  .filter-group {
+    gap: 1.2rem;
+    flex-wrap: wrap; /* Wrap filter tabs on mobile to prevent horizontal scroll */
+    justify-content: center;
+  }
+  .custom-form-card {
+    padding: 2.2rem 1.5rem; /* Reduce padding on mobile screens */
+  }
+  .hero-content h1 {
+    font-size: 2.4rem;
+    word-break: break-word; /* Prevent text overflow on tiny screens */
   }
 }
 
