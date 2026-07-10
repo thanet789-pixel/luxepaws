@@ -484,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // --- Language Switcher Logic ---
-  let currentLang = safeStorage.getItem('luxepaws_lang') || 'en';
+  let currentLang = safeStorage.getItem('luxepaws_lang') || 'th';
   const newsletterForm = document.getElementById('newsletterForm');
 
   function setLanguage(lang) {
