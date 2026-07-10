@@ -251,7 +251,14 @@ const translations = {
     "Ash Black": "Ash Black",
     "Natural Cream": "Natural Cream",
     "Urban Grey": "Urban Grey",
-    "Standard": "Standard"
+    "Standard": "Standard",
+    
+    // Product Detail Modal EN
+    detail_color_label: "Select Color",
+    detail_qty_label: "Quantity",
+    p1_desc_detail: "Indulge your pet with Nido, a sanctuary of absolute comfort and high-end design. Molded from organic felt wool with a soft, reversible inner cushion, Nido offers security and support while blending beautifully with your modern living space.",
+    p2_desc_detail: "Elevate feeding time to a luxury ritual. The Desco bowl stand combines a sturdy, varnished oak wood stand with dishwasher-safe matte ceramic bowls. Ergonomically designed to reduce neck strain for your dogs and cats while keeping your dining area clean and stylish.",
+    p3_desc_detail: "Torre is an architectural masterpiece designed for active cats. Crafted from solid ash wood and wrapped in natural heavy-duty sisal rope, this scratching tower features a elevated snug platform at the top, offering your cat the perfect playground to climb, scratch, and sleep in ultimate style."
   },
   th: {
     nav_home: "หน้าแรก",
@@ -431,7 +438,14 @@ const translations = {
     "Ash Black": "สีดำแอช",
     "Natural Cream": "สีครีมธรรมชาติ",
     "Urban Grey": "สีเทาเออร์บัน",
-    "Standard": "มาตรฐาน"
+    "Standard": "มาตรฐาน",
+    
+    // Product Detail Modal TH
+    detail_color_label: "เลือกสี",
+    detail_qty_label: "จำนวน",
+    p1_desc_detail: "ปรนเปรอสัตว์เลี้ยงของคุณด้วย Nido พื้นที่แห่งความอบอุ่นและสไตล์ระดับไฮเอนด์ ขึ้นรูปด้วยใยสักหลาดขนแกะธรรมชาติ 100% พร้อมเบาะรองนอนหนานุ่มที่สลับด้านซักได้ Nido มอบความรู้สึกปลอดภัยและผ่อนคลาย พร้อมเข้ากับพื้นที่ห้องนั่งเล่นยุคใหม่ของคุณอย่างลงตัว",
+    p2_desc_detail: "ยกระดับเวลารับประทานอาหารให้เป็นช่วงเวลาสุดหรู ที่วางชาม Desco ผลิตจากไม้โอ๊คแท้เคลือบกันน้ำ ผสานชามเซรามิกผิวแมตต์ที่ทำความสะอาดง่ายและเข้าเครื่องล้างจานได้ ได้รับการออกแบบตามหลักสรีรศาสตร์ช่วยลดอาการปวดตึงคอสำหรับสุนัขและแมว และรักษาความสะอาดในห้องครัวของคุณ",
+    p3_desc_detail: "Torre คือผลงานศิลปะทางสถาปัตยกรรมที่ออกแบบมาเพื่อแมวที่กระฉับกระเฉง สร้างสรรค์ด้วยไม้แอชแท้ทั้งหลังและพันด้วยเชือกป่านศรนารายณ์หนาพิเศษ คอนโดปีนป่ายนี้มาพร้อมแท่นรังนอนทรงโคคูนด้านบนสุด ช่วยให้เจ้าเหมียวปีนป่าย ฝนเล็บ และนอนพักผ่อนอย่างมีระดับ"
   }
 };
 
@@ -671,6 +685,13 @@ document.addEventListener('DOMContentLoaded', () => {
           ${swatchesHtml}
         </div>
       `;
+      
+      productCard.addEventListener('click', (e) => {
+        if (e.target.closest('.quick-add-btn') || e.target.closest('.swatch')) {
+          return; // Avoid triggering modal for quick cart add or color swatches clicks
+        }
+        openProductDetailsModal(product);
+      });
       
       productGrid.appendChild(productCard);
     });
@@ -1034,6 +1055,216 @@ document.addEventListener('DOMContentLoaded', () => {
   if (checkoutBtn) checkoutBtn.addEventListener('click', openCheckout);
   if (checkoutCloseBtn) checkoutCloseBtn.addEventListener('click', closeCheckout);
   if (checkoutBackdrop) checkoutBackdrop.addEventListener('click', closeCheckout);
+
+  // --- Product Details Modal Controller & Interactive Gallery ---
+  const productDetailsModal = document.getElementById('productDetailsModal');
+  const productModalBackdrop = document.getElementById('productModalBackdrop');
+  const productModalCloseBtn = document.getElementById('productModalCloseBtn');
+  
+  const modalMainImage = document.getElementById('modalMainImage');
+  const modalThumbnails = document.getElementById('modalThumbnails');
+  const modalProductBadge = document.getElementById('modalProductBadge');
+  const modalProductTitle = document.getElementById('modalProductTitle');
+  const modalProductCategory = document.getElementById('modalProductCategory');
+  const modalProductPrice = document.getElementById('modalProductPrice');
+  const modalProductDesc = document.getElementById('modalProductDesc');
+  const modalProductSwatches = document.getElementById('modalProductSwatches');
+  const modalQtyVal = document.getElementById('modalQtyVal');
+  const modalDecQtyBtn = document.getElementById('modalDecQtyBtn');
+  const modalIncQtyBtn = document.getElementById('modalIncQtyBtn');
+  const modalAddBtn = document.getElementById('modalAddBtn');
+
+  let activeModalProduct = null;
+  let selectedModalColor = null;
+  let modalQty = 1;
+
+  window.openProductDetailsModal = function(product) {
+    activeModalProduct = product;
+    modalQty = 1;
+    if (modalQtyVal) modalQtyVal.textContent = modalQty;
+
+    // Localized values
+    const title = currentLang === 'th' ? (product.title_th || product.title_en || '') : (product.title_en || product.title_th || '');
+    const categoryLabel = currentLang === 'th' ? (product.category_th || product.category_en || '') : (product.category_en || product.category_th || '');
+    const badge = currentLang === 'th' ? product.badge_th : product.badge_en;
+    const priceVal = product.price ? parseFloat(product.price) : 0.00;
+    
+    // Detailed Description key mapping
+    const descKey = `p${product.id}_desc_detail`;
+    const description = translations[currentLang][descKey] || (currentLang === 'th' ? 'ไม่มีรายละเอียดภาษาไทย' : 'No description available');
+
+    // Populate Details
+    if (modalProductTitle) modalProductTitle.textContent = title;
+    if (modalProductCategory) modalProductCategory.textContent = categoryLabel;
+    if (modalProductPrice) modalProductPrice.textContent = `฿${priceVal.toFixed(2)}`;
+    if (modalProductDesc) modalProductDesc.textContent = description;
+
+    // Badge
+    if (modalProductBadge) {
+      if (badge) {
+        modalProductBadge.textContent = badge;
+        modalProductBadge.style.display = 'inline-block';
+      } else {
+        modalProductBadge.style.display = 'none';
+      }
+    }
+
+    // Swatches / Colors
+    let swatchesArray = [];
+    if (product.swatches && Array.isArray(product.swatches)) {
+      swatchesArray = product.swatches;
+    } else if (product.swatches) {
+      try {
+        swatchesArray = typeof product.swatches === 'string' ? JSON.parse(product.swatches) : product.swatches;
+        if (!Array.isArray(swatchesArray)) swatchesArray = [];
+      } catch (e) {
+        swatchesArray = [];
+      }
+    }
+
+    if (modalProductSwatches) {
+      modalProductSwatches.innerHTML = '';
+      if (swatchesArray.length > 0) {
+        selectedModalColor = swatchesArray[0];
+        swatchesArray.forEach((swatch, idx) => {
+          if (!swatch) return;
+          const activeClass = idx === 0 ? 'active' : '';
+          const colorClass = getSwatchColorClass(swatch);
+          const swatchEl = document.createElement('div');
+          swatchEl.className = `swatch ${colorClass} ${activeClass}`;
+          swatchEl.setAttribute('data-color', swatch);
+          swatchEl.addEventListener('click', () => {
+            modalProductSwatches.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            swatchEl.classList.add('active');
+            selectedModalColor = swatch;
+          });
+          modalProductSwatches.appendChild(swatchEl);
+        });
+        modalProductSwatches.parentElement.style.display = 'flex';
+      } else {
+        selectedModalColor = 'Standard';
+        modalProductSwatches.parentElement.style.display = 'none';
+      }
+    }
+
+    // Image views (หลายวิว)
+    // Map product IDs to their custom image arrays (incorporating main + lifestyle from other slides)
+    let images = [product.image_url || 'assets/dog_bed.png'];
+    if (product.id === 1) {
+      images = [
+        "assets/dog_bed.png",
+        "assets/hero_banner.png",
+        "assets/hero_slide3.png"
+      ];
+    } else if (product.id === 2) {
+      images = [
+        "assets/pet_bowl.png",
+        "assets/hero_slide4.png",
+        "assets/hero_slide5.png"
+      ];
+    } else if (product.id === 3) {
+      images = [
+        "assets/cat_scratch.png",
+        "assets/hero_slide2.png",
+        "assets/hero_slide4.png"
+      ];
+    } else if (product.images && Array.isArray(product.images)) {
+      images = product.images;
+    }
+
+    if (modalMainImage) modalMainImage.src = images[0];
+
+    // Populate thumbnails
+    if (modalThumbnails) {
+      modalThumbnails.innerHTML = '';
+      images.forEach((imgSrc, idx) => {
+        const activeClass = idx === 0 ? 'active' : '';
+        const thumb = document.createElement('div');
+        thumb.className = `modal-thumb ${activeClass}`;
+        thumb.innerHTML = `<img src="${imgSrc}" alt="Thumbnail View ${idx + 1}">`;
+        thumb.addEventListener('click', () => {
+          modalThumbnails.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+          if (modalMainImage) {
+            modalMainImage.style.transform = 'scale(0.95)';
+            modalMainImage.style.opacity = '0.5';
+            setTimeout(() => {
+              modalMainImage.src = imgSrc;
+              modalMainImage.style.transform = 'scale(1)';
+              modalMainImage.style.opacity = '1';
+            }, 150);
+          }
+        });
+        modalThumbnails.appendChild(thumb);
+      });
+    }
+
+    if (productDetailsModal && productModalBackdrop) {
+      productDetailsModal.classList.add('open');
+      productModalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  window.closeProductDetailsModal = function() {
+    if (productDetailsModal && productModalBackdrop) {
+      productDetailsModal.classList.remove('open');
+      productModalBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      activeModalProduct = null;
+    }
+  };
+
+  if (productModalCloseBtn) productModalCloseBtn.addEventListener('click', closeProductDetailsModal);
+  if (productModalBackdrop) productModalBackdrop.addEventListener('click', closeProductDetailsModal);
+
+  // Modal Quantity Handlers
+  if (modalDecQtyBtn) {
+    modalDecQtyBtn.addEventListener('click', () => {
+      if (modalQty > 1) {
+        modalQty--;
+        if (modalQtyVal) modalQtyVal.textContent = modalQty;
+      }
+    });
+  }
+  if (modalIncQtyBtn) {
+    modalIncQtyBtn.addEventListener('click', () => {
+      modalQty++;
+      if (modalQtyVal) modalQtyVal.textContent = modalQty;
+    });
+  }
+
+  // Modal Add to Bag Action
+  if (modalAddBtn) {
+    modalAddBtn.addEventListener('click', () => {
+      if (!activeModalProduct) return;
+      
+      const p = activeModalProduct;
+      const titleKey = p.title_en || 'Product';
+      const colorKey = selectedModalColor || 'Standard';
+      
+      // Check if item already exists in cart with same color
+      const cartIndex = cart.findIndex(item => item.id === p.id && item.colorKey === colorKey);
+      
+      if (cartIndex !== -1) {
+        cart[cartIndex].qty += modalQty;
+      } else {
+        cart.push({
+          id: p.id,
+          titleKey: titleKey,
+          colorKey: colorKey,
+          price: parseFloat(p.price || 0),
+          img: p.image_url || 'assets/dog_bed.png',
+          qty: modalQty
+        });
+      }
+      
+      saveCart();
+      updateCartUI();
+      closeProductDetailsModal();
+      openCart(); // Slide open the cart to show it was added!
+    });
+  }
 
   if (checkoutForm) {
     checkoutForm.addEventListener('submit', async (e) => {

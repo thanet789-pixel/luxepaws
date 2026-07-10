@@ -650,6 +650,55 @@
     <button class="btn btn-secondary btn-close-success" id="closeSuccessBtn" data-i18n="success_close">Continue Shopping</button>
   </div>
 
+  <!-- Product Details Gallery Modal -->
+  <div class="product-modal-backdrop" id="productModalBackdrop"></div>
+  <div class="product-modal" id="productDetailsModal">
+    <button class="product-modal-close" id="productModalCloseBtn" aria-label="Close modal">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="product-modal-content">
+      <!-- Left side: Gallery -->
+      <div class="product-modal-gallery">
+        <div class="modal-main-image-wrap">
+          <img src="" id="modalMainImage" alt="Main Product Image">
+        </div>
+        <div class="modal-thumbnails" id="modalThumbnails">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+      <!-- Right side: Details -->
+      <div class="product-modal-info">
+        <span class="product-modal-badge" id="modalProductBadge"></span>
+        <h2 class="product-modal-title" id="modalProductTitle"></h2>
+        <span class="product-modal-category" id="modalProductCategory"></span>
+        <div class="product-modal-price" id="modalProductPrice"></div>
+        <p class="product-modal-desc" id="modalProductDesc"></p>
+        
+        <div class="product-modal-options">
+          <!-- Swatches Select -->
+          <div class="modal-option-group">
+            <h4 data-i18n="detail_color_label">Select Color</h4>
+            <div class="product-swatches" id="modalProductSwatches">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+          <!-- Quantity & Action -->
+          <div class="modal-option-group">
+            <h4 data-i18n="detail_qty_label">Quantity</h4>
+            <div class="modal-purchase-row">
+              <div class="qty-selector">
+                <button class="qty-btn" id="modalDecQtyBtn">-</button>
+                <span class="qty-val" id="modalQtyVal">1</span>
+                <button class="qty-btn" id="modalIncQtyBtn">+</button>
+              </div>
+              <button class="btn btn-primary" id="modalAddBtn" data-i18n="add_to_bag">Add to Bag</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Custom JavaScript -->
   <script src="app.js"></script>
 </body>
