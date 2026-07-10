@@ -660,7 +660,13 @@
       <!-- Left side: Gallery -->
       <div class="product-modal-gallery">
         <div class="modal-main-image-wrap">
-          <img src="" id="modalMainImage" alt="Main Product Image">
+          <button class="gallery-arrow prev" id="modalGalleryPrev" aria-label="Previous image">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <img src="" id="modalMainImage" alt="Main Product Image" style="cursor: zoom-in;">
+          <button class="gallery-arrow next" id="modalGalleryNext" aria-label="Next image">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
         <div class="modal-thumbnails" id="modalThumbnails">
           <!-- Populated dynamically via JS -->
@@ -697,6 +703,22 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Fullscreen Lightbox Modal -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <button class="lightbox-close" id="lightboxCloseBtn" aria-label="Close fullscreen view">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <button class="lightbox-arrow prev" id="lightboxPrevBtn" aria-label="Previous enlarged image">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <div class="lightbox-content">
+      <img src="" id="lightboxImage" alt="Enlarged View">
+    </div>
+    <button class="lightbox-arrow next" id="lightboxNextBtn" aria-label="Next enlarged image">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
   </div>
 
   <!-- Custom JavaScript -->

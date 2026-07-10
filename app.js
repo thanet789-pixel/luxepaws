@@ -1077,6 +1077,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeModalProduct = null;
   let selectedModalColor = null;
   let modalQty = 1;
+  let activeModalImages = [];
+  let activeModalImageIndex = 0;
 
   window.openProductDetailsModal = function(product) {
     activeModalProduct = product;
@@ -1172,6 +1174,8 @@ document.addEventListener('DOMContentLoaded', () => {
       images = product.images;
     }
 
+    activeModalImages = images;
+    activeModalImageIndex = 0;
     if (modalMainImage) modalMainImage.src = images[0];
 
     // Populate thumbnails
@@ -1183,17 +1187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         thumb.className = `modal-thumb ${activeClass}`;
         thumb.innerHTML = `<img src="${imgSrc}" alt="Thumbnail View ${idx + 1}">`;
         thumb.addEventListener('click', () => {
-          modalThumbnails.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
-          thumb.classList.add('active');
-          if (modalMainImage) {
-            modalMainImage.style.transform = 'scale(0.95)';
-            modalMainImage.style.opacity = '0.5';
-            setTimeout(() => {
-              modalMainImage.src = imgSrc;
-              modalMainImage.style.transform = 'scale(1)';
-              modalMainImage.style.opacity = '1';
-            }, 150);
-          }
+          setModalImage(idx);
         });
         modalThumbnails.appendChild(thumb);
       });
@@ -1263,6 +1257,108 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCartUI();
       closeProductDetailsModal();
       openCart(); // Slide open the cart to show it was added!
+    });
+  }
+
+  // Helper to transition main image and sync thumbnails/lightbox
+  function setModalImage(idx) {
+    if (activeModalImages.length === 0) return;
+    activeModalImageIndex = (idx + activeModalImages.length) % activeModalImages.length;
+    const imgSrc = activeModalImages[activeModalImageIndex];
+    if (modalMainImage) {
+      modalMainImage.style.transform = 'scale(0.95)';
+      modalMainImage.style.opacity = '0.5';
+      setTimeout(() => {
+        modalMainImage.src = imgSrc;
+        modalMainImage.style.transform = 'scale(1)';
+        modalMainImage.style.opacity = '1';
+      }, 150);
+    }
+    
+    // Sync active class on thumbnails
+    if (modalThumbnails) {
+      const thumbs = modalThumbnails.querySelectorAll('.modal-thumb');
+      thumbs.forEach((t, i) => {
+        if (i === activeModalImageIndex) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
+    }
+
+    // Sync Lightbox image if open
+    const lightboxImage = document.getElementById('lightboxImage');
+    if (lightboxImage && lightboxModal.classList.contains('open')) {
+      lightboxImage.src = imgSrc;
+    }
+  }
+
+  // Bind Details Modal Gallery Arrow Clicks
+  const modalGalleryPrev = document.getElementById('modalGalleryPrev');
+  const modalGalleryNext = document.getElementById('modalGalleryNext');
+
+  if (modalGalleryPrev) {
+    modalGalleryPrev.addEventListener('click', (e) => {
+      e.stopPropagation(); // Avoid triggering lightbox on arrow click
+      setModalImage(activeModalImageIndex - 1);
+    });
+  }
+  if (modalGalleryNext) {
+    modalGalleryNext.addEventListener('click', (e) => {
+      e.stopPropagation(); // Avoid triggering lightbox on arrow click
+      setModalImage(activeModalImageIndex + 1);
+    });
+  }
+
+  // --- Fullscreen Lightbox Controller ---
+  const lightboxModal = document.getElementById('lightboxModal');
+  const lightboxImage = document.getElementById('lightboxImage');
+  const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
+  const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
+  const lightboxNextBtn = document.getElementById('lightboxNextBtn');
+
+  // Click main image to open fullscreen Lightbox
+  if (modalMainImage) {
+    modalMainImage.addEventListener('click', () => {
+      if (lightboxModal && lightboxImage && activeModalImages.length > 0) {
+        lightboxImage.src = activeModalImages[activeModalImageIndex];
+        lightboxModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  }
+
+  function closeLightbox() {
+    if (lightboxModal) {
+      lightboxModal.classList.remove('open');
+      // If parent details modal is also closed, reset body overflow; otherwise keep locked
+      if (!productDetailsModal.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+  }
+
+  if (lightboxCloseBtn) lightboxCloseBtn.addEventListener('click', closeLightbox);
+  
+  // Close Lightbox on clicking outside image container
+  if (lightboxModal) {
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal || (!e.target.closest('.lightbox-content') && !e.target.closest('.lightbox-arrow') && !e.target.closest('.lightbox-close'))) {
+        closeLightbox();
+      }
+    });
+  }
+
+  // Bind Lightbox Navigation Arrows
+  if (lightboxPrevBtn) {
+    lightboxPrevBtn.addEventListener('click', () => {
+      setModalImage(activeModalImageIndex - 1);
+    });
+  }
+  if (lightboxNextBtn) {
+    lightboxNextBtn.addEventListener('click', () => {
+      setModalImage(activeModalImageIndex + 1);
     });
   }
 
