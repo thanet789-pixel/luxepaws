@@ -2186,6 +2186,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Set language configuration (will trigger grid render and cart updates)
+  setLanguage(currentLang);
+
   // Load and apply CMS custom settings asynchronously
   applyCmsSettings();
 });
