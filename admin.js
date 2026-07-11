@@ -75,9 +75,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const prodDescEn = document.getElementById('prodDescEn');
   const prodDescTh = document.getElementById('prodDescTh');
 
+  // Image manager elements
+  const mainImgFile = document.getElementById('mainImgFile');
+  const mainImgPreview = document.getElementById('mainImgPreview');
+  const mainImgPlaceholder = document.getElementById('mainImgPlaceholder');
+  const mainImgLoadUrl = document.getElementById('mainImgLoadUrl');
+  const subImgGrid = document.getElementById('subImgGrid');
+  const subImgEmpty = document.getElementById('subImgEmpty');
+  const addSubImgBtn = document.getElementById('addSubImgBtn');
+  const subImgAddRow = document.getElementById('subImgAddRow');
+  const subImgFile = document.getElementById('subImgFile');
+  const subImgUrlInput = document.getElementById('subImgUrlInput');
+  const subImgAddUrlBtn = document.getElementById('subImgAddUrlBtn');
+  const cancelSubImgBtn = document.getElementById('cancelSubImgBtn');
+
   let dbProducts = [];
   let dbOrders = [];
   let dbSubscribers = [];
+  let activeSubImages = []; // working list for sub-images in the form
 
   // ==========================================
   // 1. SUPABASE AUTHENTICATION CONTROLLER
@@ -267,6 +282,189 @@ document.addEventListener('DOMContentLoaded', () => {
     renderOrdersTable();
     renderProductsTable();
     renderUsersTable();
+  }
+
+  // ==========================================
+  // 2.5. IMAGE MANAGER CONTROLLER
+  // ==========================================
+
+  // Read a local File object and return a DataURL (or pass-through string URL)
+  function fileToDataUrl(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Show main image preview given a src string
+  function setMainImgPreview(src) {
+    if (!src) {
+      if (mainImgPreview) mainImgPreview.style.display = 'none';
+      if (mainImgPlaceholder) mainImgPlaceholder.style.display = 'flex';
+      return;
+    }
+    if (mainImgPreview) {
+      mainImgPreview.src = src;
+      mainImgPreview.style.display = 'block';
+    }
+    if (mainImgPlaceholder) mainImgPlaceholder.style.display = 'none';
+  }
+
+  // Rebuild the sub-images grid from activeSubImages array
+  function renderSubImgGrid() {
+    if (!subImgGrid) return;
+    // Remove all items except the static empty placeholder
+    subImgGrid.querySelectorAll('.subimg-item').forEach(el => el.remove());
+
+    if (activeSubImages.length === 0) {
+      if (subImgEmpty) subImgEmpty.style.display = 'flex';
+    } else {
+      if (subImgEmpty) subImgEmpty.style.display = 'none';
+      activeSubImages.forEach((src, idx) => {
+        const item = document.createElement('div');
+        item.className = 'subimg-item';
+        item.innerHTML = `
+          <img src="${src}" alt="Sub image ${idx + 1}" loading="lazy">
+          <span class="subimg-item__index">${idx + 1}</span>
+          <button type="button" class="subimg-item__delete" data-idx="${idx}" title="ลบรูปนี้">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        `;
+        item.querySelector('.subimg-item__delete').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const i = parseInt(e.currentTarget.getAttribute('data-idx'));
+          activeSubImages.splice(i, 1);
+          syncSubImagesHidden();
+          renderSubImgGrid();
+        });
+        subImgGrid.appendChild(item);
+      });
+    }
+  }
+
+  // Sync hidden input with activeSubImages array
+  function syncSubImagesHidden() {
+    if (prodSubImages) prodSubImages.value = activeSubImages.join(',');
+  }
+
+  // Add a sub-image src to the list
+  async function pushSubImage(src) {
+    if (!src || activeSubImages.includes(src)) return;
+    activeSubImages.push(src);
+    syncSubImagesHidden();
+    renderSubImgGrid();
+  }
+
+  // Reset image manager state (called when modal opens fresh)
+  function resetImageManager() {
+    activeSubImages = [];
+    if (prodImageUrl) prodImageUrl.value = '';
+    if (prodSubImages) prodSubImages.value = '';
+    if (subImgUrlInput) subImgUrlInput.value = '';
+    setMainImgPreview('');
+    renderSubImgGrid();
+    if (subImgAddRow) subImgAddRow.style.display = 'none';
+    if (mainImgFile) mainImgFile.value = '';
+    if (subImgFile) subImgFile.value = '';
+  }
+
+  // Load image manager from existing product (for edit)
+  function loadImageManagerFromProduct(product) {
+    const mainSrc = product.image_url || '';
+    if (prodImageUrl) prodImageUrl.value = mainSrc;
+    setMainImgPreview(mainSrc);
+
+    activeSubImages = [];
+    if (Array.isArray(product.images)) {
+      product.images.forEach(src => {
+        if (src && src !== mainSrc) activeSubImages.push(src);
+      });
+    }
+    syncSubImagesHidden();
+    renderSubImgGrid();
+    if (subImgAddRow) subImgAddRow.style.display = 'none';
+  }
+
+  // --- Wire up events ---
+
+  // Main image: upload from computer
+  if (mainImgFile) {
+    mainImgFile.addEventListener('change', async () => {
+      const file = mainImgFile.files[0];
+      if (!file) return;
+      const dataUrl = await fileToDataUrl(file);
+      setMainImgPreview(dataUrl);
+      if (prodImageUrl) prodImageUrl.value = dataUrl;
+    });
+  }
+
+  // Main image: load from URL button
+  if (mainImgLoadUrl) {
+    mainImgLoadUrl.addEventListener('click', () => {
+      const url = prodImageUrl ? prodImageUrl.value.trim() : '';
+      if (url) setMainImgPreview(url);
+    });
+  }
+
+  // Main image URL: live preview on blur / Enter
+  if (prodImageUrl) {
+    prodImageUrl.addEventListener('blur', () => {
+      const url = prodImageUrl.value.trim();
+      if (url) setMainImgPreview(url);
+    });
+    prodImageUrl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const url = prodImageUrl.value.trim();
+        if (url) setMainImgPreview(url);
+      }
+    });
+  }
+
+  // Show/hide sub-image add row
+  if (addSubImgBtn) {
+    addSubImgBtn.addEventListener('click', () => {
+      if (subImgAddRow) subImgAddRow.style.display = 'flex';
+      if (subImgUrlInput) subImgUrlInput.focus();
+    });
+  }
+
+  if (cancelSubImgBtn) {
+    cancelSubImgBtn.addEventListener('click', () => {
+      if (subImgAddRow) subImgAddRow.style.display = 'none';
+      if (subImgUrlInput) subImgUrlInput.value = '';
+    });
+  }
+
+  // Sub image: upload multiple files from computer
+  if (subImgFile) {
+    subImgFile.addEventListener('change', async () => {
+      const files = Array.from(subImgFile.files);
+      for (const file of files) {
+        const dataUrl = await fileToDataUrl(file);
+        await pushSubImage(dataUrl);
+      }
+      subImgFile.value = '';
+    });
+  }
+
+  // Sub image: add via URL button
+  const addSubFromUrl = () => {
+    const url = subImgUrlInput ? subImgUrlInput.value.trim() : '';
+    if (!url) return;
+    pushSubImage(url);
+    if (subImgUrlInput) subImgUrlInput.value = '';
+  };
+
+  if (subImgAddUrlBtn) {
+    subImgAddUrlBtn.addEventListener('click', addSubFromUrl);
+  }
+
+  if (subImgUrlInput) {
+    subImgUrlInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); addSubFromUrl(); }
+    });
   }
 
   // ==========================================
@@ -461,6 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
       productForm.reset();
       productIdField.value = '';
       modalTitle.textContent = "เพิ่มสินค้าใหม่";
+      resetImageManager();
       productModal.classList.add('open');
       productModalBackdrop.classList.add('open');
     });
@@ -481,10 +680,11 @@ document.addEventListener('DOMContentLoaded', () => {
     prodCatTh.value = product.category_th;
     prodBadgeEn.value = product.badge_en || '';
     prodBadgeTh.value = product.badge_th || '';
-    prodImageUrl.value = product.image_url;
-    prodSubImages.value = Array.isArray(product.images) ? product.images.join(', ') : '';
     prodDescEn.value = product.description_en || '';
     prodDescTh.value = product.description_th || '';
+
+    // Load image manager (handles prodImageUrl + activeSubImages)
+    loadImageManagerFromProduct(product);
 
     // Parse swatches to comma-separated text
     let swatchesArray = [];

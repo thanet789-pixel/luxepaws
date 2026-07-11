@@ -388,14 +388,80 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group col-6">
-          <label for="prodImageUrl">ลิงก์รูปภาพสินค้าหลัก (Main Image URL)</label>
-          <input type="text" id="prodImageUrl" required placeholder="เช่น assets/dog_bed.png หรือ https://images.unsplash.com/...">
+      <!-- ============================================================ -->
+      <!-- SECTION: รูปภาพสินค้า (Image Manager)                     -->
+      <!-- ============================================================ -->
+      <div class="img-section-label">
+        <i class="fa-solid fa-images"></i> จัดการรูปภาพสินค้า
+      </div>
+
+      <!-- Main Image -->
+      <div class="img-manager-card" id="mainImageCard">
+        <div class="img-manager-card__header">
+          <span class="img-card-badge main">รูปหลัก</span>
+          <span class="img-card-title">รูปภาพสินค้าหลัก (Main Product Image)</span>
         </div>
-        <div class="form-group col-6">
-          <label for="prodSubImages">ลิงก์รูปภาพย่อยเพิ่มเติม (คั่นด้วยจุลภาค ,)</label>
-          <input type="text" id="prodSubImages" placeholder="เช่น assets/dog_bed_v2.png, assets/dog_bed_v3.png">
+        <div class="img-manager-card__body">
+          <!-- Preview -->
+          <div class="img-preview-wrap" id="mainImgPreviewWrap">
+            <img id="mainImgPreview" src="" alt="Preview" style="display:none;">
+            <div class="img-placeholder" id="mainImgPlaceholder">
+              <i class="fa-solid fa-image"></i>
+              <span>ยังไม่มีรูปภาพ</span>
+            </div>
+          </div>
+          <!-- Controls -->
+          <div class="img-controls">
+            <!-- Upload from computer -->
+            <label class="btn-upload-file" for="mainImgFile">
+              <i class="fa-solid fa-upload"></i> อัปโหลดจากเครื่อง
+              <input type="file" id="mainImgFile" accept="image/*" style="display:none;">
+            </label>
+            <!-- URL input -->
+            <div class="img-url-row">
+              <input type="text" id="prodImageUrl" placeholder="หรือวาง URL รูปภาพที่นี่ เช่น https://..." aria-label="Main Image URL">
+              <button type="button" class="btn-url-load" id="mainImgLoadUrl" title="โหลดรูปจาก URL">
+                <i class="fa-solid fa-link"></i>
+              </button>
+            </div>
+            <p class="img-hint">รองรับไฟล์: JPG, PNG, WEBP, GIF (สูงสุด 10MB)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub Images -->
+      <div class="img-manager-card" id="subImagesCard">
+        <div class="img-manager-card__header">
+          <span class="img-card-badge sub">รูปย่อย</span>
+          <span class="img-card-title">รูปภาพมุมมองเพิ่มเติม (Sub Images / Gallery)</span>
+          <button type="button" class="btn-add-subimg" id="addSubImgBtn">
+            <i class="fa-solid fa-plus"></i> เพิ่มรูป
+          </button>
+        </div>
+        <!-- Hidden: actual sub-image URLs storage -->
+        <input type="hidden" id="prodSubImages">
+        <!-- Sub thumbnails grid -->
+        <div class="subimg-grid" id="subImgGrid">
+          <div class="subimg-empty" id="subImgEmpty">
+            <i class="fa-solid fa-photo-film"></i>
+            <span>กดปุ่ม "+ เพิ่มรูป" เพื่อเพิ่มรูปย่อยจากเครื่องหรือ URL</span>
+          </div>
+        </div>
+        <!-- Sub image add row (hidden by default, shown on click) -->
+        <div class="subimg-add-row" id="subImgAddRow" style="display:none;">
+          <label class="btn-upload-file small" for="subImgFile">
+            <i class="fa-solid fa-upload"></i> จากเครื่อง
+            <input type="file" id="subImgFile" accept="image/*" style="display:none;" multiple>
+          </label>
+          <div class="img-url-row flex-1">
+            <input type="text" id="subImgUrlInput" placeholder="หรือวาง URL รูปย่อย แล้วกด Enter หรือปุ่ม +">
+            <button type="button" class="btn-url-load" id="subImgAddUrlBtn" title="เพิ่ม URL">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <button type="button" class="btn-cancel-add-sub" id="cancelSubImgBtn" title="ซ่อน">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
       </div>
 
