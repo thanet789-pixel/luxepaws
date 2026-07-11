@@ -35,6 +35,7 @@
         <a href="#shop" class="filter-link" data-target="all" data-i18n="nav_products">Products</a>
         <a href="#collectionsSection" data-i18n="nav_collections">Collections</a>
         <a href="#gallerySection" data-i18n="nav_gallery">Gallery</a>
+        <a href="#portfolioSection" data-i18n="nav_portfolio">Portfolio</a>
         <a href="#customSection" data-i18n="nav_custom">Custom Design</a>
         <a href="#blogSection" data-i18n="nav_blog">Blog</a>
         <a href="#reviewsSection" data-i18n="nav_reviews">Reviews</a>
@@ -366,6 +367,90 @@
       </div>
     </div>
   </section>
+
+  <!-- ====================================================== -->
+  <!-- Portfolio / Installation Gallery Section               -->
+  <!-- ====================================================== -->
+  <section class="portfolio-section" id="portfolioSection">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle" data-i18n="portfolio_subtitle">Installation Gallery</span>
+        <h2 class="title" data-i18n="portfolio_title">Crafted for Real Homes</h2>
+      </div>
+
+      <!-- Portfolio Grid -->
+      <div class="portfolio-grid">
+
+        <!-- Card 1 -->
+        <div class="portfolio-card" data-portfolio-id="1">
+          <div class="portfolio-card__img-wrap">
+            <img src="assets/port1.png" alt="Nordic Living Room Installation" loading="lazy">
+            <div class="portfolio-card__overlay">
+              <button class="portfolio-card__view-btn" data-portfolio-id="1" data-i18n="portfolio_view_btn">View Project</button>
+            </div>
+          </div>
+          <div class="portfolio-card__info">
+            <span class="portfolio-card__tag" data-i18n="port1_tag">Dog Bed Installation</span>
+            <h3 class="portfolio-card__title" data-i18n="port1_title">The Nordic Living Room</h3>
+            <p class="portfolio-card__location"><i class="fa-solid fa-location-dot"></i> <span data-i18n="port1_location">Stockholm, Sweden</span></p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="portfolio-card" data-portfolio-id="2">
+          <div class="portfolio-card__img-wrap">
+            <img src="assets/port2.png" alt="Modern Kitchen Feeding Station" loading="lazy">
+            <div class="portfolio-card__overlay">
+              <button class="portfolio-card__view-btn" data-portfolio-id="2" data-i18n="portfolio_view_btn">View Project</button>
+            </div>
+          </div>
+          <div class="portfolio-card__info">
+            <span class="portfolio-card__tag" data-i18n="port2_tag">Feeding Station</span>
+            <h3 class="portfolio-card__title" data-i18n="port2_title">The Modern Kitchen Companion</h3>
+            <p class="portfolio-card__location"><i class="fa-solid fa-location-dot"></i> <span data-i18n="port2_location">Copenhagen, Denmark</span></p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="portfolio-card" data-portfolio-id="3">
+          <div class="portfolio-card__img-wrap">
+            <img src="assets/port3.png" alt="Bedroom Cat Tower Sanctuary" loading="lazy">
+            <div class="portfolio-card__overlay">
+              <button class="portfolio-card__view-btn" data-portfolio-id="3" data-i18n="portfolio_view_btn">View Project</button>
+            </div>
+          </div>
+          <div class="portfolio-card__info">
+            <span class="portfolio-card__tag" data-i18n="port3_tag">Cat Tower Integration</span>
+            <h3 class="portfolio-card__title" data-i18n="port3_title">The Bedroom Sanctuary</h3>
+            <p class="portfolio-card__location"><i class="fa-solid fa-location-dot"></i> <span data-i18n="port3_location">Helsinki, Finland</span></p>
+          </div>
+        </div>
+
+      </div><!-- /portfolio-grid -->
+    </div>
+  </section>
+
+  <!-- Portfolio Detail Modal -->
+  <div class="portfolio-modal-backdrop" id="portfolioModalBackdrop"></div>
+  <div class="portfolio-modal" id="portfolioModal" role="dialog" aria-modal="true">
+    <button class="portfolio-modal__close" id="portfolioModalClose" aria-label="Close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="portfolio-modal__inner">
+      <div class="portfolio-modal__img-wrap">
+        <img id="portfolioModalImg" src="" alt="">
+      </div>
+      <div class="portfolio-modal__content">
+        <span class="portfolio-modal__tag" id="portfolioModalTag"></span>
+        <h2 class="portfolio-modal__title" id="portfolioModalTitle"></h2>
+        <p class="portfolio-modal__location" id="portfolioModalLocation">
+          <i class="fa-solid fa-location-dot"></i> <span></span>
+        </p>
+        <div class="portfolio-modal__divider"></div>
+        <p class="portfolio-modal__desc" id="portfolioModalDesc"></p>
+      </div>
+    </div>
+  </div>
 
   <!-- Blog Section -->
   <section class="blog-section" id="blogSection">

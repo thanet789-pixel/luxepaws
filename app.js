@@ -78,6 +78,7 @@ const translations = {
     nav_products: "Products",
     nav_collections: "Collections",
     nav_gallery: "Gallery",
+    nav_portfolio: "Portfolio",
     nav_custom: "Custom Design",
     nav_blog: "Blog",
     nav_reviews: "Reviews",
@@ -87,6 +88,22 @@ const translations = {
     nav_dogs: "For Dogs",
     nav_cats: "For Cats",
     nav_story: "Our Story",
+    portfolio_subtitle: "Installation Gallery",
+    portfolio_title: "Crafted for Real Homes",
+    portfolio_view_btn: "View Project",
+    portfolio_close: "Close",
+    port1_title: "The Nordic Living Room",
+    port1_location: "Stockholm, Sweden",
+    port1_tag: "Dog Bed Installation",
+    port1_desc: "A bespoke Nido felt dog bed was placed in this light-flooded Stockholm apartment beside a hand-selected marble side table. The circular silhouette and warm grey felt harmonize perfectly with the existing Scandinavian interior. The client requested that the dog's space feel like an organic extension of the living room rather than an afterthought — and with LuxePaws, it does.",
+    port2_title: "The Modern Kitchen Companion",
+    port2_location: "Copenhagen, Denmark",
+    port2_tag: "Feeding Station",
+    port2_desc: "The Desco Oak Bowl Stand was custom-integrated into a kitchen island in this award-winning Copenhagen apartment. Designed to echo the kitchen cabinetry, the elevated feeding station keeps feeding hygiene high and the aesthetic impeccable. The clients noted that guests regularly mistake it for a high-end kitchen accessory — exactly the intended effect.",
+    port3_title: "The Bedroom Sanctuary",
+    port3_location: "Helsinki, Finland",
+    port3_tag: "Cat Tower Integration",
+    port3_desc: "Our Torre Cat Scratcher Tower was seamlessly incorporated into a custom bookshelf alcove in this Helsinki master bedroom. The cream and grey tones were matched to the room's palette at the client's request, and the vertical lines of the scratcher echo the architectural detailing of the custom joinery. The result is a fully functional cat playground that reads as pure interior design.",
     hs1_title: "Nido Felt Dog Bed",
     hs1_desc: "Circular felt pet bed with plush cushion",
     quick_add: "Quick Add",
@@ -270,7 +287,8 @@ const translations = {
     nav_home: "หน้าแรก",
     nav_products: "สินค้า",
     nav_collections: "คอลเลกชัน",
-    nav_gallery: "ผลงานติดตั้ง",
+    nav_gallery: "แกลเออรี่",
+    nav_portfolio: "ผลงานติดตั้ง",
     nav_custom: "ออกแบบเอง",
     nav_blog: "บทความ",
     nav_reviews: "รีวิวลูกค้า",
@@ -280,6 +298,22 @@ const translations = {
     nav_dogs: "สำหรับสุนัข",
     nav_cats: "สำหรับแมว",
     nav_story: "เรื่องราวของเรา",
+    portfolio_subtitle: "ผลงานเด่นของเรา",
+    portfolio_title: "ทุกผลงานคือใจกลางที่อยู่อาศัยจริง",
+    portfolio_view_btn: "ดูผลงาน",
+    portfolio_close: "ปิด",
+    port1_title: "ห้องนั่งสไตล์ Nordic",
+    port1_location: "สต็อคโฮล์ม, สวีเดน",
+    port1_tag: "ติดตั้งที่นอนสุนัข",
+    port1_desc: "ที่นอนสุนัข Nido เฟลต์ถูกติดตั้งในอาพาร์ตเมนต์สต็อคโฮล์มที่สว่างเอียบไปด้วยแสงแดดยามเช้า คู่กับโต๊ะเหมอหินอ่อนคัดสรรช์พิเศษ ฟอร์มทรงกลมและเนื้อผ้าเฯลต์สีเทาอี่นฉ่าฟ้อนผสมอย่างไร้รอยเข้ากับการตกแต่งสไตล์สแกนดิเนเวีย ลูกค้าต้องการให้พื้นที่ของสุนัขรู้สึกเหมือนเป็นส่วนหนึ่งของห้องโดยแท้จริง ไม่ใช่แค่สิ่งที่วางไว้แบบลากเน้อ",
+    port2_title: "ค้อนสัตว์เลี้ยงสไตล์ครัวโมเดิร์น",
+    port2_location: "โคเปนเฮเกน, เดนมาร์ก",
+    port2_tag: "ติดตั้งชุดชามอาหาร",
+    port2_desc: "ชุดชามอาหาร Desco Oak Bowl Stand ถูกออกแบบและติดตั้งรวมเข้ากับเกาะเค้าในห้องครัวสไตล์โมเดิร์นที่ได้รับรางวัล ออกแบบมาเพื่อให้สอดคล้องกับวัสดุในครัวโดยเฉพาะ ไม่เพียงผสมกลมกลืนไปกับสเปซในบ้านแต่เพิ่มคุณค่าทางสุนทรีย์ให้กับห้องครัว ลูกค้าบอกว่าแขกมักเข้าใจว่าเป็นอุปกรณ์ครัว ซึ่งนั่นคือผลลัพธ์ที่ต้องการ",
+    port3_title: "มุมสงบสันสำหรับแมว",
+    port3_location: "เฮลซิงกิ, ฟินแลนด์",
+    port3_tag: "ติดตั้งคอนโดแมว",
+    port3_desc: "ประภฮฟันเล็บแมว Torre ถูกดีไซน์ให้ประสานกลมกลืนเข้ากับชั้นวางหนังสือในห้องนอนของบ้านในเฮลซิงกิ โทนสีครีมและเทาถูกเลือกให้ตรงกับพาเลตต์ของห้องตามคำร้องของลูกค้า เส้นแนวตั้งของเสาสอดรับกับเส้นสถาปัตยกรรมของงานโจอีนเออรี่พิเศษ ผลลัพธ์ที่ได้คือไม่เพียงแค่คอนโดสำหรับแมว แต่เป็นงานสถาปัตยกรรมชิ้นเอกที่สมบูรณ์",
     hs1_title: "ที่นอนสุนัขใยสักหลาด Nido",
     hs1_desc: "ที่นอนสัตว์เลี้ยงทรงกลมพร้อมเบาะนุ่มหนา",
     quick_add: "เพิ่มลงตะกร้าด่วน",
@@ -2192,4 +2226,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load and apply CMS custom settings asynchronously
   applyCmsSettings();
+
+  // =====================================================
+  // PORTFOLIO GALLERY MODAL CONTROLLER
+  // =====================================================
+  (function initPortfolioModal() {
+    const backdrop = document.getElementById('portfolioModalBackdrop');
+    const modal    = document.getElementById('portfolioModal');
+    const closeBtn = document.getElementById('portfolioModalClose');
+    if (!backdrop || !modal) return;
+
+    // Data for each portfolio item
+    const portfolioData = {
+      '1': { img: 'assets/port1.png', titleKey: 'port1_title', locationKey: 'port1_location', tagKey: 'port1_tag', descKey: 'port1_desc' },
+      '2': { img: 'assets/port2.png', titleKey: 'port2_title', locationKey: 'port2_location', tagKey: 'port2_tag', descKey: 'port2_desc' },
+      '3': { img: 'assets/port3.png', titleKey: 'port3_title', locationKey: 'port3_location', tagKey: 'port3_tag', descKey: 'port3_desc' },
+    };
+
+    function openPortfolioModal(id) {
+      const data = portfolioData[String(id)];
+      if (!data) return;
+      const lang = document.documentElement.lang || 'th';
+      const t = translations[lang] || translations['th'];
+
+      document.getElementById('portfolioModalImg').src        = data.img;
+      document.getElementById('portfolioModalImg').alt        = t[data.titleKey] || '';
+      document.getElementById('portfolioModalTag').textContent   = t[data.tagKey]   || '';
+      document.getElementById('portfolioModalTitle').textContent = t[data.titleKey] || '';
+      document.getElementById('portfolioModalDesc').textContent  = t[data.descKey]  || '';
+      const locSpan = document.querySelector('#portfolioModalLocation span');
+      if (locSpan) locSpan.textContent = t[data.locationKey] || '';
+
+      backdrop.classList.add('open');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePortfolioModal() {
+      backdrop.classList.remove('open');
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Bind view-project buttons
+    document.querySelectorAll('.portfolio-card__view-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPortfolioModal(btn.getAttribute('data-portfolio-id'));
+      });
+    });
+
+    // Also open on card click
+    document.querySelectorAll('.portfolio-card').forEach(card => {
+      card.addEventListener('click', () => {
+        openPortfolioModal(card.getAttribute('data-portfolio-id'));
+      });
+    });
+
+    // Close handlers
+    if (closeBtn) closeBtn.addEventListener('click', closePortfolioModal);
+    backdrop.addEventListener('click', closePortfolioModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePortfolioModal();
+    });
+  })();
 });
