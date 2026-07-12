@@ -288,7 +288,46 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2.5. IMAGE MANAGER CONTROLLER
   // ==========================================
 
-  // Read a local File object and return a DataURL (or pass-through string URL)
+  // Initialize Firebase Storage instance
+  let storage = null;
+  try {
+    storage = firebase.storage();
+    console.log('Firebase Storage initialized:', storage);
+  } catch(e) {
+    console.warn('Firebase Storage not available:', e);
+  }
+
+  // Upload a File object to Firebase Storage → return public download URL
+  async function uploadToStorage(file, folder) {
+    if (!storage) throw new Error('Firebase Storage not initialized');
+    folder = folder || 'products';
+    const timestamp = Date.now();
+    const safeName  = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const path      = `${folder}/${timestamp}_${safeName}`;
+    const ref       = storage.ref().child(path);
+
+    // Upload with progress
+    const task = ref.put(file);
+    await new Promise((resolve, reject) => {
+      task.on('state_changed',
+        (snap) => {
+          const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+          console.log(`Uploading... ${pct}%`);
+          // Update any visible upload progress label
+          const el = document.getElementById('uploadProgressLabel');
+          if (el) el.textContent = `กำลังอัปโหลด... ${pct}%`;
+        },
+        (err) => reject(err),
+        () => resolve()
+      );
+    });
+    const downloadURL = await ref.getDownloadURL();
+    const el = document.getElementById('uploadProgressLabel');
+    if (el) el.textContent = '';
+    return downloadURL;
+  }
+
+  // Fallback: read a local File as DataURL (used only if Storage unavailable)
   function fileToDataUrl(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -388,14 +427,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Wire up events ---
 
-  // Main image: upload from computer
+  // Main image: upload from computer → Firebase Storage
   if (mainImgFile) {
     mainImgFile.addEventListener('change', async () => {
       const file = mainImgFile.files[0];
       if (!file) return;
-      const dataUrl = await fileToDataUrl(file);
-      setMainImgPreview(dataUrl);
-      if (prodImageUrl) prodImageUrl.value = dataUrl;
+
+      // Show uploading state
+      if (mainImgPlaceholder) mainImgPlaceholder.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span>กำลังอัปโหลด...</span>';
+
+      try {
+        let url;
+        if (storage) {
+          url = await uploadToStorage(file, 'products/main');
+        } else {
+          url = await fileToDataUrl(file); // fallback Base64
+        }
+        setMainImgPreview(url);
+        if (prodImageUrl) prodImageUrl.value = url;
+      } catch (err) {
+        console.error('Upload failed:', err);
+        alert('อัปโหลดไม่สำเร็จ: ' + err.message);
+        if (mainImgPlaceholder) mainImgPlaceholder.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>คลิกเพื่ออัปโหลด</span>';
+      }
+      mainImgFile.value = '';
     });
   }
 
@@ -437,13 +492,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Sub image: upload multiple files from computer
+  // Sub image: upload multiple files from computer → Firebase Storage
   if (subImgFile) {
     subImgFile.addEventListener('change', async () => {
       const files = Array.from(subImgFile.files);
       for (const file of files) {
-        const dataUrl = await fileToDataUrl(file);
-        await pushSubImage(dataUrl);
+        try {
+          let url;
+          if (storage) {
+            url = await uploadToStorage(file, 'products/sub');
+          } else {
+            url = await fileToDataUrl(file); // fallback Base64
+          }
+          await pushSubImage(url);
+        } catch (err) {
+          console.error('Sub-image upload failed:', err);
+          alert('อัปโหลดรูปย่อยไม่สำเร็จ: ' + err.message);
+        }
       }
       subImgFile.value = '';
     });
