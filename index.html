@@ -579,44 +579,149 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer id="contactSection">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>Luxe<span>Paws</span></h3>
-          <p data-i18n="footer_desc">Premium designer furniture and lifestyle accessories for dogs and cats. Form following comfort.</p>
+  <!-- ============================================================ -->
+  <!-- CONTACT SECTION                                             -->
+  <!-- ============================================================ -->
+  <section class="contact-section" id="contactSection">
+    <div class="contact-inner">
+
+      <!-- LEFT: Info + Map -->
+      <div class="contact-info-col">
+        <span class="subtitle" data-i18n="contact_subtitle">Get in Touch</span>
+        <h2 class="contact-title" data-i18n="contact_title">We'd Love to Hear from You</h2>
+        <p class="contact-desc" data-i18n="contact_desc">Whether you have a question about our products, a custom design request, or simply want to say hello — our team is ready to help.</p>
+
+        <!-- Info Cards -->
+        <div class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-card__icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div>
+              <p class="contact-card__label" data-i18n="contact_address_label">Address</p>
+              <p class="contact-card__value" data-i18n="contact_address">Maximilianstraße 36, 80539 Munich, Germany</p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card__icon"><i class="fa-solid fa-phone"></i></div>
+            <div>
+              <p class="contact-card__label" data-i18n="contact_phone_label">Phone</p>
+              <p class="contact-card__value"><a href="tel:+498912345678" data-i18n="contact_phone">+49 89 1234 5678</a></p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card__icon"><i class="fa-solid fa-envelope"></i></div>
+            <div>
+              <p class="contact-card__label" data-i18n="contact_email_label2">Email</p>
+              <p class="contact-card__value"><a href="mailto:hello@luxepaws.de" data-i18n="contact_email_addr">hello@luxepaws.de</a></p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card__icon"><i class="fa-regular fa-clock"></i></div>
+            <div>
+              <p class="contact-card__label" data-i18n="contact_hours_label">Studio Hours</p>
+              <p class="contact-card__value" data-i18n="contact_hours">Mon – Fri: 9:00 – 18:00 (CET)</p>
+            </div>
+          </div>
         </div>
-        <div class="footer-col">
-          <h4 data-i18n="footer_col1_header">Products</h4>
-          <ul>
-            <li><a href="#" class="filter-link" data-target="dog" data-i18n="nav_dogs">Dog Beds</a></li>
-            <li><a href="#" class="filter-link" data-target="accessories" data-i18n="col3_title">Bowl Stands</a></li>
-            <li><a href="#" class="filter-link" data-target="cat" data-i18n="nav_cats">Cat Scratchers</a></li>
-            <li><a href="#" class="filter-link" data-target="all" data-i18n="nav_shop_all">New Arrivals</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4 data-i18n="footer_col2_header">Customer Care</h4>
-          <ul>
-            <li><a href="#" data-i18n="footer_ship">Shipping & Returns</a></li>
-            <li><a href="#" data-i18n="footer_care">Materials & Care</a></li>
-            <li><a href="#" data-i18n="footer_size">Size Guide</a></li>
-            <li><a href="#" data-i18n="footer_contact">Contact Us</a></li>
-            <li><a href="admin.html" data-i18n="footer_admin">Staff Login</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4 data-i18n="footer_col3_header">Follow Us</h4>
-          <ul>
-            <li><a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
-            <li><a href="#"><i class="fa-brands fa-pinterest"></i> Pinterest</a></li>
-            <li><a href="#"><i class="fa-brands fa-facebook"></i> Facebook</a></li>
-          </ul>
+
+        <!-- Google Map Embed -->
+        <div class="contact-map">
+          <iframe
+            title="LuxePaws Studio Location"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2662.1752596688697!2d11.57976!3d48.13767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e75f9a38c5fd7%3A0x7f5a96e4a4b9c3d4!2sMaximilianstra%C3%9Fe%2036%2C%2080539%20M%C3%BCnchen%2C%20Germany!5e0!3m2!1sen!2sde!4v1720000000000!5m2!1sen!2sde"
+            width="100%"
+            height="260"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p data-i18n="footer_copy">&copy; 2026 LuxePaws GmbH. All rights reserved.</p>
+
+      <!-- RIGHT: Contact Form -->
+      <div class="contact-form-col">
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="cf-row">
+            <div class="cf-group">
+              <label for="cfName" data-i18n="contact_name_label">Full Name</label>
+              <input type="text" id="cfName" name="name" required autocomplete="name"
+                placeholder="e.g. Jane Smith" data-i18n-placeholder="contact_name_ph">
+            </div>
+            <div class="cf-group">
+              <label for="cfEmail" data-i18n="contact_email_label">Email Address</label>
+              <input type="email" id="cfEmail" name="email" required autocomplete="email"
+                placeholder="e.g. jane@example.com" data-i18n-placeholder="contact_email_ph">
+            </div>
+          </div>
+          <div class="cf-group">
+            <label for="cfSubject" data-i18n="contact_subject_label">Subject</label>
+            <input type="text" id="cfSubject" name="subject"
+              placeholder="e.g. Custom order inquiry" data-i18n-placeholder="contact_subject_ph">
+          </div>
+          <div class="cf-group">
+            <label for="cfMessage" data-i18n="contact_msg_label">Message</label>
+            <textarea id="cfMessage" name="message" rows="6" required
+              placeholder="Tell us how we can help you..." data-i18n-placeholder="contact_msg_ph"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary cf-submit" id="cfSubmitBtn">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span data-i18n="contact_send_btn">Send Message</span>
+          </button>
+          <div class="cf-success" id="cfSuccess" style="display:none;">
+            <i class="fa-solid fa-circle-check"></i>
+            <span data-i18n="contact_success">Thank you! We'll get back to you within 24 hours.</span>
+          </div>
+        </form>
+      </div>
+
+    </div><!-- /contact-inner -->
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER                                                       -->
+  <!-- ============================================================ -->
+  <footer id="siteFooter">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h3>Luxe<span>Paws</span></h3>
+        <p data-i18n="footer_desc">Premium designer furniture and lifestyle accessories for dogs and cats. Form following comfort.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_col1_header">Products</h4>
+        <ul>
+          <li><a href="#" class="filter-link" data-target="dog" data-i18n="nav_dogs">Dog Beds</a></li>
+          <li><a href="#" class="filter-link" data-target="accessories" data-i18n="col3_title">Bowl Stands</a></li>
+          <li><a href="#" class="filter-link" data-target="cat" data-i18n="nav_cats">Cat Scratchers</a></li>
+          <li><a href="#" class="filter-link" data-target="all" data-i18n="nav_shop_all">New Arrivals</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_col2_header">Customer Care</h4>
+        <ul>
+          <li><a href="#" data-i18n="footer_ship">Shipping &amp; Returns</a></li>
+          <li><a href="#" data-i18n="footer_care">Materials &amp; Care</a></li>
+          <li><a href="#" data-i18n="footer_size">Size Guide</a></li>
+          <li><a href="#contactSection" data-i18n="footer_contact">Contact Us</a></li>
+          <li><a href="admin.html" data-i18n="footer_admin">Staff Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_col3_header">Follow Us</h4>
+        <ul>
+          <li><a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
+          <li><a href="#"><i class="fa-brands fa-pinterest"></i> Pinterest</a></li>
+          <li><a href="#"><i class="fa-brands fa-facebook"></i> Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p data-i18n="footer_copy">© 2026 LuxePaws GmbH. All rights reserved.</p>
         <p data-i18n="footer_loc">Designed with passion in Munich, Germany.</p>
       </div>
     </div>

@@ -174,6 +174,28 @@ const translations = {
     footer_admin: "Staff Login",
     footer_copy: "© 2026 LuxePaws GmbH. All rights reserved.",
     footer_loc: "Designed with passion in Munich, Germany.",
+    contact_subtitle: "Get in Touch",
+    contact_title: "We'd Love to Hear from You",
+    contact_desc: "Whether you have a question about our products, a custom design request, or simply want to say hello — our team is ready to help.",
+    contact_name_label: "Full Name",
+    contact_name_ph: "e.g. Jane Smith",
+    contact_email_label: "Email Address",
+    contact_email_ph: "e.g. jane@example.com",
+    contact_subject_label: "Subject",
+    contact_subject_ph: "e.g. Custom order inquiry",
+    contact_msg_label: "Message",
+    contact_msg_ph: "Tell us how we can help you...",
+    contact_send_btn: "Send Message",
+    contact_success: "Thank you! We'll get back to you within 24 hours.",
+    contact_info_title: "Our Studio",
+    contact_address: "Maximilianstraße 36, 80539 Munich, Germany",
+    contact_phone: "+49 89 1234 5678",
+    contact_email_addr: "hello@luxepaws.de",
+    contact_hours: "Mon – Fri: 9:00 – 18:00 (CET)",
+    contact_hours_label: "Studio Hours",
+    contact_address_label: "Address",
+    contact_phone_label: "Phone",
+    contact_email_label2: "Email",
     cart_header: "Your Shopping Bag",
     cart_empty: "Your bag is empty.",
     cart_subtotal_label: "Subtotal",
@@ -384,6 +406,28 @@ const translations = {
     footer_admin: "เข้าสู่ระบบเจ้าหน้าที่",
     footer_copy: "© 2026 LuxePaws GmbH. สงวนลิขสิทธิ์ทั้งหมด",
     footer_loc: "ออกแบบด้วยใจรักในเมืองมิวนิก ประเทศเยอรมนี",
+    contact_subtitle: "ติดต่อเรา",
+    contact_title: "ยินดีที่ได้รับฟังจากคุณเสมอ",
+    contact_desc: "ไม่ว่าจะเป็นคำถามเกี่ยวกับสินค้า คำขอออกแบบพิเศษ หรือเพียงแค่อยากทักทาย ทีมงานของเราพร้อมช่วยเหลือคุณเสมอ",
+    contact_name_label: "ชื่อ-นามสกุล",
+    contact_name_ph: "เช่น สมชาย ใจดี",
+    contact_email_label: "อีเมล์",
+    contact_email_ph: "เช่น somchai@example.com",
+    contact_subject_label: "หัวข้อข่าวสาร",
+    contact_subject_ph: "เช่น สอบถามเรื่องสินค้าสั่งพิเศษ",
+    contact_msg_label: "ข้อความ",
+    contact_msg_ph: "บอกเราว่าเราจะช่วยคุณได้อย่างไร...",
+    contact_send_btn: "ส่งข้อความ",
+    contact_success: "ขอบคุณครับ! เราจะตอบกลับภายใน 24 ชั่วโมง",
+    contact_info_title: "สตูดิโอของเรา",
+    contact_address: "Maximilianstraße 36, 80539 Munich, Germany",
+    contact_phone: "+49 89 1234 5678",
+    contact_email_addr: "hello@luxepaws.de",
+    contact_hours: "จันทร์ – ศุกร์: 9:00 – 18:00 (CET)",
+    contact_hours_label: "เวลาทำการ",
+    contact_address_label: "ที่อยู่",
+    contact_phone_label: "โทรศัพท์",
+    contact_email_label2: "อีเมล์",
     cart_header: "ตะกร้าสินค้าของคุณ",
     cart_empty: "ไม่มีสินค้าอยู่ในตะกร้าของคุณ",
     cart_subtotal_label: "ยอดรวมย่อย",
@@ -2288,6 +2332,64 @@ document.addEventListener('DOMContentLoaded', () => {
     backdrop.addEventListener('click', closePortfolioModal);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closePortfolioModal();
+    });
+  })();
+
+  // =====================================================
+  // CONTACT FORM HANDLER
+  // =====================================================
+  (function initContactForm() {
+    const form     = document.getElementById('contactForm');
+    const success  = document.getElementById('cfSuccess');
+    const submitBtn = document.getElementById('cfSubmitBtn');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Simulate sending — show success state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span>Sending...</span>';
+      }
+      setTimeout(() => {
+        form.reset();
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span data-i18n="contact_send_btn">Send Message</span>';
+        }
+        if (success) {
+          success.style.display = 'flex';
+          setTimeout(() => { success.style.display = 'none'; }, 6000);
+        }
+        // Re-apply i18n to the button span
+        const lang = document.documentElement.lang || 'th';
+        const t = translations[lang] || translations['th'];
+        const btnSpan = submitBtn ? submitBtn.querySelector('span[data-i18n]') : null;
+        if (btnSpan) btnSpan.textContent = t['contact_send_btn'] || 'Send Message';
+      }, 1400);
+    });
+  })();
+
+  // Support data-i18n-placeholder (extend setLanguage)
+  const _origSetLanguage = setLanguage;
+  // Patch placeholder updates into the existing setLanguage call cycle
+  // by hooking into MutationObserver on html[lang]
+  const _langObserver = new MutationObserver(() => {
+    const lang = document.documentElement.lang || 'th';
+    const t = translations[lang] || translations['th'];
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (t[key]) el.placeholder = t[key];
+    });
+  });
+  _langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  // Run once now
+  (() => {
+    const lang = document.documentElement.lang || 'th';
+    const t = translations[lang] || translations['th'];
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (t[key]) el.placeholder = t[key];
     });
   })();
 });
